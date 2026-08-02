@@ -26,10 +26,12 @@ Pour tout régénérer : `rm -rf dist/img`.
 
 ## Déployer
 
-Projet Vercel, sans framework. `vercel.json` fait le reste.
+Projet Vercel, sans framework. `vercel.json` fait le reste
+(`installCommand` + `buildCommand` + `outputDirectory`).
 
-- **Build Command** : `pip install -r requirements.txt && python build.py`
-- **Output Directory** : `dist`
+Ne pas remettre `pip install` dans le Build Command du dashboard :
+Vercel installe déjà les dépendances Python, et un second `pip install`
+échoue avec `externally-managed-environment`.
 
 ### Formulaire de contact
 
