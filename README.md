@@ -11,7 +11,7 @@ pas de CMS, pas de webfont chargée depuis un CDN.
 
 ```bash
 python3 -m venv .venv
-.venv/bin/pip install -r requirements.txt
+.venv/bin/pip install -r requirements-build.txt
 .venv/bin/python build.py
 ```
 
@@ -26,12 +26,15 @@ Pour tout régénérer : `rm -rf dist/img`.
 
 ## Déployer
 
-Projet Vercel, sans framework. `vercel.json` fait le reste
-(`installCommand` + `buildCommand` + `outputDirectory`).
+Le site est préconstruit dans `dist/` (Pillow / Python 3.14 casse sur
+Vercel). Workflow :
 
-Ne pas remettre `pip install` dans le Build Command du dashboard :
-Vercel installe déjà les dépendances Python, et un second `pip install`
-échoue avec `externally-managed-environment`.
+1. Modifier le contenu ou les photos localement
+2. Relancer `build.py`
+3. Committer `dist/` et pousser — Vercel sert `dist/` tel quel
+
+Dans le dashboard Vercel : Framework **Other**, pas d’override de
+Build / Install (tout est dans `vercel.json`).
 
 ### Formulaire de contact
 
@@ -98,7 +101,7 @@ assets/
   originals/      les photographies sources, jamais retouchées par le build
 api/contact.js    fonction serverless d'envoi du formulaire
 build.py          le générateur
-dist/             le site produit — ne rien y modifier à la main
+dist/             le site produit — versionné pour Vercel ; régénéré par build.py
 ```
 
 ## Notes techniques

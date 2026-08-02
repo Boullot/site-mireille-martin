@@ -3,7 +3,7 @@
 """
 Générateur du site de Mireille Martin.
 
-    python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+    python3 -m venv .venv && .venv/bin/pip install -r requirements-build.txt
     .venv/bin/python build.py
 
 Tout le contenu vit dans content/ et assets/originals/.
