@@ -1,0 +1,28 @@
+# Critique
+
+## Une perfection formelle par de simples contrastes de non-couleurs
+
+Mireille Martin est venue à la peinture après avoir réalisé des carnets d'artistes, dans lesquels
+elle découpait aux ciseaux des formes géométriques. Fascinée par l'abbaye de Fontevraud et sa
+magie en noir et blanc, elle a délibérément orienté son œuvre peint vers le choix de figures
+épurées en « non-couleurs » fondamentales, qu'elle décline inlassablement dans ses
+« Allers-Retours », opposition des contraires.
+
+Attirée par l'expressionnisme abstrait, l'artiste travaille dans l'esprit de l'abstraction
+géométrique. Apparue dans le premier quart du XXᵉ siècle, celle-ci retrouve aujourd'hui une
+vigueur exceptionnelle grâce à des peintres tels que Mireille Martin, dont l'art est basé sur la
+combinaison et la variation de formes abstraites. L'assemblage d'éléments bien construits et
+d'une simplicité radicale lui permet de morceler l'espace et de le mettre en valeur par des
+aplats noirs et blancs, en jouant sur l'orthogonalité et la diagonale. Au-delà de la simple
+représentation mathématique rigoureuse, avec une extrême sobriété et une grande économie de
+moyens, elle nous démontre — tant dans ses acryliques que dans ses encres de Chine — sa capacité
+à créer la perfection formelle par des équilibres remarquables et de simples contrastes de
+non-couleurs.
+
+Elle affirme sa conception de l'art : « La géométrie a toujours été pour moi source de poésie et
+prétexte à m'évader. » Ses voyages en Chine ont également été déterminants dans son parcours
+artistique, très marqué par la philosophie chinoise. Sa démarche est pour elle autant une
+réflexion esthétique qu'une véritable méditation picturale. Mireille Martin impose un style dont
+se dégagent un rythme, un dynamisme et une harmonie parfaite, sans cesse renouvelés.
+
+— Francine Bunel-Malras, historienne de l'art

@@ -1,0 +1,35 @@
+{
+  "name": "Mireille Martin",
+  "role": "Peintre — abstraction géométrique",
+  "baseline": "Autant de noir que de blanc.",
+  "domain": "https://mireille-martin.fr",
+  "locale": "fr_FR",
+  "email": "mireillemartin8@free.fr",
+  "phone": "",
+  "phone_note": "Numéro figurant sur l'affiche « Less is more » (06 77 58 45 83). Laissé vide par défaut : le renseigner ici pour l'afficher sur la page Contact.",
+  "city": "Rouen",
+  "region": "Normandie",
+  "country": "FR",
+  "instagram": "mireilledecampsmartin",
+  "instagram_url": "https://www.instagram.com/mireilledecampsmartin/",
+  "memberships": [
+    {
+      "label": "Collectif Art Concret — Normandie",
+      "detail": "membre fondatrice",
+      "url": "http://cac-normandie.org/martin.html"
+    },
+    {
+      "label": "Union des Arts Plastiques de Saint-Étienne-du-Rouvray",
+      "detail": "membre",
+      "url": "https://www.union-arts-plastiques76800.fr/"
+    },
+    {
+      "label": "Salon des Réalités Nouvelles",
+      "detail": "exposante",
+      "url": "https://realitesnouvelles.org/"
+    }
+  ],
+  "influences": ["Kazimir Malévitch", "Piet Mondrian", "Ellsworth Kelly", "Vera Molnár", "Josef Albers", "Aurélie Nemours"],
+  "credits_photo": "Patrick Le Baube",
+  "form_endpoint": "/api/contact"
+}
