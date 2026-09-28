@@ -1,0 +1,17 @@
+{
+  "name": "site-mireille-martin",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "build": "python3 build.py",
+    "dev": "node scripts/dev.mjs",
+    "invite": "node scripts/admin-invite.mjs",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "dependencies": {
+    "sharp": "^0.35.5"
+  }
+}

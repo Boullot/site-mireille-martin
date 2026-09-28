@@ -827,3 +827,4 @@ dialog.lightbox::backdrop { background: rgba(10, 9, 8, .82); }
   main > .wrap:first-child + section { border-top: 0; }
   .hero { padding-top: var(--space-6); gap: var(--space-6); }
 }
+.foot__bottom a { white-space: nowrap; }
