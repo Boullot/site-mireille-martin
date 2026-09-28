@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://mireille-martin.fr/sitemap.xml

@@ -1,70 +1,518 @@
 {
   "note": "sort = clé de tri AAAA-MM (début). solo = exposition personnelle. Ajouter les nouvelles expositions en haut de la liste, le tri est automatique.",
   "exhibitions": [
-    {"sort": "2026-05", "when": "Mai 2026", "title": "Less is more", "venue": "Espace UAP", "city": "Rouen", "solo": true},
-    {"sort": "2026-05", "when": "Mai – juin 2026", "title": "Rouen National Arts", "venue": "Halle aux Toiles", "city": "Rouen", "solo": false},
-    {"sort": "2026-05", "when": "Mai 2026", "title": "Traces de vie", "venue": "Pavillon du Jardin des Plantes", "city": "Rouen", "solo": false},
-    {"sort": "2026-05", "when": "Mai 2026", "title": "Art Concret, avec le collège Chartier", "venue": "Centre culturel Leclerc", "city": "Bayeux", "solo": false},
-    {"sort": "2026-05", "when": "Mai 2026", "title": "Salon Culture et Jeux Mathématiques", "venue": "Place Saint-Sulpice", "city": "Paris", "solo": false},
-    {"sort": "2026-03", "when": "Mars – mai 2026", "title": "Au printemps, au printemps", "venue": "Usine à Zabu", "city": "Saint-Germain-des-Angles", "solo": false},
-    {"sort": "2026-02", "when": "Février – avril 2026", "title": "À géométrie variable", "venue": "Hangar des Arts", "city": "Magny-en-Vexin", "solo": false},
-    {"sort": "2026-02", "when": "Février 2026", "title": "Art Capital — Comparaisons", "venue": "Grand Palais", "city": "Paris", "solo": false},
-    {"sort": "2026-01", "when": "Janvier – mars 2026", "title": "CAC-Normandie", "venue": "Galerie du Parc", "city": "Port-Jérôme-sur-Seine", "solo": false},
-    {"sort": "2026-01", "when": "Janvier – mars 2026", "title": "Union des Arts Plastiques", "venue": "", "city": "Saint-Étienne-du-Rouvray", "solo": false},
-    {"sort": "2025-11", "when": "Novembre 2025", "title": "Métaphore", "venue": "", "city": "Gisors", "solo": false},
-    {"sort": "2025-11", "when": "Novembre 2025", "title": "111 pour les Arts", "venue": "Mairie du 8ᵉ", "city": "Paris", "solo": false},
-    {"sort": "2025-11", "when": "Novembre 2025", "title": "Musique", "venue": "", "city": "Saint-Étienne-du-Rouvray", "solo": false},
-    {"sort": "2025-10", "when": "Octobre 2025", "title": "Trait d'union", "venue": "Galerie Abstract Project", "city": "Paris", "solo": false},
-    {"sort": "2025-09", "when": "Septembre 2025", "title": "Salon de Londinières", "venue": "", "city": "Londinières", "solo": false},
-    {"sort": "2025-06", "when": "Juin 2025", "title": "Salon Culture et Jeux Mathématiques", "venue": "", "city": "Paris", "solo": false},
-    {"sort": "2025-03", "when": "Mars 2025", "title": "Exposition internationale de calligraphies", "venue": "", "city": "Taipei", "solo": false},
-    {"sort": "2025-03", "when": "Mars 2025", "title": "Collages", "venue": "Espace UAP", "city": "Rouen", "solo": false},
-    {"sort": "2024-11", "when": "Novembre – décembre 2024", "title": "Vague de Rêves", "venue": "", "city": "Saint-Étienne-du-Rouvray", "solo": false},
-    {"sort": "2024-11", "when": "Novembre – décembre 2024", "title": "CréArts", "venue": "", "city": "Bosc-Roger-en-Roumois", "solo": false},
-    {"sort": "2024-10", "when": "Octobre 2024", "title": "Journées de l'APMEP — Arts et mathématiques", "venue": "", "city": "Le Havre", "solo": false},
-    {"sort": "2024-09", "when": "Septembre 2024", "title": "Salon de Londinières", "venue": "", "city": "Londinières", "solo": false},
-    {"sort": "2024-05", "when": "Mai – juin 2024", "title": "Rouen National Arts", "venue": "", "city": "Rouen", "solo": false},
-    {"sort": "2024-05", "when": "Mai 2024", "title": "jARTdins de Montagny", "venue": "", "city": "Montagny", "solo": false},
-    {"sort": "2024-04", "when": "Avril 2024", "title": "OpenArts", "venue": "", "city": "Amfreville-la-Mi-Voie", "solo": false},
-    {"sort": "2024-03", "when": "Mars – avril 2024", "title": "Carrégraphie", "venue": "Espace UAP", "city": "Rouen", "solo": true},
-    {"sort": "2024-02", "when": "Février 2024", "title": "Espace UAP", "venue": "Espace UAP", "city": "Rouen", "solo": false},
-    {"sort": "2024-01", "when": "Janvier – février 2024", "title": "Union des Arts Plastiques", "venue": "", "city": "Saint-Étienne-du-Rouvray", "solo": false},
-    {"sort": "2023-11", "when": "Novembre 2023", "title": "Vivre Liberté", "venue": "", "city": "Saint-Étienne-du-Rouvray", "solo": false},
-    {"sort": "2023-09", "when": "Septembre 2023", "title": "Salon de Londinières", "venue": "", "city": "Londinières", "solo": false},
-    {"sort": "2023-05", "when": "Mai 2023", "title": "Déstructurer le carré", "venue": "Galerie Abstract Project", "city": "Paris", "solo": false},
-    {"sort": "2023-05", "when": "Mai 2023", "title": "Salon d'Arts Contemporains", "venue": "", "city": "Saint-Nicolas-d'Aliermont", "solo": false},
-    {"sort": "2023-03", "when": "Mars – avril 2023", "title": "3 + 1", "venue": "Le Rive Gauche", "city": "Saint-Étienne-du-Rouvray", "solo": false},
-    {"sort": "2023-03", "when": "Mars – avril 2023", "title": "France-Taïwan", "venue": "Casino", "city": "Bonsecours", "solo": false},
-    {"sort": "2023-01", "when": "Janvier – février 2023", "title": "Au-delà des lignes", "venue": "La Passerelle", "city": "Mont-Saint-Aignan", "solo": false},
-    {"sort": "2023-01", "when": "Janvier – février 2023", "title": "60 ans de l'U.A.P.", "venue": "", "city": "Saint-Étienne-du-Rouvray", "solo": false},
-    {"sort": "2022-11", "when": "Novembre 2022", "title": "Résistance", "venue": "", "city": "Saint-Étienne-du-Rouvray", "solo": false},
-    {"sort": "2022-09", "when": "Septembre – octobre 2022", "title": "Carré", "venue": "Espace UAP", "city": "Rouen", "solo": false},
-    {"sort": "2022-09", "when": "Septembre 2022", "title": "Salon de Londinières", "venue": "", "city": "Londinières", "solo": false},
-    {"sort": "2022-06", "when": "Juin 2022", "title": "Salon d'Arts Contemporains", "venue": "", "city": "Sainte-Croix-sur-Buchy", "solo": false},
-    {"sort": "2022-05", "when": "Mai 2022", "title": "Kakémonos, acryliques et encres de Chine", "venue": "Espace Union des Arts Plastiques", "city": "Rouen", "solo": true},
-    {"sort": "2022-04", "when": "Avril – mai 2022", "title": "Lions'Art", "venue": "", "city": "Eu", "solo": false},
-    {"sort": "2022-03", "when": "Mars – avril 2022", "title": "Art en vitrine", "venue": "", "city": "Neufchâtel-en-Bray", "solo": true},
-    {"sort": "2021-12", "when": "Décembre 2021 – janvier 2022", "title": "Espace UAP", "venue": "Espace UAP", "city": "Rouen", "solo": false},
-    {"sort": "2021-11", "when": "Novembre – décembre 2021", "title": "Relecture d'une œuvre", "venue": "", "city": "Saint-Étienne-du-Rouvray", "solo": false},
-    {"sort": "2021-10", "when": "Octobre 2021", "title": "Atelier Normand Création", "venue": "", "city": "Rouen", "solo": false},
-    {"sort": "2021-09", "when": "Septembre 2021", "title": "Salon de Londinières", "venue": "", "city": "Londinières", "solo": false},
-    {"sort": "2021-05", "when": "Mai – juillet 2021", "title": "Union des Arts Plastiques", "venue": "", "city": "Saint-Étienne-du-Rouvray", "solo": false},
-    {"sort": "2020-10", "when": "Octobre 2020", "title": "Atelier Normand Création", "venue": "", "city": "Rouen", "solo": false},
-    {"sort": "2019-10", "when": "Octobre 2019", "title": "Salon des Réalités Nouvelles", "venue": "Parc Floral", "city": "Paris", "solo": false},
-    {"sort": "2019-09", "when": "Septembre 2019", "title": "Grisy Code", "venue": "", "city": "Grisy-les-Plâtres", "solo": false},
-    {"sort": "2019-08", "when": "Août – septembre 2019", "title": "L'Étage", "venue": "Espace Culturel Leclerc", "city": "Bayeux", "solo": true},
-    {"sort": "2019-04", "when": "Avril – mai 2019", "title": "Atelier Normand Création", "venue": "", "city": "Rouen", "solo": false},
-    {"sort": "2019-01", "when": "Janvier – février 2019", "title": "Les Hivernales", "venue": "", "city": "Bonsecours", "solo": false},
-    {"sort": "2018-10", "when": "Octobre 2018", "title": "Salon des Réalités Nouvelles", "venue": "Parc Floral", "city": "Paris", "solo": false},
-    {"sort": "2018-09", "when": "Septembre 2018 – janvier 2019", "title": "La Table des Matières", "venue": "Bibliothèque Alexis-de-Tocqueville", "city": "Caen", "solo": true},
-    {"sort": "2018-03", "when": "Mars 2018", "title": "France-Taïwan", "venue": "", "city": "Bonsecours", "solo": false},
-    {"sort": "2018-01", "when": "Janvier 2018", "title": "Salon d'Arts Contemporains", "venue": "", "city": "Sainte-Croix-sur-Buchy", "solo": false},
-    {"sort": "2017-07", "when": "Juillet – août 2017", "title": "Acryliques", "venue": "Hôtel de Bourgtheroulde", "city": "Rouen", "solo": true},
-    {"sort": "2017-05", "when": "Mai 2017", "title": "Salon d'Arts Contemporains", "venue": "", "city": "Saint-Nicolas-d'Aliermont", "solo": false},
-    {"sort": "2017-01", "when": "Janvier 2017", "title": "Acryliques", "venue": "Maison de l'Université", "city": "Mont-Saint-Aignan", "solo": true},
-    {"sort": "2016-03", "when": "Mars 2016", "title": "Acryliques", "venue": "Atelier de la Page Blanche", "city": "Rouen", "solo": true},
-    {"sort": "2014-10", "when": "Octobre 2014", "title": "Exposition de peintures Taïwan-France", "venue": "", "city": "Taipei", "solo": false},
-    {"sort": "2014-05", "when": "Mai 2014", "title": "Kakémonos", "venue": "Chapelle de Flamets-Frétils", "city": "Flamets-Frétils", "solo": true}
+    {
+      "sort": "2026-05",
+      "when": "Mai 2026",
+      "title": "Less is more",
+      "venue": "Espace UAP",
+      "city": "Rouen",
+      "solo": true
+    },
+    {
+      "sort": "2026-05",
+      "when": "Mai – juin 2026",
+      "title": "Rouen National Arts",
+      "venue": "Halle aux Toiles",
+      "city": "Rouen",
+      "solo": false
+    },
+    {
+      "sort": "2026-05",
+      "when": "Mai 2026",
+      "title": "Traces de vie",
+      "venue": "Pavillon du Jardin des Plantes",
+      "city": "Rouen",
+      "solo": false
+    },
+    {
+      "sort": "2026-05",
+      "when": "Mai 2026",
+      "title": "Art Concret, avec le collège Chartier",
+      "venue": "Centre culturel Leclerc",
+      "city": "Bayeux",
+      "solo": false
+    },
+    {
+      "sort": "2026-05",
+      "when": "Mai 2026",
+      "title": "Salon Culture et Jeux Mathématiques",
+      "venue": "Place Saint-Sulpice",
+      "city": "Paris",
+      "solo": false
+    },
+    {
+      "sort": "2026-03",
+      "when": "Mars – mai 2026",
+      "title": "Au printemps, au printemps",
+      "venue": "Usine à Zabu",
+      "city": "Saint-Germain-des-Angles",
+      "solo": false
+    },
+    {
+      "sort": "2026-02",
+      "when": "Février – avril 2026",
+      "title": "À géométrie variable",
+      "venue": "Hangar des Arts",
+      "city": "Magny-en-Vexin",
+      "solo": false
+    },
+    {
+      "sort": "2026-02",
+      "when": "Février 2026",
+      "title": "Art Capital — Comparaisons",
+      "venue": "Grand Palais",
+      "city": "Paris",
+      "solo": false
+    },
+    {
+      "sort": "2026-01",
+      "when": "Janvier – mars 2026",
+      "title": "CAC-Normandie",
+      "venue": "Galerie du Parc",
+      "city": "Port-Jérôme-sur-Seine",
+      "solo": false
+    },
+    {
+      "sort": "2026-01",
+      "when": "Janvier – mars 2026",
+      "title": "Union des Arts Plastiques",
+      "venue": "",
+      "city": "Saint-Étienne-du-Rouvray",
+      "solo": false
+    },
+    {
+      "sort": "2025-11",
+      "when": "Novembre 2025",
+      "title": "Métaphore",
+      "venue": "",
+      "city": "Gisors",
+      "solo": false
+    },
+    {
+      "sort": "2025-11",
+      "when": "Novembre 2025",
+      "title": "111 pour les Arts",
+      "venue": "Mairie du 8ᵉ",
+      "city": "Paris",
+      "solo": false
+    },
+    {
+      "sort": "2025-11",
+      "when": "Novembre 2025",
+      "title": "Musique",
+      "venue": "",
+      "city": "Saint-Étienne-du-Rouvray",
+      "solo": false
+    },
+    {
+      "sort": "2025-10",
+      "when": "Octobre 2025",
+      "title": "Trait d'union",
+      "venue": "Galerie Abstract Project",
+      "city": "Paris",
+      "solo": false
+    },
+    {
+      "sort": "2025-09",
+      "when": "Septembre 2025",
+      "title": "Salon de Londinières",
+      "venue": "",
+      "city": "Londinières",
+      "solo": false
+    },
+    {
+      "sort": "2025-06",
+      "when": "Juin 2025",
+      "title": "Salon Culture et Jeux Mathématiques",
+      "venue": "",
+      "city": "Paris",
+      "solo": false
+    },
+    {
+      "sort": "2025-03",
+      "when": "Mars 2025",
+      "title": "Exposition internationale de calligraphies",
+      "venue": "",
+      "city": "Taipei",
+      "solo": false
+    },
+    {
+      "sort": "2025-03",
+      "when": "Mars 2025",
+      "title": "Collages",
+      "venue": "Espace UAP",
+      "city": "Rouen",
+      "solo": false
+    },
+    {
+      "sort": "2024-11",
+      "when": "Novembre – décembre 2024",
+      "title": "Vague de Rêves",
+      "venue": "",
+      "city": "Saint-Étienne-du-Rouvray",
+      "solo": false
+    },
+    {
+      "sort": "2024-11",
+      "when": "Novembre – décembre 2024",
+      "title": "CréArts",
+      "venue": "",
+      "city": "Bosc-Roger-en-Roumois",
+      "solo": false
+    },
+    {
+      "sort": "2024-10",
+      "when": "Octobre 2024",
+      "title": "Journées de l'APMEP — Arts et mathématiques",
+      "venue": "",
+      "city": "Le Havre",
+      "solo": false
+    },
+    {
+      "sort": "2024-09",
+      "when": "Septembre 2024",
+      "title": "Salon de Londinières",
+      "venue": "",
+      "city": "Londinières",
+      "solo": false
+    },
+    {
+      "sort": "2024-05",
+      "when": "Mai – juin 2024",
+      "title": "Rouen National Arts",
+      "venue": "",
+      "city": "Rouen",
+      "solo": false
+    },
+    {
+      "sort": "2024-05",
+      "when": "Mai 2024",
+      "title": "jARTdins de Montagny",
+      "venue": "",
+      "city": "Montagny",
+      "solo": false
+    },
+    {
+      "sort": "2024-04",
+      "when": "Avril 2024",
+      "title": "OpenArts",
+      "venue": "",
+      "city": "Amfreville-la-Mi-Voie",
+      "solo": false
+    },
+    {
+      "sort": "2024-03",
+      "when": "Mars – avril 2024",
+      "title": "Carrégraphie",
+      "venue": "Espace UAP",
+      "city": "Rouen",
+      "solo": true
+    },
+    {
+      "sort": "2024-02",
+      "when": "Février 2024",
+      "title": "Espace UAP",
+      "venue": "Espace UAP",
+      "city": "Rouen",
+      "solo": false
+    },
+    {
+      "sort": "2024-01",
+      "when": "Janvier – février 2024",
+      "title": "Union des Arts Plastiques",
+      "venue": "",
+      "city": "Saint-Étienne-du-Rouvray",
+      "solo": false
+    },
+    {
+      "sort": "2023-11",
+      "when": "Novembre 2023",
+      "title": "Vivre Liberté",
+      "venue": "",
+      "city": "Saint-Étienne-du-Rouvray",
+      "solo": false
+    },
+    {
+      "sort": "2023-09",
+      "when": "Septembre 2023",
+      "title": "Salon de Londinières",
+      "venue": "",
+      "city": "Londinières",
+      "solo": false
+    },
+    {
+      "sort": "2023-05",
+      "when": "Mai 2023",
+      "title": "Déstructurer le carré",
+      "venue": "Galerie Abstract Project",
+      "city": "Paris",
+      "solo": false
+    },
+    {
+      "sort": "2023-05",
+      "when": "Mai 2023",
+      "title": "Salon d'Arts Contemporains",
+      "venue": "",
+      "city": "Saint-Nicolas-d'Aliermont",
+      "solo": false
+    },
+    {
+      "sort": "2023-03",
+      "when": "Mars – avril 2023",
+      "title": "3 + 1",
+      "venue": "Le Rive Gauche",
+      "city": "Saint-Étienne-du-Rouvray",
+      "solo": false
+    },
+    {
+      "sort": "2023-03",
+      "when": "Mars – avril 2023",
+      "title": "France-Taïwan",
+      "venue": "Casino",
+      "city": "Bonsecours",
+      "solo": false
+    },
+    {
+      "sort": "2023-01",
+      "when": "Janvier – février 2023",
+      "title": "Au-delà des lignes",
+      "venue": "La Passerelle",
+      "city": "Mont-Saint-Aignan",
+      "solo": false
+    },
+    {
+      "sort": "2023-01",
+      "when": "Janvier – février 2023",
+      "title": "60 ans de l'U.A.P.",
+      "venue": "",
+      "city": "Saint-Étienne-du-Rouvray",
+      "solo": false
+    },
+    {
+      "sort": "2022-11",
+      "when": "Novembre 2022",
+      "title": "Résistance",
+      "venue": "",
+      "city": "Saint-Étienne-du-Rouvray",
+      "solo": false
+    },
+    {
+      "sort": "2022-09",
+      "when": "Septembre – octobre 2022",
+      "title": "Carré",
+      "venue": "Espace UAP",
+      "city": "Rouen",
+      "solo": false
+    },
+    {
+      "sort": "2022-09",
+      "when": "Septembre 2022",
+      "title": "Salon de Londinières",
+      "venue": "",
+      "city": "Londinières",
+      "solo": false
+    },
+    {
+      "sort": "2022-06",
+      "when": "Juin 2022",
+      "title": "Salon d'Arts Contemporains",
+      "venue": "",
+      "city": "Sainte-Croix-sur-Buchy",
+      "solo": false
+    },
+    {
+      "sort": "2022-05",
+      "when": "Mai 2022",
+      "title": "Kakémonos, acryliques et encres de Chine",
+      "venue": "Espace Union des Arts Plastiques",
+      "city": "Rouen",
+      "solo": true
+    },
+    {
+      "sort": "2022-04",
+      "when": "Avril – mai 2022",
+      "title": "Lions'Art",
+      "venue": "",
+      "city": "Eu",
+      "solo": false
+    },
+    {
+      "sort": "2022-03",
+      "when": "Mars – avril 2022",
+      "title": "Art en vitrine",
+      "venue": "",
+      "city": "Neufchâtel-en-Bray",
+      "solo": true
+    },
+    {
+      "sort": "2021-12",
+      "when": "Décembre 2021 – janvier 2022",
+      "title": "Espace UAP",
+      "venue": "Espace UAP",
+      "city": "Rouen",
+      "solo": false
+    },
+    {
+      "sort": "2021-11",
+      "when": "Novembre – décembre 2021",
+      "title": "Relecture d'une œuvre",
+      "venue": "",
+      "city": "Saint-Étienne-du-Rouvray",
+      "solo": false
+    },
+    {
+      "sort": "2021-10",
+      "when": "Octobre 2021",
+      "title": "Atelier Normand Création",
+      "venue": "",
+      "city": "Rouen",
+      "solo": false
+    },
+    {
+      "sort": "2021-09",
+      "when": "Septembre 2021",
+      "title": "Salon de Londinières",
+      "venue": "",
+      "city": "Londinières",
+      "solo": false
+    },
+    {
+      "sort": "2021-05",
+      "when": "Mai – juillet 2021",
+      "title": "Union des Arts Plastiques",
+      "venue": "",
+      "city": "Saint-Étienne-du-Rouvray",
+      "solo": false
+    },
+    {
+      "sort": "2020-10",
+      "when": "Octobre 2020",
+      "title": "Atelier Normand Création",
+      "venue": "",
+      "city": "Rouen",
+      "solo": false
+    },
+    {
+      "sort": "2019-10",
+      "when": "Octobre 2019",
+      "title": "Salon des Réalités Nouvelles",
+      "venue": "Parc Floral",
+      "city": "Paris",
+      "solo": false
+    },
+    {
+      "sort": "2019-09",
+      "when": "Septembre 2019",
+      "title": "Grisy Code",
+      "venue": "",
+      "city": "Grisy-les-Plâtres",
+      "solo": false
+    },
+    {
+      "sort": "2019-08",
+      "when": "Août – septembre 2019",
+      "title": "L'Étage",
+      "venue": "Espace Culturel Leclerc",
+      "city": "Bayeux",
+      "solo": true
+    },
+    {
+      "sort": "2019-04",
+      "when": "Avril – mai 2019",
+      "title": "Atelier Normand Création",
+      "venue": "",
+      "city": "Rouen",
+      "solo": false
+    },
+    {
+      "sort": "2019-01",
+      "when": "Janvier – février 2019",
+      "title": "Les Hivernales",
+      "venue": "",
+      "city": "Bonsecours",
+      "solo": false
+    },
+    {
+      "sort": "2018-10",
+      "when": "Octobre 2018",
+      "title": "Salon des Réalités Nouvelles",
+      "venue": "Parc Floral",
+      "city": "Paris",
+      "solo": false
+    },
+    {
+      "sort": "2018-09",
+      "when": "Septembre 2018 – janvier 2019",
+      "title": "La Table des Matières",
+      "venue": "Bibliothèque Alexis-de-Tocqueville",
+      "city": "Caen",
+      "solo": true
+    },
+    {
+      "sort": "2018-03",
+      "when": "Mars 2018",
+      "title": "France-Taïwan",
+      "venue": "",
+      "city": "Bonsecours",
+      "solo": false
+    },
+    {
+      "sort": "2018-01",
+      "when": "Janvier 2018",
+      "title": "Salon d'Arts Contemporains",
+      "venue": "",
+      "city": "Sainte-Croix-sur-Buchy",
+      "solo": false
+    },
+    {
+      "sort": "2017-07",
+      "when": "Juillet – août 2017",
+      "title": "Acryliques",
+      "venue": "Hôtel de Bourgtheroulde",
+      "city": "Rouen",
+      "solo": true
+    },
+    {
+      "sort": "2017-05",
+      "when": "Mai 2017",
+      "title": "Salon d'Arts Contemporains",
+      "venue": "",
+      "city": "Saint-Nicolas-d'Aliermont",
+      "solo": false
+    },
+    {
+      "sort": "2017-01",
+      "when": "Janvier 2017",
+      "title": "Acryliques",
+      "venue": "Maison de l'Université",
+      "city": "Mont-Saint-Aignan",
+      "solo": true
+    },
+    {
+      "sort": "2016-03",
+      "when": "Mars 2016",
+      "title": "Acryliques",
+      "venue": "Atelier de la Page Blanche",
+      "city": "Rouen",
+      "solo": true
+    },
+    {
+      "sort": "2014-10",
+      "when": "Octobre 2014",
+      "title": "Exposition de peintures Taïwan-France",
+      "venue": "",
+      "city": "Taipei",
+      "solo": false
+    },
+    {
+      "sort": "2014-05",
+      "when": "Mai 2014",
+      "title": "Kakémonos",
+      "venue": "Chapelle de Flamets-Frétils",
+      "city": "Flamets-Frétils",
+      "solo": true
+    }
   ],
   "upcoming": []
 }

@@ -21,27 +21,49 @@
       var next = current === "dark" ? "light" : "dark";
       root.setAttribute("data-theme", next);
       try { localStorage.setItem("mm-theme", next); } catch (e) { /* mode privé */ }
-      var meta = document.querySelector('meta[name="theme-color"]');
-      if (meta) meta.setAttribute("content", next === "dark" ? "#131210" : "#f5f2ea");
+      syncThemeColor();
     });
   }
+
+  /* La barre d'état de Safari suit <meta name="theme-color">. Il y en a deux, une par
+     media query : si le thème est forcé, les deux doivent porter la couleur choisie,
+     sinon la barre reste sombre au-dessus d'une page claire (ou l'inverse). */
+  function syncThemeColor() {
+    var forced = root.getAttribute("data-theme");
+    document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) {
+      var dark = forced ? forced === "dark" : /dark/.test(m.getAttribute("media") || "");
+      m.setAttribute("content", dark ? "#131210" : "#f5f2ea");
+    });
+  }
+  syncThemeColor();
 
   /* ------------------------------------------------------ menu mobile */
   var navToggle = document.getElementById("navtoggle");
   var nav = document.getElementById("nav");
   if (navToggle && nav) {
+    var setNav = function (open) {
+      nav.setAttribute("data-open", String(open));
+      navToggle.setAttribute("aria-expanded", String(open));
+      navToggle.setAttribute("aria-label", open ? "Fermer le menu" : "Ouvrir le menu");
+      root.classList.toggle("nav-open", open);
+    };
     navToggle.addEventListener("click", function () {
-      var open = nav.getAttribute("data-open") === "true";
-      nav.setAttribute("data-open", String(!open));
-      navToggle.setAttribute("aria-expanded", String(!open));
-      navToggle.setAttribute("aria-label", open ? "Ouvrir le menu" : "Fermer le menu");
+      setNav(nav.getAttribute("data-open") !== "true");
+    });
+    nav.addEventListener("click", function (ev) {
+      if (ev.target.closest("a")) setNav(false);
     });
     document.addEventListener("keydown", function (ev) {
       if (ev.key === "Escape" && nav.getAttribute("data-open") === "true") {
-        navToggle.click();
+        setNav(false);
         navToggle.focus();
       }
     });
+    window.matchMedia("(min-width: 861px)").addEventListener("change", function (mq) {
+      if (mq.matches) setNav(false);
+    });
+    // retour arrière depuis le cache : le menu ne doit pas réapparaître ouvert
+    window.addEventListener("pageshow", function () { setNav(false); });
   }
 
   /* --------------------------------------------------- filtres séries */
@@ -89,7 +111,7 @@
       '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 5l14 14M19 5L5 19"/></svg></button>' +
       '<div class="lightbox__inner"><div class="lightbox__img"></div>' +
       '<div class="lightbox__bar"><span class="label"></span>' +
-      '<span class="label">Échap pour fermer</span></div></div>';
+      '<span class="label lightbox__hint">Échap pour fermer</span></div></div>';
     document.body.appendChild(dlg);
 
     zoom.style.cursor = "zoom-in";

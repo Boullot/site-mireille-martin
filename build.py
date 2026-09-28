@@ -8,6 +8,11 @@ Générateur du site de Mireille Martin.
 
 Tout le contenu vit dans content/ et assets/originals/.
 Le site complet est écrit dans dist/, prêt à être déposé sur Vercel.
+
+Pillow n'est nécessaire que pour fabriquer les images dérivées manquantes. Sur Vercel,
+il n'est pas installé : les dérivés sont versionnés dans dist/img/ (ceux des œuvres
+ajoutées depuis l'espace d'administration sont fabriqués par api/admin.js), et le build
+se contente d'écrire le HTML avec la bibliothèque standard.
 """
 
 import html
@@ -15,10 +20,15 @@ import json
 import os
 import re
 import shutil
+import struct
+import sys
 import unicodedata
 from datetime import date
 
-from PIL import Image, ImageOps, ImageDraw, ImageFont
+try:
+    from PIL import Image, ImageOps, ImageDraw, ImageFont
+except ImportError:  # build distant : les dérivés existent déjà
+    Image = None
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 CONTENT = os.path.join(ROOT, "content")
@@ -52,63 +62,57 @@ def slugify(s):
     return re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")
 
 
+_UNITS = ("zéro un deux trois quatre cinq six sept huit neuf dix onze douze treize "
+          "quatorze quinze seize dix-sept dix-huit dix-neuf").split()
+_TENS = {2: "vingt", 3: "trente", 4: "quarante", 5: "cinquante", 6: "soixante"}
+
+
+def en_lettres(n):
+    """Nombre en toutes lettres (0–999), orthographe traditionnelle : « cent huit »."""
+    if n < 20:
+        return _UNITS[n]
+    if n < 100:
+        t, u = divmod(n, 10)
+        if t in (7, 9):
+            t, u = t - 1, u + 10
+        head = "quatre-vingt" if t == 8 else _TENS[t]
+        if u == 0:
+            return head + ("s" if t == 8 else "")
+        if u in (1, 11) and t != 8:
+            return f"{head} et {_UNITS[u]}"
+        return f"{head}-{_UNITS[u]}"
+    h, r = divmod(n, 100)
+    head = "cent" if h == 1 else f"{_UNITS[h]} cent"
+    if r == 0:
+        return head + ("s" if h > 1 else "")
+    return f"{head} {en_lettres(r)}"
+
+
+def by_slug(slug):
+    return next((w for w in WORKS if w["slug"] == slug), None)
+
+
+def first_year():
+    years = [x["sort"][:4] for x in EXPOS["exhibitions"] if x.get("sort")]
+    return min(years) if years else str(TODAY.year)
+
+
 SITE = load("site.json")
 WORKS = load("works.json")["works"]
 VIEWS = load("views.json")["views"]
 EXPOS = load("exhibitions.json")
 GOLD = load("livre-dor.json")
+HOME = load("home.json")
+CRITIQUES = load("critiques.json")["critiques"]
+_SERIES = load("series.json")
 
 BASE = SITE["domain"].rstrip("/")
 
-SERIES = {
-    "aller-retour": {
-        "title": "Aller Retour",
-        "lede": "Le cœur de l'œuvre. Une variation construite à partir de deux carrés, "
-                "un noir et un blanc, reprise trente-quatre fois sans jamais se répéter.",
-        "medium": "Acrylique sur toile",
-    },
-    "peintures": {
-        "title": "Peintures",
-        "lede": "Autour de la série principale : les petits formats, les six Équinoxes, "
-                "les triangles, et les toiles où le rouge fait son entrée.",
-        "medium": "Acrylique sur toile",
-    },
-    "carregraphies": {
-        "title": "Carrégraphies",
-        "lede": "Onze idéogrammes chinois ramenés à l'orthogonale, posés au centre d'une "
-                "trame. La calligraphie passée au tamis de la géométrie.",
-        "medium": "Acrylique sur toile",
-    },
-    "encres": {
-        "title": "Encres de Chine",
-        "lede": "Quatre projets menés au pinceau et à l'encre sur papier : les kakémonos "
-                "de « Géométrie d'encre et de papier », les doubles, les mots, l'ombre et la lumière.",
-        "medium": "Encre de Chine sur papier",
-    },
-}
-
-GROUP_ORDER = [
-    "Aller Retour",
-    "2111", "Équinoxe", "Grands carrés", "Lignes", "Triangles aux carrés", "Sans titre",
-    "Carrégraphies",
-    "Géométrie d'encre et de papier", "Aller Retour Double", "Les mots entre les lignes",
-    "Ombre et lumière",
-]
-
-GROUP_NOTES = {
-    "2111": "Quatre toiles où l'ocre traverse le noir et le blanc.",
-    "Équinoxe": "Six formats verticaux 20 × 40, où l'équilibre bascule d'un côté puis de l'autre.",
-    "Grands carrés": "Deux toiles de 80 × 80.",
-    "Lignes": "Petits formats : la ligne comme seul sujet.",
-    "Triangles aux carrés": "La diagonale prend le pas sur l'angle droit.",
-    "Sans titre": "Toiles récentes et peintures de la série principale restées sans titre.",
-    "Géométrie d'encre et de papier": "Kakémonos, encre de Chine sur papier xuan, 35 × 137 cm.",
-    "Aller Retour Double": "Huit encres de petit format, 17,5 × 22 cm.",
-    "Les mots entre les lignes": "Huit idéogrammes, encre de Chine sur papier, 30 × 30 cm.",
-    "Ombre et lumière": "Projet en cours.",
-}
-
-TALL_GROUPS = {"Géométrie d'encre et de papier"}
+# familles = les grandes sections de la page Œuvres ; groupes = les séries en intertitre
+SERIES = {f["key"]: f for f in _SERIES["families"]}
+GROUP_ORDER = [g["name"] for g in _SERIES["groups"]]
+GROUP_NOTES = {g["name"]: g.get("note", "") for g in _SERIES["groups"]}
+TALL_GROUPS = {g["name"] for g in _SERIES["groups"] if g.get("tall")}
 
 NAV = [
     ("/oeuvres/", "Œuvres"),
@@ -121,41 +125,89 @@ NAV = [
 # =============================================================== images
 
 _meta_cache = {}
+_listing = {}
+
+
+def stem(f):
+    """Nom de base des dérivés d'une image : le nom du fichier source sans extension."""
+    return os.path.splitext(os.path.basename(f))[0]
+
+
+def need_pillow(what):
+    if Image is None:
+        sys.exit(f"✗ {what} : dérivé d'image manquant et Pillow absent. "
+                 "Lancer build.py en local (avec Pillow) ou republier l'image depuis l'admin.")
+
+
+def webp_size(path):
+    """Largeur × hauteur d'un WebP, lues dans l'en-tête (VP8, VP8L ou VP8X)."""
+    with open(path, "rb") as f:
+        head = f.read(40)
+    kind = head[12:16]
+    if kind == b"VP8 ":
+        w, h = struct.unpack("<HH", head[26:30])
+        return w & 0x3FFF, h & 0x3FFF
+    if kind == b"VP8L":
+        b = int.from_bytes(head[21:25], "little")
+        return (b & 0x3FFF) + 1, ((b >> 14) & 0x3FFF) + 1
+    if kind == b"VP8X":
+        return int.from_bytes(head[24:27], "little") + 1, int.from_bytes(head[27:30], "little") + 1
+    raise ValueError(f"WebP illisible : {path}")
+
+
+def existing(outdir, base_name):
+    """Dérivés déjà présents : ({largeur: nom webp}, nom du jpeg de repli ou None)."""
+    if outdir not in _listing:
+        _listing[outdir] = os.listdir(outdir) if os.path.isdir(outdir) else []
+    pat = re.compile(re.escape(base_name) + r"-(\d+)\.(webp|jpg)$")
+    webps, jpg = {}, None
+    for name in _listing[outdir]:
+        m = pat.fullmatch(name)
+        if m and m.group(2) == "webp":
+            webps[int(m.group(1))] = name
+        elif m:
+            jpg = name
+    return webps, jpg
 
 
 def process(rel_src, base_name, subdir=""):
-    """Produit les dérivés webp + un JPEG de repli. Renvoie (srcset, fallback, w, h)."""
+    """Produit les dérivés webp + un JPEG de repli. Renvoie (srcset, fallback, w, h).
+
+    Si les dérivés existent déjà, rien n'est ouvert : les dimensions sont lues dans
+    l'en-tête du plus grand WebP. C'est ce qui permet au build de tourner sans Pillow."""
     key = (rel_src, base_name)
     if key in _meta_cache:
         return _meta_cache[key]
 
-    src = os.path.join(ORIGINALS, rel_src)
-    im = ImageOps.exif_transpose(Image.open(src)).convert("RGB")
-    ow, oh = im.size
     outdir = os.path.join(IMGDIR, subdir) if subdir else IMGDIR
-    os.makedirs(outdir, exist_ok=True)
+    prefix = f"/img/{subdir + '/' if subdir else ''}"
+    webps, jpg = existing(outdir, base_name)
 
-    parts = []
-    for w in WIDTHS:
-        if w > ow and parts:
-            break
-        tw = min(w, ow)
-        th = round(oh * tw / ow)
-        name = f"{base_name}-{tw}.webp"
-        path = os.path.join(outdir, name)
-        if not os.path.exists(path):
-            im.resize((tw, th), Image.LANCZOS).save(path, "WEBP", quality=84, method=5)
-        url = f"/img/{subdir + '/' if subdir else ''}{name}"
-        parts.append(f"{url} {tw}w")
-
-    fw = min(1000, ow)
-    fb = f"{base_name}-{fw}.jpg"
-    fbpath = os.path.join(outdir, fb)
-    if not os.path.exists(fbpath):
+    if not webps or not jpg:
+        need_pillow(rel_src)
+        src = os.path.join(ORIGINALS, rel_src)
+        im = ImageOps.exif_transpose(Image.open(src)).convert("RGB")
+        ow, oh = im.size
+        os.makedirs(outdir, exist_ok=True)
+        webps = {}
+        for w in WIDTHS:
+            if w > ow and webps:
+                break
+            tw = min(w, ow)
+            th = round(oh * tw / ow)
+            name = f"{base_name}-{tw}.webp"
+            im.resize((tw, th), Image.LANCZOS).save(os.path.join(outdir, name), "WEBP", quality=84, method=5)
+            webps[tw] = name
+        fw = min(1000, ow)
+        jpg = f"{base_name}-{fw}.jpg"
         im.resize((fw, round(oh * fw / ow)), Image.LANCZOS).save(
-            fbpath, "JPEG", quality=82, optimize=True, progressive=True)
+            os.path.join(outdir, jpg), "JPEG", quality=82, optimize=True, progressive=True)
+        _listing.pop(outdir, None)
 
-    res = (", ".join(parts), f"/img/{subdir + '/' if subdir else ''}{fb}", ow, oh)
+    widths = sorted(webps)
+    w, h = webp_size(os.path.join(outdir, webps[widths[-1]]))
+    parts = [f"{prefix}{webps[x]} {x}w" for x in widths]
+    res = (", ".join(parts), f"{prefix}{jpg}", w, h)
     _meta_cache[key] = res
     return res
 
@@ -166,19 +218,16 @@ def og_image(rel_src, base_name):
     os.makedirs(os.path.dirname(out), exist_ok=True)
     if os.path.exists(out):
         return f"/img/og/{base_name}.jpg"
+    need_pillow(f"og/{base_name}.jpg")
 
     canvas = Image.new("RGB", (1200, 630), (245, 242, 234))
     im = ImageOps.exif_transpose(Image.open(os.path.join(ORIGINALS, rel_src))).convert("RGB")
     im.thumbnail((760, 470), Image.LANCZOS)
     canvas.paste(im, ((1200 - im.width) // 2, (630 - im.height) // 2 - 18))
-
-    d = ImageDraw.Draw(canvas)
-    try:
-        f = ImageFont.truetype("/System/Library/Fonts/Supplemental/Optima.ttc", 26)
-    except OSError:
-        f = ImageFont.load_default()
-    d.text((600, 580), "MIREILLE MARTIN", fill=(60, 56, 50), font=f, anchor="mm")
-    d.line([(490, 552), (710, 552)], fill=(201, 53, 31), width=2)
+    # la signature est un calque partagé avec api/admin.js, qui fabrique les cartes
+    # des œuvres ajoutées en ligne : même rendu, avec ou sans Optima sur la machine
+    sig = Image.open(os.path.join(ASSETS, "og-signature.png")).convert("RGBA")
+    canvas.paste(sig, (0, 0), sig)
     canvas.save(out, "JPEG", quality=86, optimize=True)
     return f"/img/og/{base_name}.jpg"
 
@@ -251,7 +300,7 @@ def page(path, title, description, body, og=None, extra_head="", nav_key=None,
     url = BASE + path
     og = og or f"{BASE}/img/og/accueil.jpg"
     nav = "".join(
-        f'<a href="{href}"{" aria-current=\"page\"" if href == nav_key else ""}>{label}</a>'
+        '<a href="{}"{}>{}</a>'.format(href, ' aria-current="page"' if href == nav_key else "", label)
         for href, label in NAV
     )
     ld = ""
@@ -302,7 +351,8 @@ def page(path, title, description, body, og=None, extra_head="", nav_key=None,
         <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M2 12h2.4M19.6 12H22M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M19.1 4.9l-1.7 1.7M6.6 17.4l-1.7 1.7"/></svg>
       </button>
       <button class="nav-toggle" id="navtoggle" type="button" aria-expanded="false" aria-controls="nav" aria-label="Ouvrir le menu">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        <svg class="icon-burger" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 7h18M3 12h18M3 17h18"/></svg>
+        <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg>
       </button>
     </div>
   </div>
@@ -336,7 +386,7 @@ def page(path, title, description, body, og=None, extra_head="", nav_key=None,
     </div>
     <div class="foot__bottom">
       <span>© {TODAY.year} Mireille Martin — tous droits réservés.</span>
-      <span>Photographies des œuvres : {e(SITE['credits_photo'])} · <a href="/mentions-legales/">Mentions légales</a></span>
+      <span>Photographies des œuvres : {e(SITE['credits_photo'])} · <a href="/mentions-legales/">Mentions légales</a> · <a href="/admin/" rel="nofollow">Administration</a></span>
     </div>
   </div>
 </footer>
@@ -371,7 +421,7 @@ def dims_short(w):
 def plate(w, sizes="(min-width:1200px) 300px, (min-width:700px) 33vw, 50vw", eager=False):
     ideo = f'<span class="ideo">{e(w["note"])}</span>' if w.get("note") else ""
     meta = dims_short(w) or w["technique"]
-    img = picture(w["file"], w["slug"], f'{w["title"]}, {w["technique"]}', sizes=sizes, eager=eager)
+    img = picture(w["file"], stem(w["file"]), f'{w["title"]}, {w["technique"]}', sizes=sizes, eager=eager)
     # l'intertitre du groupe porte déjà le nom du projet : la vignette peut être brève
     label = w.get("short") or w["title"]
     return f"""<article class="plate" data-series="{e(w['series'])}">
@@ -411,13 +461,11 @@ def render_group(g, items, show_head=True):
 
 
 def build_home():
-    hero_work = next(w for w in WORKS if w["slug"] == "sans-titre-01")
-    og_image(hero_work["file"], "accueil")
-
-    picks = ["aller-retour-i", "aller-retour-xi", "carregraphie-harmonie",
-             "geometrie-encre-papier-3", "equinoxe-iii", "2111-xix",
-             "vice-et-versa", "mots-entre-les-lignes-liberte"]
-    selection = [w for s in picks for w in WORKS if w["slug"] == s]
+    # choix réglés depuis l'admin (content/home.json) ; une œuvre supprimée entre-temps
+    # est simplement ignorée, jamais une erreur
+    hero_work = by_slug(HOME.get("hero")) or WORKS[0]
+    home_og = og_image(hero_work["file"], stem(hero_work["file"]))
+    selection = [w for w in (by_slug(s) for s in HOME.get("featured", [])) if w] or WORKS[:8]
 
     last = sorted(EXPOS["exhibitions"], key=lambda x: x["sort"], reverse=True)
     upcoming = [x for x in EXPOS["upcoming"]] or []
@@ -455,7 +503,7 @@ def build_home():
       </div>
     </div>
     <figure class="hero__figure" style="margin:0">
-      {picture(hero_work['file'], hero_work['slug'], 'Peinture de Mireille Martin, acrylique sur toile, noir et blanc', sizes='(min-width:900px) 46vw, 92vw', eager=True)}
+      {picture(hero_work['file'], stem(hero_work['file']), f"{hero_work['title']}, peinture de Mireille Martin — {hero_work['technique']}", sizes='(min-width:900px) 46vw, 92vw', eager=True)}
     </figure>
   </section>
 </div>
@@ -478,7 +526,7 @@ def build_home():
       </div>
       <div class="facts">
         <div><b>{len(WORKS)}</b><span>œuvres au catalogue</span></div>
-        <div><b>{n_expos}</b><span>expositions depuis 2014</span></div>
+        <div><b>{n_expos}</b><span>expositions depuis {first_year()}</span></div>
         <div><b>{n_solo}</b><span>expositions personnelles</span></div>
         <div class="facts__memb">
           <span class="label">Membre de</span>
@@ -493,7 +541,7 @@ def build_home():
   <div class="wrap">
     <div class="section-head">
       <h2>Un choix d'œuvres</h2>
-      <a class="link-arrow" href="/oeuvres/">Les 108 œuvres →</a>
+      <a class="link-arrow" href="/oeuvres/">Les {len(WORKS)} œuvres →</a>
     </div>
     <div class="plates">{"".join(plate(w) for w in selection)}</div>
   </div>
@@ -527,7 +575,7 @@ def build_home():
         "@context": "https://schema.org", "@type": "Person",
         "name": "Mireille Martin", "alternateName": "Mireille de Camps Martin",
         "jobTitle": "Artiste peintre", "url": BASE,
-        "image": BASE + "/img/og/accueil.jpg",
+        "image": BASE + home_og,
         "email": "mailto:" + SITE["email"],
         "sameAs": [SITE["instagram_url"], "http://cac-normandie.org/martin.html"],
         "address": {"@type": "PostalAddress", "addressLocality": SITE["city"],
@@ -541,17 +589,32 @@ def build_home():
     page("/", "Mireille Martin — peintre, abstraction géométrique",
          "Peintures et encres de Chine en noir et blanc. Chaque tableau contient un carré noir, "
          "un carré blanc, et autant de noir que de blanc. Œuvres à découvrir et à acquérir.",
-         body, og="/img/og/accueil.jpg", jsonld=ld)
+         body, og=home_og, jsonld=ld)
+
+
+def catalogue_lede(families, counts):
+    n, k = len(WORKS), len(families)
+    head = f"{en_lettres(n).capitalize()} œuvre{'s' if n > 1 else ''}, {en_lettres(k)} famille{'s' if k > 1 else ''}."
+    em = '<em style="font-style:normal;color:var(--fg)">{}</em>'
+    if list(families) == ["aller-retour", "peintures", "carregraphies", "encres"]:
+        nc = counts["carregraphies"]
+        return (f"{head} Les acryliques sur toile de la série {em.format('Aller Retour')}, les "
+                f"peintures qui l'entourent, {'les ' + en_lettres(nc) if nc > 1 else 'la'} "
+                f"{em.format('Carrégraphie' + ('s' if nc > 1 else ''))} et les encres de Chine sur papier.")
+    titles = [em.format(e(f["title"])) for f in families.values()]
+    listed = ", ".join(titles[:-1]) + " et " + titles[-1] if len(titles) > 1 else "".join(titles)
+    return f"{head} {listed}."
 
 
 def build_works_index():
     counts = {k: len([w for w in WORKS if w["series"] == k]) for k in SERIES}
+    families = {k: s for k, s in SERIES.items() if counts[k]}  # une famille vide ne s'affiche pas
     filters = ['<button class="filter" data-filter="all" aria-pressed="true">Tout <em>%d</em></button>' % len(WORKS)]
-    for k, s in SERIES.items():
+    for k, s in families.items():
         filters.append(f'<button class="filter" data-filter="{k}" aria-pressed="false">{e(s["title"])} <em>{counts[k]}</em></button>')
 
     sections = []
-    for k, s in SERIES.items():
+    for k, s in families.items():
         gs = groups_of(k)
         inner = "\n".join(render_group(g, items, show_head=(len(gs) > 1 or g != s["title"]))
                           for g, items in gs)
@@ -559,9 +622,9 @@ def build_works_index():
   <div class="wrap">
     <div class="section-head">
       <h2>{e(s['title'])}</h2>
-      <p class="label">{e(s['medium'])} · {counts[k]} œuvres</p>
+      <p class="label">{e(s['medium']) + ' · ' if s.get('medium') else ''}{counts[k]} œuvre{'s' if counts[k] > 1 else ''}</p>
     </div>
-    <p class="lede" style="margin-bottom:var(--space-7)">{e(s['lede'])}</p>
+    {f'<p class="lede" style="margin-bottom:var(--space-7)">{e(s["lede"])}</p>' if s.get('lede') else ''}
     {inner}
   </div>
 </section>""")
@@ -571,10 +634,7 @@ def build_works_index():
   <section style="padding-bottom:var(--space-5)">
     <p class="label">Catalogue</p>
     <h1 style="font-size:var(--fs-2xl);margin-block:var(--space-3) var(--space-5)">Œuvres</h1>
-    <p class="lede">Cent huit œuvres, quatre familles. Les acryliques sur toile de la série
-      <em style="font-style:normal;color:var(--fg)">Aller Retour</em>, les peintures qui
-      l'entourent, les onze <em style="font-style:normal;color:var(--fg)">Carrégraphies</em>
-      et les encres de Chine sur papier.</p>
+    <p class="lede">{catalogue_lede(families, counts)}</p>
     <div class="filters" style="margin-top:var(--space-7)" role="group" aria-label="Filtrer par série">
       {"".join(filters)}
     </div>
@@ -587,7 +647,7 @@ def build_works_index():
           "hasPart": [{"@type": "VisualArtwork", "name": w["title"],
                        "url": f"{BASE}/oeuvres/{w['slug']}/"} for w in WORKS[:40]]}
     page("/oeuvres/", "Œuvres — Mireille Martin",
-         "Le catalogue complet : 108 peintures et encres de Chine en noir et blanc. "
+         f"Le catalogue complet : {len(WORKS)} peintures et encres de Chine en noir et blanc. "
          "Séries Aller Retour, Carrégraphies, Équinoxe, Géométrie d'encre et de papier.",
          body, nav_key="/oeuvres/", jsonld=ld)
 
@@ -602,14 +662,16 @@ def build_work_pages():
         i = siblings.index(w)
         prev = siblings[i - 1] if i > 0 else siblings[-1]
         nxt = siblings[(i + 1) % len(siblings)]
-        # les quatre suivantes du même groupe, en cycle — pas toujours les mêmes
+        # les quatre suivantes du même groupe, en cycle — pas toujours les mêmes ;
+        # jamais l'œuvre elle-même ni un doublon, même dans une petite série
         same = [x for x in siblings if x["group"] == w["group"]]
         pool = same if len(same) > 4 else siblings
         j = pool.index(w)
-        others = [pool[(j + k) % len(pool)] for k in range(1, 5)]
+        others = [pool[(j + k) % len(pool)] for k in range(1, min(5, len(pool)))]
 
-        og = og_image(w["file"], w["slug"])
-        srcset, fb, ow, oh = process(w["file"], w["slug"])
+        base = stem(w["file"])
+        og = og_image(w["file"], base)
+        srcset, fb, ow, oh = process(w["file"], base)
         s = SERIES[w["series"]]
 
         dims_html = ""
@@ -619,7 +681,20 @@ def build_work_pages():
             dims_html = f"<div><dt>Dimensions</dt><dd><ul>{lst}</ul>{plural}</dd></div>"
 
         ideo = f'<span class="work__ideo">{e(w["note"])}</span>' if w.get("note") else ""
-        subject = f"Œuvre : {w['title']}"
+        about = ""
+        if (w.get("description") or "").strip():
+            paras = [p.strip() for p in w["description"].split("\n") if p.strip()]
+            about = '<div class="work__about">' + "".join(f"<p>{inline(p)}</p>" for p in paras) + "</div>"
+        others_html = ""
+        if others:
+            others_html = f"""
+<section>
+  <div class="wrap">
+    <div class="section-head"><h2>Dans la même série</h2>
+      <a class="link-arrow" href="/oeuvres/">Tout le catalogue →</a></div>
+    <div class="plates">{"".join(plate(x) for x in others)}</div>
+  </div>
+</section>"""
 
         body = f"""
 <div class="wrap">
@@ -632,14 +707,15 @@ def build_work_pages():
       <div class="work__stage">
         <button type="button" class="zoom" data-full="{e(fb)}" data-srcset="{e(srcset)}"
                 data-caption="{e(w['title'])}" aria-label="Agrandir {e(w['title'])}">
-          {picture(w['file'], w['slug'], f"{w['title']} — {w['technique']}, {dims_str(w) or 'dimensions non précisées'}", sizes="(min-width:940px) 62vw, 92vw", eager=True)}
+          {picture(w['file'], base, f"{w['title']} — {w['technique']}, {dims_str(w) or 'dimensions non précisées'}", sizes="(min-width:940px) 62vw, 92vw", eager=True)}
         </button>
       </div>
-      <p class="label" style="margin-top:var(--space-3)">Photographie : {e(SITE['credits_photo'])} — cliquer pour agrandir</p>
+      <p class="label work__credit">Photographie : {e(SITE['credits_photo'])}<span class="hint-mouse"> — cliquer pour agrandir</span><span class="hint-touch"> — toucher pour agrandir</span></p>
     </div>
     <aside class="work__aside">
       <p class="label">{e(s['title'])}</p>
       <h1 class="work__title">{e(w['title'])}{ideo}</h1>
+      {about}
       <dl class="specs">
         <div><dt>Technique</dt><dd>{e(w['technique'])}</dd></div>
         {dims_html}
@@ -659,14 +735,7 @@ def build_work_pages():
     <a class="link-arrow" href="/oeuvres/{e(nxt['slug'])}/">{e(nxt['title'])} →</a>
   </nav>
 </div>
-
-<section>
-  <div class="wrap">
-    <div class="section-head"><h2>Dans la même série</h2>
-      <a class="link-arrow" href="/oeuvres/">Tout le catalogue →</a></div>
-    <div class="plates">{"".join(plate(x) for x in others)}</div>
-  </div>
-</section>
+{others_html}
 """
         desc = (f"{w['title']} — {w['technique']}"
                 + (f", {dims_str(w)}" if w["dimensions"] else "")
@@ -675,6 +744,7 @@ def build_work_pages():
             "@context": "https://schema.org", "@type": "VisualArtwork",
             "name": w["title"], "url": f"{BASE}/oeuvres/{w['slug']}/",
             "image": f"{BASE}{fb}",
+            **({"description": w["description"].strip()} if (w.get("description") or "").strip() else {}),
             "artform": "Peinture" if "Acrylique" in w["technique"] else "Dessin",
             "artMedium": w["technique"],
             "artworkSurface": "Toile" if "toile" in w["technique"] else "Papier",
@@ -695,11 +765,32 @@ def build_work_pages():
              body, og=og, nav_key="/oeuvres/", jsonld=ld)
 
 
+def critiques_html():
+    if not CRITIQUES:
+        return ""
+    items = []
+    for c in CRITIQUES:
+        sig = ", ".join(x for x in (c.get("author", "").strip(), c.get("role", "").strip()) if x)
+        items.append(
+            '<article class="prose critique">'
+            + (f"<h2>{inline(c['title'])}</h2>" if c.get("title", "").strip() else "")
+            + md(c["text"])
+            + (f'<p class="signature">— {inline(sig)}</p>' if sig else "")
+            + "</article>")
+    head = "Critique" if len(CRITIQUES) == 1 else "Critiques"
+    return f"""<section>
+  <div class="wrap">
+    <div class="section-head"><h2>{head}</h2></div>
+    <div class="critiques">{"".join(items)}</div>
+  </div>
+</section>"""
+
+
 def build_demarche():
     portrait = picture("portrait-mireille-martin.jpg", "portrait", "Mireille Martin dans son atelier",
                        sizes="(min-width:900px) 34vw, 92vw")
     og_image("portrait-mireille-martin.jpg", "demarche")
-    manifest = next(w for w in WORKS if w["slug"] == "sans-titre-01")
+    manifest = by_slug("sans-titre-01") or by_slug(HOME.get("hero")) or WORKS[0]
 
     infl = " · ".join(SITE["influences"])
     memb = "".join(
@@ -734,7 +825,7 @@ def build_demarche():
   <div class="wrap">
     <figure style="margin:0;max-width:44rem">
       <div class="plate__frame" style="--plate-ratio:auto;aspect-ratio:auto">
-        {picture(manifest['file'], manifest['slug'], "Le tableau fondateur : un carré noir, un carré blanc", sizes="(min-width:900px) 44rem, 92vw")}
+        {picture(manifest['file'], stem(manifest['file']), "Le tableau fondateur : un carré noir, un carré blanc", sizes="(min-width:900px) 44rem, 92vw")}
       </div>
       <figcaption class="label" style="margin-top:var(--space-3)">
         Un carré noir, un carré blanc : le point de départ de tout le reste.
@@ -743,12 +834,7 @@ def build_demarche():
   </div>
 </section>
 
-<section>
-  <div class="wrap">
-    <div class="section-head"><h2>Critique</h2></div>
-    <div class="prose">{md(text('critique.md'))}</div>
-  </div>
-</section>
+{critiques_html()}
 
 <section>
   <div class="wrap">
@@ -799,22 +885,32 @@ def build_exhibitions():
         seen.add(v["caption"])
         group = [x for x in VIEWS if x["caption"] == v["caption"]]
         figs = "".join(
-            f'<div class="view"><figure>{picture(x["file"], x["slug"], x["caption"], sizes="(min-width:900px) 30vw, 92vw", subdir="vues")}</figure></div>'
+            f'<div class="view"><figure>{picture(x["file"], stem(x["file"]), x["caption"], sizes="(min-width:900px) 30vw, 92vw", subdir="vues")}</figure></div>'
             for x in group)
         blocks.append(f"""<div class="group">
           <div class="group__head"><h3>{e(v['caption'])}</h3></div>
           <div class="views">{figs}</div>
         </div>""")
 
-    og_image("vues/" + VIEWS[0]["slug"] + ".jpg", "expositions")
+    if VIEWS:
+        og_image(VIEWS[0]["file"], "expositions")
 
     n_solo = len([x for x in ex if x.get("solo")])
+    views_html = ""
+    if VIEWS:
+        views_html = f"""<section>
+  <div class="wrap">
+    <div class="section-head"><h2>Vues d'accrochage</h2>
+      <p class="label">{len(VIEWS)} photographies</p></div>
+    {"".join(blocks)}
+  </div>
+</section>"""
     body = f"""
 <div class="wrap">
   <section style="padding-bottom:var(--space-5)">
     <p class="label">Expositions</p>
     <h1 style="font-size:var(--fs-2xl);margin-block:var(--space-3) var(--space-5)">Là où le travail s'est montré</h1>
-    <p class="lede">{len(ex)} expositions depuis 2014, dont {n_solo} personnelles.
+    <p class="lede">{len(ex)} expositions depuis {first_year()}, dont {n_solo} personnelle{'s' if n_solo > 1 else ''}.
       Rouen, Caen, Bayeux, Paris — Grand Palais, Réalités Nouvelles, galerie Abstract Project —
       et Taipei.</p>
   </section>
@@ -828,16 +924,10 @@ def build_exhibitions():
   </div>
 </section>
 
-<section>
-  <div class="wrap">
-    <div class="section-head"><h2>Vues d'accrochage</h2>
-      <p class="label">{len(VIEWS)} photographies</p></div>
-    {"".join(blocks)}
-  </div>
-</section>
+{views_html}
 """
     page("/expositions/", "Expositions — Mireille Martin",
-         f"{len(ex)} expositions depuis 2014, dont {n_solo} personnelles : Grand Palais, Réalités "
+         f"{len(ex)} expositions depuis {first_year()}, dont {n_solo} personnelles : Grand Palais, Réalités "
          "Nouvelles, galerie Abstract Project, bibliothèque de Caen, Taipei. Vues d'accrochage.",
          body, og="/img/og/expositions.jpg", nav_key="/expositions/")
 
@@ -1063,11 +1153,9 @@ def build_static():
     with open(os.path.join(DIST, "favicon.svg"), "w", encoding="utf-8") as f:
         f.write(favicon)
 
-    ico = Image.new("RGB", (180, 180), (245, 242, 234))
-    d = ImageDraw.Draw(ico)
-    d.rectangle([18, 18, 96, 96], fill=(20, 18, 15))
-    d.rectangle([96, 96, 162, 162], outline=(20, 18, 15), width=10)
-    ico.save(os.path.join(DIST, "apple-touch-icon.png"))
+    shutil.copyfile(os.path.join(ASSETS, "apple-touch-icon.png"), os.path.join(DIST, "apple-touch-icon.png"))
+    # l'espace d'administration : pages statiques, le contenu passe par api/admin.js
+    shutil.copytree(os.path.join(ROOT, "admin"), os.path.join(DIST, "admin"))
 
     manifest = {
         "name": "Mireille Martin", "short_name": "M. Martin",
@@ -1079,7 +1167,7 @@ def build_static():
         json.dump(manifest, f, ensure_ascii=False)
 
     with open(os.path.join(DIST, "robots.txt"), "w", encoding="utf-8") as f:
-        f.write(f"User-agent: *\nAllow: /\n\nSitemap: {BASE}/sitemap.xml\n")
+        f.write(f"User-agent: *\nAllow: /\nDisallow: /admin/\n\nSitemap: {BASE}/sitemap.xml\n")
 
 
 def build_sitemap(urls):
@@ -1093,7 +1181,50 @@ def build_sitemap(urls):
         f.write(xml)
 
 
+def validate():
+    """Garde-fou : des données incohérentes font échouer le build, et Vercel garde alors
+    la version précédente en ligne. Le site publié n'est jamais à moitié cassé."""
+    errs = []
+    slug_re = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
+    fams = set(SERIES)
+    groups = {}
+    for g in _SERIES["groups"]:
+        if g["name"] in groups:
+            errs.append(f"série en double : {g['name']}")
+        groups[g["name"]] = g["family"]
+        if g["family"] not in fams:
+            errs.append(f"série {g['name']} : famille inconnue {g['family']}")
+    if not WORKS:
+        errs.append("aucune œuvre")
+    seen = set()
+    for w in WORKS:
+        tag = w.get("slug", "?")
+        for k in ("title", "series", "group", "technique", "slug", "file"):
+            if not isinstance(w.get(k), str) or not w[k].strip():
+                errs.append(f"œuvre {tag} : champ {k} manquant")
+        if tag in seen:
+            errs.append(f"œuvre {tag} : référence en double")
+        seen.add(tag)
+        if not slug_re.match(tag):
+            errs.append(f"œuvre {tag} : référence invalide")
+        if groups.get(w.get("group")) != w.get("series"):
+            errs.append(f"œuvre {tag} : série « {w.get('group')} » absente de la famille {w.get('series')}")
+        if not isinstance(w.get("dimensions"), list) or not all(isinstance(d, str) for d in w["dimensions"]):
+            errs.append(f"œuvre {tag} : dimensions invalides")
+    for x in EXPOS["exhibitions"] + EXPOS["upcoming"]:
+        if not x.get("title") or not re.match(r"^\d{4}-\d{2}$", x.get("sort", "")):
+            errs.append(f"exposition invalide : {x.get('title')!r}")
+    for v in VIEWS:
+        if not v.get("caption") or not v.get("file", "").startswith("vues/"):
+            errs.append(f"vue d'accrochage invalide : {v.get('file')!r}")
+    if not all(isinstance(t, str) and t.strip() for t in GOLD["entries"]):
+        errs.append("livre d'or : mot vide")
+    if errs:
+        sys.exit("✗ Contenu incohérent, build interrompu :\n  " + "\n  ".join(errs))
+
+
 def main():
+    validate()
     if os.path.exists(DIST):
         for entry in os.listdir(DIST):
             if entry != "img":

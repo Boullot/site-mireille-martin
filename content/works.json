@@ -1,1603 +1,1603 @@
 {
- "works": [
-  {
-   "n": 35,
-   "title": "Aller Retour I",
-   "series": "aller-retour",
-   "group": "Aller Retour",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "60 × 80",
-    "80 × 100"
-   ],
-   "note": null,
-   "slug": "aller-retour-i",
-   "untitled": false,
-   "file": "aller-retour-i.jpg",
-   "short": null
-  },
-  {
-   "n": 36,
-   "title": "Aller Retour II",
-   "series": "aller-retour",
-   "group": "Aller Retour",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "60 × 80",
-    "80 × 100",
-    "120 × 150"
-   ],
-   "note": null,
-   "slug": "aller-retour-ii",
-   "untitled": false,
-   "file": "aller-retour-ii.jpg",
-   "short": null
-  },
-  {
-   "n": 37,
-   "title": "Aller Retour III",
-   "series": "aller-retour",
-   "group": "Aller Retour",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "60 × 80"
-   ],
-   "note": null,
-   "slug": "aller-retour-iii",
-   "untitled": false,
-   "file": "aller-retour-iii.jpg",
-   "short": null
-  },
-  {
-   "n": 38,
-   "title": "Aller Retour IV",
-   "series": "aller-retour",
-   "group": "Aller Retour",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "60 × 80",
-    "80 × 100"
-   ],
-   "note": null,
-   "slug": "aller-retour-iv",
-   "untitled": false,
-   "file": "aller-retour-iv.jpg",
-   "short": null
-  },
-  {
-   "n": 39,
-   "title": "Aller Retour V",
-   "series": "aller-retour",
-   "group": "Aller Retour",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "60 × 80",
-    "80 × 100"
-   ],
-   "note": null,
-   "slug": "aller-retour-v",
-   "untitled": false,
-   "file": "aller-retour-v.jpg",
-   "short": null
-  },
-  {
-   "n": 40,
-   "title": "Aller Retour VI",
-   "series": "aller-retour",
-   "group": "Aller Retour",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "60 × 80",
-    "80 × 100",
-    "120 × 150"
-   ],
-   "note": null,
-   "slug": "aller-retour-vi",
-   "untitled": false,
-   "file": "aller-retour-vi.jpg",
-   "short": null
-  },
-  {
-   "n": 41,
-   "title": "Aller Retour VII",
-   "series": "aller-retour",
-   "group": "Aller Retour",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "60 × 80",
-    "80 × 100"
-   ],
-   "note": null,
-   "slug": "aller-retour-vii",
-   "untitled": false,
-   "file": "aller-retour-vii.jpg",
-   "short": null
-  },
-  {
-   "n": 42,
-   "title": "Aller Retour VIII",
-   "series": "aller-retour",
-   "group": "Aller Retour",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "60 × 80",
-    "80 × 100"
-   ],
-   "note": null,
-   "slug": "aller-retour-viii",
-   "untitled": false,
-   "file": "aller-retour-viii.jpg",
-   "short": null
-  },
-  {
-   "n": 43,
-   "title": "Aller Retour IX",
-   "series": "aller-retour",
-   "group": "Aller Retour",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "60 × 80",
-    "80 × 100"
-   ],
-   "note": null,
-   "slug": "aller-retour-ix",
-   "untitled": false,
-   "file": "aller-retour-ix.jpg",
-   "short": null
-  },
-  {
-   "n": 44,
-   "title": "Aller Retour X",
-   "series": "aller-retour",
-   "group": "Aller Retour",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "60 × 80",
-    "80 × 100"
-   ],
-   "note": null,
-   "slug": "aller-retour-x",
-   "untitled": false,
-   "file": "aller-retour-x.jpg",
-   "short": null
-  },
-  {
-   "n": 45,
-   "title": "Aller Retour XI",
-   "series": "aller-retour",
-   "group": "Aller Retour",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "60 × 80",
-    "80 × 100",
-    "100 × 120"
-   ],
-   "note": null,
-   "slug": "aller-retour-xi",
-   "untitled": false,
-   "file": "aller-retour-xi.jpg",
-   "short": null
-  },
-  {
-   "n": 46,
-   "title": "Aller Retour XII",
-   "series": "aller-retour",
-   "group": "Aller Retour",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "60 × 80",
-    "80 × 100"
-   ],
-   "note": null,
-   "slug": "aller-retour-xii",
-   "untitled": false,
-   "file": "aller-retour-xii.jpg",
-   "short": null
-  },
-  {
-   "n": 47,
-   "title": "Aller Retour XIII",
-   "series": "aller-retour",
-   "group": "Aller Retour",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "60 × 80",
-    "100 × 120"
-   ],
-   "note": null,
-   "slug": "aller-retour-xiii",
-   "untitled": false,
-   "file": "aller-retour-xiii.jpg",
-   "short": null
-  },
-  {
-   "n": 48,
-   "title": "Aller Retour XIV",
-   "series": "aller-retour",
-   "group": "Aller Retour",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "60 × 80",
-    "80 × 100"
-   ],
-   "note": null,
-   "slug": "aller-retour-xiv",
-   "untitled": false,
-   "file": "aller-retour-xiv.jpg",
-   "short": null
-  },
-  {
-   "n": 49,
-   "title": "Aller Retour XV",
-   "series": "aller-retour",
-   "group": "Aller Retour",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "60 × 80"
-   ],
-   "note": null,
-   "slug": "aller-retour-xv",
-   "untitled": false,
-   "file": "aller-retour-xv.jpg",
-   "short": null
-  },
-  {
-   "n": 50,
-   "title": "Aller Retour XVI",
-   "series": "aller-retour",
-   "group": "Aller Retour",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "60 × 80",
-    "80 × 100"
-   ],
-   "note": null,
-   "slug": "aller-retour-xvi",
-   "untitled": false,
-   "file": "aller-retour-xvi.jpg",
-   "short": null
-  },
-  {
-   "n": 51,
-   "title": "Aller Retour XVII",
-   "series": "aller-retour",
-   "group": "Aller Retour",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "80 × 100"
-   ],
-   "note": null,
-   "slug": "aller-retour-xvii",
-   "untitled": false,
-   "file": "aller-retour-xvii.jpg",
-   "short": null
-  },
-  {
-   "n": 52,
-   "title": "Aller Retour XVIII",
-   "series": "aller-retour",
-   "group": "Aller Retour",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "60 × 80",
-    "120 × 150"
-   ],
-   "note": null,
-   "slug": "aller-retour-xviii",
-   "untitled": false,
-   "file": "aller-retour-xviii.jpg",
-   "short": null
-  },
-  {
-   "n": 53,
-   "title": "Aller Retour XIX",
-   "series": "aller-retour",
-   "group": "Aller Retour",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "80 × 100"
-   ],
-   "note": null,
-   "slug": "aller-retour-xix",
-   "untitled": false,
-   "file": "aller-retour-xix.jpg",
-   "short": null
-  },
-  {
-   "n": 54,
-   "title": "Aller Retour XX",
-   "series": "aller-retour",
-   "group": "Aller Retour",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "80 × 100",
-    "120 × 150"
-   ],
-   "note": null,
-   "slug": "aller-retour-xx",
-   "untitled": false,
-   "file": "aller-retour-xx.jpg",
-   "short": null
-  },
-  {
-   "n": 55,
-   "title": "Aller Retour XXI",
-   "series": "aller-retour",
-   "group": "Aller Retour",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "60 × 80"
-   ],
-   "note": null,
-   "slug": "aller-retour-xxi",
-   "untitled": false,
-   "file": "aller-retour-xxi.jpg",
-   "short": null
-  },
-  {
-   "n": 56,
-   "title": "Aller Retour XXII",
-   "series": "aller-retour",
-   "group": "Aller Retour",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "60 × 80"
-   ],
-   "note": null,
-   "slug": "aller-retour-xxii",
-   "untitled": false,
-   "file": "aller-retour-xxii.jpg",
-   "short": null
-  },
-  {
-   "n": 57,
-   "title": "Aller Retour XXIII",
-   "series": "aller-retour",
-   "group": "Aller Retour",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "60 × 80",
-    "120 × 150"
-   ],
-   "note": null,
-   "slug": "aller-retour-xxiii",
-   "untitled": false,
-   "file": "aller-retour-xxiii.jpg",
-   "short": null
-  },
-  {
-   "n": 58,
-   "title": "Aller Retour XXIV",
-   "series": "aller-retour",
-   "group": "Aller Retour",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "80 × 100",
-    "100 × 120"
-   ],
-   "note": null,
-   "slug": "aller-retour-xxiv",
-   "untitled": false,
-   "file": "aller-retour-xxiv.jpg",
-   "short": null
-  },
-  {
-   "n": 59,
-   "title": "Aller Retour XXV",
-   "series": "aller-retour",
-   "group": "Aller Retour",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "60 × 80"
-   ],
-   "note": null,
-   "slug": "aller-retour-xxv",
-   "untitled": false,
-   "file": "aller-retour-xxv.jpg",
-   "short": null
-  },
-  {
-   "n": 60,
-   "title": "Aller Retour XXVI",
-   "series": "aller-retour",
-   "group": "Aller Retour",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "60 × 80"
-   ],
-   "note": null,
-   "slug": "aller-retour-xxvi",
-   "untitled": false,
-   "file": "aller-retour-xxvi.jpg",
-   "short": null
-  },
-  {
-   "n": 61,
-   "title": "Aller Retour XXVIII",
-   "series": "aller-retour",
-   "group": "Aller Retour",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "80 × 100"
-   ],
-   "note": null,
-   "slug": "aller-retour-xxviii",
-   "untitled": false,
-   "file": "aller-retour-xxviii.jpg",
-   "short": null
-  },
-  {
-   "n": 62,
-   "title": "Aller Retour XXVII",
-   "series": "aller-retour",
-   "group": "Aller Retour",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "40 × 120"
-   ],
-   "note": null,
-   "slug": "aller-retour-xxvii",
-   "untitled": false,
-   "file": "aller-retour-xxvii.jpg",
-   "short": null
-  },
-  {
-   "n": 63,
-   "title": "Aller Retour XXXI",
-   "series": "aller-retour",
-   "group": "Aller Retour",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "40 × 120"
-   ],
-   "note": null,
-   "slug": "aller-retour-xxxi",
-   "untitled": false,
-   "file": "aller-retour-xxxi.jpg",
-   "short": null
-  },
-  {
-   "n": 64,
-   "title": "Aller Retour XXXIV",
-   "series": "aller-retour",
-   "group": "Aller Retour",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "40 × 120"
-   ],
-   "note": null,
-   "slug": "aller-retour-xxxiv",
-   "untitled": false,
-   "file": "aller-retour-xxxiv.jpg",
-   "short": null
-  },
-  {
-   "n": 65,
-   "title": "Aller Retour XXXIII",
-   "series": "aller-retour",
-   "group": "Aller Retour",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "40 × 120"
-   ],
-   "note": null,
-   "slug": "aller-retour-xxxiii",
-   "untitled": false,
-   "file": "aller-retour-xxxiii.jpg",
-   "short": null
-  },
-  {
-   "n": 66,
-   "title": "Aller Retour XXXV",
-   "series": "aller-retour",
-   "group": "Aller Retour",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "40 × 120"
-   ],
-   "note": null,
-   "slug": "aller-retour-xxxv",
-   "untitled": false,
-   "file": "aller-retour-xxxv.jpg",
-   "short": null
-  },
-  {
-   "n": 67,
-   "title": "Vice et versa",
-   "series": "aller-retour",
-   "group": "Aller Retour",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "60 × 80"
-   ],
-   "note": null,
-   "slug": "aller-retour-vice-et-versa",
-   "untitled": false,
-   "file": "aller-retour-vice-et-versa.jpg",
-   "short": null
-  },
-  {
-   "n": 68,
-   "title": "Trait d'union",
-   "series": "aller-retour",
-   "group": "Aller Retour",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "60 × 80"
-   ],
-   "note": null,
-   "slug": "aller-retour-trait-d-union",
-   "untitled": false,
-   "file": "aller-retour-trait-d-union.jpg",
-   "short": null
-  },
-  {
-   "n": 69,
-   "title": "2111 · V",
-   "series": "peintures",
-   "group": "2111",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "18 × 24"
-   ],
-   "note": null,
-   "slug": "2111-v",
-   "untitled": false,
-   "file": "2111-v.jpg",
-   "short": "V"
-  },
-  {
-   "n": 70,
-   "title": "2111 · XIX",
-   "series": "peintures",
-   "group": "2111",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "18 × 24"
-   ],
-   "note": null,
-   "slug": "2111-xix",
-   "untitled": false,
-   "file": "2111-xix.jpg",
-   "short": "XIX"
-  },
-  {
-   "n": 71,
-   "title": "2111 · XXIV",
-   "series": "peintures",
-   "group": "2111",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "18 × 24"
-   ],
-   "note": null,
-   "slug": "2111-xxiv",
-   "untitled": false,
-   "file": "2111-xxiv.jpg",
-   "short": "XXIV"
-  },
-  {
-   "n": 72,
-   "title": "2111 · XXXI",
-   "series": "peintures",
-   "group": "2111",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "18 × 24"
-   ],
-   "note": null,
-   "slug": "2111-xxxi",
-   "untitled": false,
-   "file": "2111-xxxi.jpg",
-   "short": "XXXI"
-  },
-  {
-   "n": 78,
-   "title": "Équinoxe I",
-   "series": "peintures",
-   "group": "Équinoxe",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "20 × 40"
-   ],
-   "note": null,
-   "slug": "equinoxe-i",
-   "untitled": false,
-   "file": "equinoxe-i.jpg",
-   "short": null
-  },
-  {
-   "n": 80,
-   "title": "Équinoxe II",
-   "series": "peintures",
-   "group": "Équinoxe",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "20 × 40"
-   ],
-   "note": null,
-   "slug": "equinoxe-ii",
-   "untitled": false,
-   "file": "equinoxe-ii.jpg",
-   "short": null
-  },
-  {
-   "n": 76,
-   "title": "Équinoxe III",
-   "series": "peintures",
-   "group": "Équinoxe",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "20 × 40"
-   ],
-   "note": null,
-   "slug": "equinoxe-iii",
-   "untitled": false,
-   "file": "equinoxe-iii.jpg",
-   "short": null
-  },
-  {
-   "n": 77,
-   "title": "Équinoxe IV",
-   "series": "peintures",
-   "group": "Équinoxe",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "20 × 40"
-   ],
-   "note": null,
-   "slug": "equinoxe-iv",
-   "untitled": false,
-   "file": "equinoxe-iv.jpg",
-   "short": null
-  },
-  {
-   "n": 79,
-   "title": "Équinoxe V",
-   "series": "peintures",
-   "group": "Équinoxe",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "20 × 40"
-   ],
-   "note": null,
-   "slug": "equinoxe-v",
-   "untitled": false,
-   "file": "equinoxe-v.jpg",
-   "short": null
-  },
-  {
-   "n": 81,
-   "title": "Équinoxe VI",
-   "series": "peintures",
-   "group": "Équinoxe",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "20 × 40"
-   ],
-   "note": null,
-   "slug": "equinoxe-vi",
-   "untitled": false,
-   "file": "equinoxe-vi.jpg",
-   "short": null
-  },
-  {
-   "n": 82,
-   "title": "Liberté[s]",
-   "series": "peintures",
-   "group": "Grands carrés",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "80 × 80"
-   ],
-   "note": null,
-   "slug": "grands-carres-liberte-s",
-   "untitled": false,
-   "file": "grands-carres-liberte-s.jpg",
-   "short": null
-  },
-  {
-   "n": 83,
-   "title": "Joie",
-   "series": "peintures",
-   "group": "Grands carrés",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "80 × 80"
-   ],
-   "note": null,
-   "slug": "joie-80x80",
-   "untitled": false,
-   "file": "joie-80x80.jpg",
-   "short": null
-  },
-  {
-   "n": 84,
-   "title": "Ligne brisée 1",
-   "series": "peintures",
-   "group": "Lignes",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "18 × 24"
-   ],
-   "note": null,
-   "slug": "lignes-ligne-brisee-1",
-   "untitled": false,
-   "file": "lignes-ligne-brisee-1.jpg",
-   "short": null
-  },
-  {
-   "n": 85,
-   "title": "Ligne brisée 2",
-   "series": "peintures",
-   "group": "Lignes",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "18 × 24"
-   ],
-   "note": null,
-   "slug": "lignes-ligne-brisee-2",
-   "untitled": false,
-   "file": "lignes-ligne-brisee-2.jpg",
-   "short": null
-  },
-  {
-   "n": 86,
-   "title": "Ligne rouge",
-   "series": "peintures",
-   "group": "Lignes",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "18 × 24"
-   ],
-   "note": null,
-   "slug": "lignes-ligne-rouge",
-   "untitled": false,
-   "file": "lignes-ligne-rouge.jpg",
-   "short": null
-  },
-  {
-   "n": 87,
-   "title": "Carré gris",
-   "series": "peintures",
-   "group": "Lignes",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "18 × 24"
-   ],
-   "note": null,
-   "slug": "lignes-carre-gris",
-   "untitled": false,
-   "file": "lignes-carre-gris.jpg",
-   "short": null
-  },
-  {
-   "n": 99,
-   "title": "Triangles aux carrés I",
-   "series": "peintures",
-   "group": "Triangles aux carrés",
-   "technique": "Acrylique sur toile",
-   "dimensions": [],
-   "note": null,
-   "slug": "triangles-aux-carres-1",
-   "untitled": false,
-   "file": "triangles-aux-carres-1.jpg",
-   "short": "Triangles I"
-  },
-  {
-   "n": 100,
-   "title": "Triangles aux carrés II",
-   "series": "peintures",
-   "group": "Triangles aux carrés",
-   "technique": "Acrylique sur toile",
-   "dimensions": [],
-   "note": null,
-   "slug": "triangles-aux-carres-2",
-   "untitled": false,
-   "file": "triangles-aux-carres-2.jpg",
-   "short": "Triangles II"
-  },
-  {
-   "n": 101,
-   "title": "Triangles aux carrés III",
-   "series": "peintures",
-   "group": "Triangles aux carrés",
-   "technique": "Acrylique sur toile",
-   "dimensions": [],
-   "note": null,
-   "slug": "triangles-aux-carres-3",
-   "untitled": false,
-   "file": "triangles-aux-carres-3.jpg",
-   "short": "Triangles III"
-  },
-  {
-   "n": 102,
-   "title": "Triangles aux carrés IV",
-   "series": "peintures",
-   "group": "Triangles aux carrés",
-   "technique": "Acrylique sur toile",
-   "dimensions": [],
-   "note": null,
-   "slug": "triangles-aux-carres-4",
-   "untitled": false,
-   "file": "triangles-aux-carres-4.jpg",
-   "short": "Triangles IV"
-  },
-  {
-   "n": 1,
-   "title": "Sans titre 01",
-   "series": "peintures",
-   "group": "Sans titre",
-   "technique": "Acrylique sur toile",
-   "dimensions": [],
-   "note": null,
-   "slug": "sans-titre-01",
-   "untitled": true,
-   "file": "sans-titre-01.jpg",
-   "short": null
-  },
-  {
-   "n": 6,
-   "title": "Sans titre 02",
-   "series": "peintures",
-   "group": "Sans titre",
-   "technique": "Acrylique sur toile",
-   "dimensions": [],
-   "note": null,
-   "slug": "sans-titre-02",
-   "untitled": true,
-   "file": "sans-titre-02.jpg",
-   "short": null
-  },
-  {
-   "n": 11,
-   "title": "Sans titre 03",
-   "series": "peintures",
-   "group": "Sans titre",
-   "technique": "Acrylique sur toile",
-   "dimensions": [],
-   "note": null,
-   "slug": "sans-titre-03",
-   "untitled": true,
-   "file": "sans-titre-03.jpg",
-   "short": null
-  },
-  {
-   "n": 12,
-   "title": "Sans titre 04",
-   "series": "peintures",
-   "group": "Sans titre",
-   "technique": "Acrylique sur toile",
-   "dimensions": [],
-   "note": null,
-   "slug": "sans-titre-04",
-   "untitled": true,
-   "file": "sans-titre-04.jpg",
-   "short": null
-  },
-  {
-   "n": 13,
-   "title": "Sans titre 05",
-   "series": "peintures",
-   "group": "Sans titre",
-   "technique": "Acrylique sur toile",
-   "dimensions": [],
-   "note": null,
-   "slug": "sans-titre-05",
-   "untitled": true,
-   "file": "sans-titre-05.jpg",
-   "short": null
-  },
-  {
-   "n": 17,
-   "title": "Sans titre 06",
-   "series": "peintures",
-   "group": "Sans titre",
-   "technique": "Acrylique sur toile",
-   "dimensions": [],
-   "note": null,
-   "slug": "sans-titre-06",
-   "untitled": true,
-   "file": "sans-titre-06.jpg",
-   "short": null
-  },
-  {
-   "n": 19,
-   "title": "Sans titre 07",
-   "series": "peintures",
-   "group": "Sans titre",
-   "technique": "Acrylique sur toile",
-   "dimensions": [],
-   "note": null,
-   "slug": "sans-titre-07",
-   "untitled": true,
-   "file": "sans-titre-07.jpg",
-   "short": null
-  },
-  {
-   "n": 20,
-   "title": "Sans titre 08",
-   "series": "peintures",
-   "group": "Sans titre",
-   "technique": "Acrylique sur toile",
-   "dimensions": [],
-   "note": null,
-   "slug": "sans-titre-08",
-   "untitled": true,
-   "file": "sans-titre-08.jpg",
-   "short": null
-  },
-  {
-   "n": 22,
-   "title": "Sans titre 09",
-   "series": "peintures",
-   "group": "Sans titre",
-   "technique": "Acrylique sur toile",
-   "dimensions": [],
-   "note": null,
-   "slug": "sans-titre-09",
-   "untitled": true,
-   "file": "sans-titre-09.jpg",
-   "short": null
-  },
-  {
-   "n": 23,
-   "title": "Sans titre 10",
-   "series": "peintures",
-   "group": "Sans titre",
-   "technique": "Acrylique sur toile",
-   "dimensions": [],
-   "note": null,
-   "slug": "sans-titre-10",
-   "untitled": true,
-   "file": "sans-titre-10.jpg",
-   "short": null
-  },
-  {
-   "n": 25,
-   "title": "Sans titre 11",
-   "series": "peintures",
-   "group": "Sans titre",
-   "technique": "Acrylique sur toile",
-   "dimensions": [],
-   "note": null,
-   "slug": "sans-titre-11",
-   "untitled": true,
-   "file": "sans-titre-11.jpg",
-   "short": null
-  },
-  {
-   "n": 30,
-   "title": "Sans titre 12",
-   "series": "peintures",
-   "group": "Sans titre",
-   "technique": "Acrylique sur toile",
-   "dimensions": [],
-   "note": null,
-   "slug": "sans-titre-12",
-   "untitled": true,
-   "file": "sans-titre-12.jpg",
-   "short": null
-  },
-  {
-   "n": 73,
-   "title": "Sans titre 13",
-   "series": "peintures",
-   "group": "Sans titre",
-   "technique": "Acrylique sur toile",
-   "dimensions": [],
-   "note": null,
-   "slug": "sans-titre-13",
-   "untitled": true,
-   "file": "sans-titre-13.jpg",
-   "short": null
-  },
-  {
-   "n": 74,
-   "title": "Sans titre 14",
-   "series": "peintures",
-   "group": "Sans titre",
-   "technique": "Acrylique sur toile",
-   "dimensions": [],
-   "note": null,
-   "slug": "sans-titre-14",
-   "untitled": true,
-   "file": "sans-titre-14.jpg",
-   "short": null
-  },
-  {
-   "n": 75,
-   "title": "Sans titre 15",
-   "series": "peintures",
-   "group": "Sans titre",
-   "technique": "Acrylique sur toile",
-   "dimensions": [],
-   "note": null,
-   "slug": "sans-titre-15",
-   "untitled": true,
-   "file": "sans-titre-15.jpg",
-   "short": null
-  },
-  {
-   "n": 88,
-   "title": "Affection",
-   "series": "carregraphies",
-   "group": "Carrégraphies",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "20 × 20"
-   ],
-   "note": "情",
-   "slug": "carregraphie-affection",
-   "untitled": false,
-   "file": "carregraphie-affection.jpg",
-   "short": null
-  },
-  {
-   "n": 89,
-   "title": "Serpent",
-   "series": "carregraphies",
-   "group": "Carrégraphies",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "20 × 20"
-   ],
-   "note": "蛇",
-   "slug": "carregraphie-serpent",
-   "untitled": false,
-   "file": "carregraphie-serpent.jpg",
-   "short": null
-  },
-  {
-   "n": 90,
-   "title": "Harmonie",
-   "series": "carregraphies",
-   "group": "Carrégraphies",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "20 × 20"
-   ],
-   "note": "和",
-   "slug": "carregraphie-harmonie",
-   "untitled": false,
-   "file": "carregraphie-harmonie.jpg",
-   "short": null
-  },
-  {
-   "n": 91,
-   "title": "Dragon",
-   "series": "carregraphies",
-   "group": "Carrégraphies",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "20 × 20"
-   ],
-   "note": "龍",
-   "slug": "carregraphie-dragon",
-   "untitled": false,
-   "file": "carregraphie-dragon.jpg",
-   "short": null
-  },
-  {
-   "n": 92,
-   "title": "Joie",
-   "series": "carregraphies",
-   "group": "Carrégraphies",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "20 × 20"
-   ],
-   "note": "喜",
-   "slug": "carregraphie-joie",
-   "untitled": false,
-   "file": "carregraphie-joie.jpg",
-   "short": null
-  },
-  {
-   "n": 93,
-   "title": "Bleu",
-   "series": "carregraphies",
-   "group": "Carrégraphies",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "20 × 20"
-   ],
-   "note": "青",
-   "slug": "carregraphie-bleu",
-   "untitled": false,
-   "file": "carregraphie-bleu.jpg",
-   "short": null
-  },
-  {
-   "n": 94,
-   "title": "Résistance",
-   "series": "carregraphies",
-   "group": "Carrégraphies",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "20 × 20"
-   ],
-   "note": "抗",
-   "slug": "carregraphie-resistance",
-   "untitled": false,
-   "file": "carregraphie-resistance.jpg",
-   "short": null
-  },
-  {
-   "n": 95,
-   "title": "Cheval",
-   "series": "carregraphies",
-   "group": "Carrégraphies",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "20 × 20"
-   ],
-   "note": "馬",
-   "slug": "carregraphie-cheval",
-   "untitled": false,
-   "file": "carregraphie-cheval.jpg",
-   "short": null
-  },
-  {
-   "n": 96,
-   "title": "Chèvre",
-   "series": "carregraphies",
-   "group": "Carrégraphies",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "20 × 20"
-   ],
-   "note": "羊",
-   "slug": "carregraphie-chevre",
-   "untitled": false,
-   "file": "carregraphie-chevre.jpg",
-   "short": null
-  },
-  {
-   "n": 97,
-   "title": "Éternité",
-   "series": "carregraphies",
-   "group": "Carrégraphies",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "20 × 20"
-   ],
-   "note": "永",
-   "slug": "carregraphie-eternite",
-   "untitled": false,
-   "file": "carregraphie-eternite.jpg",
-   "short": null
-  },
-  {
-   "n": 98,
-   "title": "Noter",
-   "series": "carregraphies",
-   "group": "Carrégraphies",
-   "technique": "Acrylique sur toile",
-   "dimensions": [
-    "20 × 20"
-   ],
-   "note": "記",
-   "slug": "carregraphie-noter",
-   "untitled": false,
-   "file": "carregraphie-noter.jpg",
-   "short": null
-  },
-  {
-   "n": 103,
-   "title": "Géométrie d'encre et de papier I",
-   "series": "encres",
-   "group": "Géométrie d'encre et de papier",
-   "technique": "Encre de Chine sur papier xuan",
-   "dimensions": [
-    "35 × 137"
-   ],
-   "note": null,
-   "slug": "geometrie-encre-papier-1",
-   "untitled": false,
-   "file": "geometrie-encre-papier-1.jpg",
-   "short": "Kakémono I"
-  },
-  {
-   "n": 104,
-   "title": "Géométrie d'encre et de papier II",
-   "series": "encres",
-   "group": "Géométrie d'encre et de papier",
-   "technique": "Encre de Chine sur papier xuan",
-   "dimensions": [
-    "35 × 137"
-   ],
-   "note": null,
-   "slug": "geometrie-encre-papier-2",
-   "untitled": false,
-   "file": "geometrie-encre-papier-2.jpg",
-   "short": "Kakémono II"
-  },
-  {
-   "n": 105,
-   "title": "Géométrie d'encre et de papier III",
-   "series": "encres",
-   "group": "Géométrie d'encre et de papier",
-   "technique": "Encre de Chine sur papier xuan",
-   "dimensions": [
-    "35 × 137"
-   ],
-   "note": null,
-   "slug": "geometrie-encre-papier-3",
-   "untitled": false,
-   "file": "geometrie-encre-papier-3.jpg",
-   "short": "Kakémono III"
-  },
-  {
-   "n": 106,
-   "title": "Géométrie d'encre et de papier IV",
-   "series": "encres",
-   "group": "Géométrie d'encre et de papier",
-   "technique": "Encre de Chine sur papier xuan",
-   "dimensions": [
-    "35 × 137"
-   ],
-   "note": null,
-   "slug": "geometrie-encre-papier-4",
-   "untitled": false,
-   "file": "geometrie-encre-papier-4.jpg",
-   "short": "Kakémono IV"
-  },
-  {
-   "n": 107,
-   "title": "Géométrie d'encre et de papier V",
-   "series": "encres",
-   "group": "Géométrie d'encre et de papier",
-   "technique": "Encre de Chine sur papier xuan",
-   "dimensions": [
-    "35 × 137"
-   ],
-   "note": null,
-   "slug": "geometrie-encre-papier-5",
-   "untitled": false,
-   "file": "geometrie-encre-papier-5.jpg",
-   "short": "Kakémono V"
-  },
-  {
-   "n": 108,
-   "title": "Géométrie d'encre et de papier VI",
-   "series": "encres",
-   "group": "Géométrie d'encre et de papier",
-   "technique": "Encre de Chine sur papier xuan",
-   "dimensions": [
-    "35 × 137"
-   ],
-   "note": null,
-   "slug": "geometrie-encre-papier-6",
-   "untitled": false,
-   "file": "geometrie-encre-papier-6.jpg",
-   "short": "Kakémono VI"
-  },
-  {
-   "n": 109,
-   "title": "Géométrie d'encre et de papier VII",
-   "series": "encres",
-   "group": "Géométrie d'encre et de papier",
-   "technique": "Encre de Chine sur papier xuan",
-   "dimensions": [
-    "35 × 137"
-   ],
-   "note": null,
-   "slug": "geometrie-encre-papier-7",
-   "untitled": false,
-   "file": "geometrie-encre-papier-7.jpg",
-   "short": "Kakémono VII"
-  },
-  {
-   "n": 110,
-   "title": "Géométrie d'encre et de papier VIII",
-   "series": "encres",
-   "group": "Géométrie d'encre et de papier",
-   "technique": "Encre de Chine sur papier xuan",
-   "dimensions": [
-    "35 × 137"
-   ],
-   "note": null,
-   "slug": "geometrie-encre-papier-8",
-   "untitled": false,
-   "file": "geometrie-encre-papier-8.jpg",
-   "short": "Kakémono VIII"
-  },
-  {
-   "n": 111,
-   "title": "Géométrie d'encre et de papier IX",
-   "series": "encres",
-   "group": "Géométrie d'encre et de papier",
-   "technique": "Encre de Chine sur papier xuan",
-   "dimensions": [
-    "35 × 137"
-   ],
-   "note": null,
-   "slug": "geometrie-encre-papier-9",
-   "untitled": false,
-   "file": "geometrie-encre-papier-9.jpg",
-   "short": "Kakémono IX"
-  },
-  {
-   "n": 112,
-   "title": "Géométrie d'encre et de papier X",
-   "series": "encres",
-   "group": "Géométrie d'encre et de papier",
-   "technique": "Encre de Chine sur papier xuan",
-   "dimensions": [
-    "35 × 137"
-   ],
-   "note": null,
-   "slug": "geometrie-encre-papier-10",
-   "untitled": false,
-   "file": "geometrie-encre-papier-10.jpg",
-   "short": "Kakémono X"
-  },
-  {
-   "n": 113,
-   "title": "Aller Retour Double V",
-   "series": "encres",
-   "group": "Aller Retour Double",
-   "technique": "Encre de Chine sur papier",
-   "dimensions": [
-    "17,5 × 22"
-   ],
-   "note": null,
-   "slug": "aller-retour-double-v",
-   "untitled": false,
-   "file": "aller-retour-double-v.jpg",
-   "short": "AR D V"
-  },
-  {
-   "n": 114,
-   "title": "Aller Retour Double VI",
-   "series": "encres",
-   "group": "Aller Retour Double",
-   "technique": "Encre de Chine sur papier",
-   "dimensions": [
-    "17,5 × 22"
-   ],
-   "note": null,
-   "slug": "aller-retour-double-vi",
-   "untitled": false,
-   "file": "aller-retour-double-vi.jpg",
-   "short": "AR D VI"
-  },
-  {
-   "n": 115,
-   "title": "Aller Retour Double X",
-   "series": "encres",
-   "group": "Aller Retour Double",
-   "technique": "Encre de Chine sur papier",
-   "dimensions": [
-    "17,5 × 22"
-   ],
-   "note": null,
-   "slug": "aller-retour-double-x",
-   "untitled": false,
-   "file": "aller-retour-double-x.jpg",
-   "short": "AR D X"
-  },
-  {
-   "n": 116,
-   "title": "Aller Retour Double XVII",
-   "series": "encres",
-   "group": "Aller Retour Double",
-   "technique": "Encre de Chine sur papier",
-   "dimensions": [
-    "17,5 × 22"
-   ],
-   "note": null,
-   "slug": "aller-retour-double-xvii",
-   "untitled": false,
-   "file": "aller-retour-double-xvii.jpg",
-   "short": "AR D XVII"
-  },
-  {
-   "n": 117,
-   "title": "Aller Retour Double XIX",
-   "series": "encres",
-   "group": "Aller Retour Double",
-   "technique": "Encre de Chine sur papier",
-   "dimensions": [
-    "17,5 × 22"
-   ],
-   "note": null,
-   "slug": "aller-retour-double-xix",
-   "untitled": false,
-   "file": "aller-retour-double-xix.jpg",
-   "short": "AR D XIX"
-  },
-  {
-   "n": 118,
-   "title": "Aller Retour Double XXIX",
-   "series": "encres",
-   "group": "Aller Retour Double",
-   "technique": "Encre de Chine sur papier",
-   "dimensions": [
-    "17,5 × 22"
-   ],
-   "note": null,
-   "slug": "aller-retour-double-xxix",
-   "untitled": false,
-   "file": "aller-retour-double-xxix.jpg",
-   "short": "AR D XXIX"
-  },
-  {
-   "n": 119,
-   "title": "Aller Retour Double II",
-   "series": "encres",
-   "group": "Aller Retour Double",
-   "technique": "Encre de Chine sur papier",
-   "dimensions": [
-    "17,5 × 22"
-   ],
-   "note": null,
-   "slug": "aller-retour-double-ii",
-   "untitled": false,
-   "file": "aller-retour-double-ii.jpg",
-   "short": "AR D II"
-  },
-  {
-   "n": 120,
-   "title": "Aller Retour Double XXX",
-   "series": "encres",
-   "group": "Aller Retour Double",
-   "technique": "Encre de Chine sur papier",
-   "dimensions": [
-    "17,5 × 22"
-   ],
-   "note": null,
-   "slug": "aller-retour-double-xxx",
-   "untitled": false,
-   "file": "aller-retour-double-xxx.jpg",
-   "short": "AR D XXX"
-  },
-  {
-   "n": 121,
-   "title": "Liberté",
-   "series": "encres",
-   "group": "Les mots entre les lignes",
-   "technique": "Encre de Chine sur papier",
-   "dimensions": [
-    "30 × 30"
-   ],
-   "note": "自由",
-   "slug": "mots-entre-les-lignes-liberte",
-   "untitled": false,
-   "file": "mots-entre-les-lignes-liberte.jpg",
-   "short": null
-  },
-  {
-   "n": 122,
-   "title": "Harmonie",
-   "series": "encres",
-   "group": "Les mots entre les lignes",
-   "technique": "Encre de Chine sur papier",
-   "dimensions": [
-    "30 × 30"
-   ],
-   "note": "和",
-   "slug": "mots-entre-les-lignes-harmonie",
-   "untitled": false,
-   "file": "mots-entre-les-lignes-harmonie.jpg",
-   "short": null
-  },
-  {
-   "n": 123,
-   "title": "Bonheur",
-   "series": "encres",
-   "group": "Les mots entre les lignes",
-   "technique": "Encre de Chine sur papier",
-   "dimensions": [
-    "30 × 30"
-   ],
-   "note": "福",
-   "slug": "mots-entre-les-lignes-bonheur",
-   "untitled": false,
-   "file": "mots-entre-les-lignes-bonheur.jpg",
-   "short": null
-  },
-  {
-   "n": 124,
-   "title": "Énergie",
-   "series": "encres",
-   "group": "Les mots entre les lignes",
-   "technique": "Encre de Chine sur papier",
-   "dimensions": [
-    "30 × 30"
-   ],
-   "note": "氣",
-   "slug": "mots-entre-les-lignes-energie",
-   "untitled": false,
-   "file": "mots-entre-les-lignes-energie.jpg",
-   "short": null
-  },
-  {
-   "n": 125,
-   "title": "Dragon",
-   "series": "encres",
-   "group": "Les mots entre les lignes",
-   "technique": "Encre de Chine sur papier",
-   "dimensions": [
-    "30 × 30"
-   ],
-   "note": "龍",
-   "slug": "mots-entre-les-lignes-dragon",
-   "untitled": false,
-   "file": "mots-entre-les-lignes-dragon.jpg",
-   "short": null
-  },
-  {
-   "n": 126,
-   "title": "Penser",
-   "series": "encres",
-   "group": "Les mots entre les lignes",
-   "technique": "Encre de Chine sur papier",
-   "dimensions": [
-    "30 × 30"
-   ],
-   "note": "思",
-   "slug": "mots-entre-les-lignes-penser",
-   "untitled": false,
-   "file": "mots-entre-les-lignes-penser.jpg",
-   "short": null
-  },
-  {
-   "n": 127,
-   "title": "Joie",
-   "series": "encres",
-   "group": "Les mots entre les lignes",
-   "technique": "Encre de Chine sur papier",
-   "dimensions": [
-    "30 × 30"
-   ],
-   "note": "喜",
-   "slug": "mots-entre-les-lignes-joie",
-   "untitled": false,
-   "file": "mots-entre-les-lignes-joie.jpg",
-   "short": null
-  },
-  {
-   "n": 128,
-   "title": "Affection",
-   "series": "encres",
-   "group": "Les mots entre les lignes",
-   "technique": "Encre de Chine sur papier",
-   "dimensions": [
-    "30 × 30"
-   ],
-   "note": "情",
-   "slug": "mots-entre-les-lignes-affection",
-   "untitled": false,
-   "file": "mots-entre-les-lignes-affection.jpg",
-   "short": null
-  },
-  {
-   "n": 129,
-   "title": "Ombre et lumière I",
-   "series": "encres",
-   "group": "Ombre et lumière",
-   "technique": "Encre de Chine sur papier",
-   "dimensions": [],
-   "note": null,
-   "slug": "ombre-et-lumiere-1",
-   "untitled": false,
-   "file": "ombre-et-lumiere-1.jpg",
-   "short": "I"
-  },
-  {
-   "n": 130,
-   "title": "Ombre et lumière II",
-   "series": "encres",
-   "group": "Ombre et lumière",
-   "technique": "Encre de Chine sur papier",
-   "dimensions": [],
-   "note": null,
-   "slug": "ombre-et-lumiere-2",
-   "untitled": false,
-   "file": "ombre-et-lumiere-2.jpg",
-   "short": "II"
-  }
- ]
+  "works": [
+    {
+      "n": 35,
+      "title": "Aller Retour I",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "60 × 80",
+        "80 × 100"
+      ],
+      "note": null,
+      "slug": "aller-retour-i",
+      "untitled": false,
+      "file": "aller-retour-i.jpg",
+      "short": null
+    },
+    {
+      "n": 36,
+      "title": "Aller Retour II",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "60 × 80",
+        "80 × 100",
+        "120 × 150"
+      ],
+      "note": null,
+      "slug": "aller-retour-ii",
+      "untitled": false,
+      "file": "aller-retour-ii.jpg",
+      "short": null
+    },
+    {
+      "n": 37,
+      "title": "Aller Retour III",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "60 × 80"
+      ],
+      "note": null,
+      "slug": "aller-retour-iii",
+      "untitled": false,
+      "file": "aller-retour-iii.jpg",
+      "short": null
+    },
+    {
+      "n": 38,
+      "title": "Aller Retour IV",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "60 × 80",
+        "80 × 100"
+      ],
+      "note": null,
+      "slug": "aller-retour-iv",
+      "untitled": false,
+      "file": "aller-retour-iv.jpg",
+      "short": null
+    },
+    {
+      "n": 39,
+      "title": "Aller Retour V",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "60 × 80",
+        "80 × 100"
+      ],
+      "note": null,
+      "slug": "aller-retour-v",
+      "untitled": false,
+      "file": "aller-retour-v.jpg",
+      "short": null
+    },
+    {
+      "n": 40,
+      "title": "Aller Retour VI",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "60 × 80",
+        "80 × 100",
+        "120 × 150"
+      ],
+      "note": null,
+      "slug": "aller-retour-vi",
+      "untitled": false,
+      "file": "aller-retour-vi.jpg",
+      "short": null
+    },
+    {
+      "n": 41,
+      "title": "Aller Retour VII",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "60 × 80",
+        "80 × 100"
+      ],
+      "note": null,
+      "slug": "aller-retour-vii",
+      "untitled": false,
+      "file": "aller-retour-vii.jpg",
+      "short": null
+    },
+    {
+      "n": 42,
+      "title": "Aller Retour VIII",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "60 × 80",
+        "80 × 100"
+      ],
+      "note": null,
+      "slug": "aller-retour-viii",
+      "untitled": false,
+      "file": "aller-retour-viii.jpg",
+      "short": null
+    },
+    {
+      "n": 43,
+      "title": "Aller Retour IX",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "60 × 80",
+        "80 × 100"
+      ],
+      "note": null,
+      "slug": "aller-retour-ix",
+      "untitled": false,
+      "file": "aller-retour-ix.jpg",
+      "short": null
+    },
+    {
+      "n": 44,
+      "title": "Aller Retour X",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "60 × 80",
+        "80 × 100"
+      ],
+      "note": null,
+      "slug": "aller-retour-x",
+      "untitled": false,
+      "file": "aller-retour-x.jpg",
+      "short": null
+    },
+    {
+      "n": 45,
+      "title": "Aller Retour XI",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "60 × 80",
+        "80 × 100",
+        "100 × 120"
+      ],
+      "note": null,
+      "slug": "aller-retour-xi",
+      "untitled": false,
+      "file": "aller-retour-xi.jpg",
+      "short": null
+    },
+    {
+      "n": 46,
+      "title": "Aller Retour XII",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "60 × 80",
+        "80 × 100"
+      ],
+      "note": null,
+      "slug": "aller-retour-xii",
+      "untitled": false,
+      "file": "aller-retour-xii.jpg",
+      "short": null
+    },
+    {
+      "n": 47,
+      "title": "Aller Retour XIII",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "60 × 80",
+        "100 × 120"
+      ],
+      "note": null,
+      "slug": "aller-retour-xiii",
+      "untitled": false,
+      "file": "aller-retour-xiii.jpg",
+      "short": null
+    },
+    {
+      "n": 48,
+      "title": "Aller Retour XIV",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "60 × 80",
+        "80 × 100"
+      ],
+      "note": null,
+      "slug": "aller-retour-xiv",
+      "untitled": false,
+      "file": "aller-retour-xiv.jpg",
+      "short": null
+    },
+    {
+      "n": 49,
+      "title": "Aller Retour XV",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "60 × 80"
+      ],
+      "note": null,
+      "slug": "aller-retour-xv",
+      "untitled": false,
+      "file": "aller-retour-xv.jpg",
+      "short": null
+    },
+    {
+      "n": 50,
+      "title": "Aller Retour XVI",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "60 × 80",
+        "80 × 100"
+      ],
+      "note": null,
+      "slug": "aller-retour-xvi",
+      "untitled": false,
+      "file": "aller-retour-xvi.jpg",
+      "short": null
+    },
+    {
+      "n": 51,
+      "title": "Aller Retour XVII",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "80 × 100"
+      ],
+      "note": null,
+      "slug": "aller-retour-xvii",
+      "untitled": false,
+      "file": "aller-retour-xvii.jpg",
+      "short": null
+    },
+    {
+      "n": 52,
+      "title": "Aller Retour XVIII",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "60 × 80",
+        "120 × 150"
+      ],
+      "note": null,
+      "slug": "aller-retour-xviii",
+      "untitled": false,
+      "file": "aller-retour-xviii.jpg",
+      "short": null
+    },
+    {
+      "n": 53,
+      "title": "Aller Retour XIX",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "80 × 100"
+      ],
+      "note": null,
+      "slug": "aller-retour-xix",
+      "untitled": false,
+      "file": "aller-retour-xix.jpg",
+      "short": null
+    },
+    {
+      "n": 54,
+      "title": "Aller Retour XX",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "80 × 100",
+        "120 × 150"
+      ],
+      "note": null,
+      "slug": "aller-retour-xx",
+      "untitled": false,
+      "file": "aller-retour-xx.jpg",
+      "short": null
+    },
+    {
+      "n": 55,
+      "title": "Aller Retour XXI",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "60 × 80"
+      ],
+      "note": null,
+      "slug": "aller-retour-xxi",
+      "untitled": false,
+      "file": "aller-retour-xxi.jpg",
+      "short": null
+    },
+    {
+      "n": 56,
+      "title": "Aller Retour XXII",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "60 × 80"
+      ],
+      "note": null,
+      "slug": "aller-retour-xxii",
+      "untitled": false,
+      "file": "aller-retour-xxii.jpg",
+      "short": null
+    },
+    {
+      "n": 57,
+      "title": "Aller Retour XXIII",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "60 × 80",
+        "120 × 150"
+      ],
+      "note": null,
+      "slug": "aller-retour-xxiii",
+      "untitled": false,
+      "file": "aller-retour-xxiii.jpg",
+      "short": null
+    },
+    {
+      "n": 58,
+      "title": "Aller Retour XXIV",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "80 × 100",
+        "100 × 120"
+      ],
+      "note": null,
+      "slug": "aller-retour-xxiv",
+      "untitled": false,
+      "file": "aller-retour-xxiv.jpg",
+      "short": null
+    },
+    {
+      "n": 59,
+      "title": "Aller Retour XXV",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "60 × 80"
+      ],
+      "note": null,
+      "slug": "aller-retour-xxv",
+      "untitled": false,
+      "file": "aller-retour-xxv.jpg",
+      "short": null
+    },
+    {
+      "n": 60,
+      "title": "Aller Retour XXVI",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "60 × 80"
+      ],
+      "note": null,
+      "slug": "aller-retour-xxvi",
+      "untitled": false,
+      "file": "aller-retour-xxvi.jpg",
+      "short": null
+    },
+    {
+      "n": 61,
+      "title": "Aller Retour XXVIII",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "80 × 100"
+      ],
+      "note": null,
+      "slug": "aller-retour-xxviii",
+      "untitled": false,
+      "file": "aller-retour-xxviii.jpg",
+      "short": null
+    },
+    {
+      "n": 62,
+      "title": "Aller Retour XXVII",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "40 × 120"
+      ],
+      "note": null,
+      "slug": "aller-retour-xxvii",
+      "untitled": false,
+      "file": "aller-retour-xxvii.jpg",
+      "short": null
+    },
+    {
+      "n": 63,
+      "title": "Aller Retour XXXI",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "40 × 120"
+      ],
+      "note": null,
+      "slug": "aller-retour-xxxi",
+      "untitled": false,
+      "file": "aller-retour-xxxi.jpg",
+      "short": null
+    },
+    {
+      "n": 64,
+      "title": "Aller Retour XXXIV",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "40 × 120"
+      ],
+      "note": null,
+      "slug": "aller-retour-xxxiv",
+      "untitled": false,
+      "file": "aller-retour-xxxiv.jpg",
+      "short": null
+    },
+    {
+      "n": 65,
+      "title": "Aller Retour XXXIII",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "40 × 120"
+      ],
+      "note": null,
+      "slug": "aller-retour-xxxiii",
+      "untitled": false,
+      "file": "aller-retour-xxxiii.jpg",
+      "short": null
+    },
+    {
+      "n": 66,
+      "title": "Aller Retour XXXV",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "40 × 120"
+      ],
+      "note": null,
+      "slug": "aller-retour-xxxv",
+      "untitled": false,
+      "file": "aller-retour-xxxv.jpg",
+      "short": null
+    },
+    {
+      "n": 67,
+      "title": "Vice et versa",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "60 × 80"
+      ],
+      "note": null,
+      "slug": "aller-retour-vice-et-versa",
+      "untitled": false,
+      "file": "aller-retour-vice-et-versa.jpg",
+      "short": null
+    },
+    {
+      "n": 68,
+      "title": "Trait d'union",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "60 × 80"
+      ],
+      "note": null,
+      "slug": "aller-retour-trait-d-union",
+      "untitled": false,
+      "file": "aller-retour-trait-d-union.jpg",
+      "short": null
+    },
+    {
+      "n": 69,
+      "title": "2111 · V",
+      "series": "peintures",
+      "group": "2111",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "18 × 24"
+      ],
+      "note": null,
+      "slug": "2111-v",
+      "untitled": false,
+      "file": "2111-v.jpg",
+      "short": "V"
+    },
+    {
+      "n": 70,
+      "title": "2111 · XIX",
+      "series": "peintures",
+      "group": "2111",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "18 × 24"
+      ],
+      "note": null,
+      "slug": "2111-xix",
+      "untitled": false,
+      "file": "2111-xix.jpg",
+      "short": "XIX"
+    },
+    {
+      "n": 71,
+      "title": "2111 · XXIV",
+      "series": "peintures",
+      "group": "2111",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "18 × 24"
+      ],
+      "note": null,
+      "slug": "2111-xxiv",
+      "untitled": false,
+      "file": "2111-xxiv.jpg",
+      "short": "XXIV"
+    },
+    {
+      "n": 72,
+      "title": "2111 · XXXI",
+      "series": "peintures",
+      "group": "2111",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "18 × 24"
+      ],
+      "note": null,
+      "slug": "2111-xxxi",
+      "untitled": false,
+      "file": "2111-xxxi.jpg",
+      "short": "XXXI"
+    },
+    {
+      "n": 78,
+      "title": "Équinoxe I",
+      "series": "peintures",
+      "group": "Équinoxe",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "20 × 40"
+      ],
+      "note": null,
+      "slug": "equinoxe-i",
+      "untitled": false,
+      "file": "equinoxe-i.jpg",
+      "short": null
+    },
+    {
+      "n": 80,
+      "title": "Équinoxe II",
+      "series": "peintures",
+      "group": "Équinoxe",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "20 × 40"
+      ],
+      "note": null,
+      "slug": "equinoxe-ii",
+      "untitled": false,
+      "file": "equinoxe-ii.jpg",
+      "short": null
+    },
+    {
+      "n": 76,
+      "title": "Équinoxe III",
+      "series": "peintures",
+      "group": "Équinoxe",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "20 × 40"
+      ],
+      "note": null,
+      "slug": "equinoxe-iii",
+      "untitled": false,
+      "file": "equinoxe-iii.jpg",
+      "short": null
+    },
+    {
+      "n": 77,
+      "title": "Équinoxe IV",
+      "series": "peintures",
+      "group": "Équinoxe",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "20 × 40"
+      ],
+      "note": null,
+      "slug": "equinoxe-iv",
+      "untitled": false,
+      "file": "equinoxe-iv.jpg",
+      "short": null
+    },
+    {
+      "n": 79,
+      "title": "Équinoxe V",
+      "series": "peintures",
+      "group": "Équinoxe",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "20 × 40"
+      ],
+      "note": null,
+      "slug": "equinoxe-v",
+      "untitled": false,
+      "file": "equinoxe-v.jpg",
+      "short": null
+    },
+    {
+      "n": 81,
+      "title": "Équinoxe VI",
+      "series": "peintures",
+      "group": "Équinoxe",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "20 × 40"
+      ],
+      "note": null,
+      "slug": "equinoxe-vi",
+      "untitled": false,
+      "file": "equinoxe-vi.jpg",
+      "short": null
+    },
+    {
+      "n": 82,
+      "title": "Liberté[s]",
+      "series": "peintures",
+      "group": "Grands carrés",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "80 × 80"
+      ],
+      "note": null,
+      "slug": "grands-carres-liberte-s",
+      "untitled": false,
+      "file": "grands-carres-liberte-s.jpg",
+      "short": null
+    },
+    {
+      "n": 83,
+      "title": "Joie",
+      "series": "peintures",
+      "group": "Grands carrés",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "80 × 80"
+      ],
+      "note": null,
+      "slug": "joie-80x80",
+      "untitled": false,
+      "file": "joie-80x80.jpg",
+      "short": null
+    },
+    {
+      "n": 84,
+      "title": "Ligne brisée 1",
+      "series": "peintures",
+      "group": "Lignes",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "18 × 24"
+      ],
+      "note": null,
+      "slug": "lignes-ligne-brisee-1",
+      "untitled": false,
+      "file": "lignes-ligne-brisee-1.jpg",
+      "short": null
+    },
+    {
+      "n": 85,
+      "title": "Ligne brisée 2",
+      "series": "peintures",
+      "group": "Lignes",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "18 × 24"
+      ],
+      "note": null,
+      "slug": "lignes-ligne-brisee-2",
+      "untitled": false,
+      "file": "lignes-ligne-brisee-2.jpg",
+      "short": null
+    },
+    {
+      "n": 86,
+      "title": "Ligne rouge",
+      "series": "peintures",
+      "group": "Lignes",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "18 × 24"
+      ],
+      "note": null,
+      "slug": "lignes-ligne-rouge",
+      "untitled": false,
+      "file": "lignes-ligne-rouge.jpg",
+      "short": null
+    },
+    {
+      "n": 87,
+      "title": "Carré gris",
+      "series": "peintures",
+      "group": "Lignes",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "18 × 24"
+      ],
+      "note": null,
+      "slug": "lignes-carre-gris",
+      "untitled": false,
+      "file": "lignes-carre-gris.jpg",
+      "short": null
+    },
+    {
+      "n": 99,
+      "title": "Triangles aux carrés I",
+      "series": "peintures",
+      "group": "Triangles aux carrés",
+      "technique": "Acrylique sur toile",
+      "dimensions": [],
+      "note": null,
+      "slug": "triangles-aux-carres-1",
+      "untitled": false,
+      "file": "triangles-aux-carres-1.jpg",
+      "short": "Triangles I"
+    },
+    {
+      "n": 100,
+      "title": "Triangles aux carrés II",
+      "series": "peintures",
+      "group": "Triangles aux carrés",
+      "technique": "Acrylique sur toile",
+      "dimensions": [],
+      "note": null,
+      "slug": "triangles-aux-carres-2",
+      "untitled": false,
+      "file": "triangles-aux-carres-2.jpg",
+      "short": "Triangles II"
+    },
+    {
+      "n": 101,
+      "title": "Triangles aux carrés III",
+      "series": "peintures",
+      "group": "Triangles aux carrés",
+      "technique": "Acrylique sur toile",
+      "dimensions": [],
+      "note": null,
+      "slug": "triangles-aux-carres-3",
+      "untitled": false,
+      "file": "triangles-aux-carres-3.jpg",
+      "short": "Triangles III"
+    },
+    {
+      "n": 102,
+      "title": "Triangles aux carrés IV",
+      "series": "peintures",
+      "group": "Triangles aux carrés",
+      "technique": "Acrylique sur toile",
+      "dimensions": [],
+      "note": null,
+      "slug": "triangles-aux-carres-4",
+      "untitled": false,
+      "file": "triangles-aux-carres-4.jpg",
+      "short": "Triangles IV"
+    },
+    {
+      "n": 1,
+      "title": "Sans titre 01",
+      "series": "peintures",
+      "group": "Sans titre",
+      "technique": "Acrylique sur toile",
+      "dimensions": [],
+      "note": null,
+      "slug": "sans-titre-01",
+      "untitled": true,
+      "file": "sans-titre-01.jpg",
+      "short": null
+    },
+    {
+      "n": 6,
+      "title": "Sans titre 02",
+      "series": "peintures",
+      "group": "Sans titre",
+      "technique": "Acrylique sur toile",
+      "dimensions": [],
+      "note": null,
+      "slug": "sans-titre-02",
+      "untitled": true,
+      "file": "sans-titre-02.jpg",
+      "short": null
+    },
+    {
+      "n": 11,
+      "title": "Sans titre 03",
+      "series": "peintures",
+      "group": "Sans titre",
+      "technique": "Acrylique sur toile",
+      "dimensions": [],
+      "note": null,
+      "slug": "sans-titre-03",
+      "untitled": true,
+      "file": "sans-titre-03.jpg",
+      "short": null
+    },
+    {
+      "n": 12,
+      "title": "Sans titre 04",
+      "series": "peintures",
+      "group": "Sans titre",
+      "technique": "Acrylique sur toile",
+      "dimensions": [],
+      "note": null,
+      "slug": "sans-titre-04",
+      "untitled": true,
+      "file": "sans-titre-04.jpg",
+      "short": null
+    },
+    {
+      "n": 13,
+      "title": "Sans titre 05",
+      "series": "peintures",
+      "group": "Sans titre",
+      "technique": "Acrylique sur toile",
+      "dimensions": [],
+      "note": null,
+      "slug": "sans-titre-05",
+      "untitled": true,
+      "file": "sans-titre-05.jpg",
+      "short": null
+    },
+    {
+      "n": 17,
+      "title": "Sans titre 06",
+      "series": "peintures",
+      "group": "Sans titre",
+      "technique": "Acrylique sur toile",
+      "dimensions": [],
+      "note": null,
+      "slug": "sans-titre-06",
+      "untitled": true,
+      "file": "sans-titre-06.jpg",
+      "short": null
+    },
+    {
+      "n": 19,
+      "title": "Sans titre 07",
+      "series": "peintures",
+      "group": "Sans titre",
+      "technique": "Acrylique sur toile",
+      "dimensions": [],
+      "note": null,
+      "slug": "sans-titre-07",
+      "untitled": true,
+      "file": "sans-titre-07.jpg",
+      "short": null
+    },
+    {
+      "n": 20,
+      "title": "Sans titre 08",
+      "series": "peintures",
+      "group": "Sans titre",
+      "technique": "Acrylique sur toile",
+      "dimensions": [],
+      "note": null,
+      "slug": "sans-titre-08",
+      "untitled": true,
+      "file": "sans-titre-08.jpg",
+      "short": null
+    },
+    {
+      "n": 22,
+      "title": "Sans titre 09",
+      "series": "peintures",
+      "group": "Sans titre",
+      "technique": "Acrylique sur toile",
+      "dimensions": [],
+      "note": null,
+      "slug": "sans-titre-09",
+      "untitled": true,
+      "file": "sans-titre-09.jpg",
+      "short": null
+    },
+    {
+      "n": 23,
+      "title": "Sans titre 10",
+      "series": "peintures",
+      "group": "Sans titre",
+      "technique": "Acrylique sur toile",
+      "dimensions": [],
+      "note": null,
+      "slug": "sans-titre-10",
+      "untitled": true,
+      "file": "sans-titre-10.jpg",
+      "short": null
+    },
+    {
+      "n": 25,
+      "title": "Sans titre 11",
+      "series": "peintures",
+      "group": "Sans titre",
+      "technique": "Acrylique sur toile",
+      "dimensions": [],
+      "note": null,
+      "slug": "sans-titre-11",
+      "untitled": true,
+      "file": "sans-titre-11.jpg",
+      "short": null
+    },
+    {
+      "n": 30,
+      "title": "Sans titre 12",
+      "series": "peintures",
+      "group": "Sans titre",
+      "technique": "Acrylique sur toile",
+      "dimensions": [],
+      "note": null,
+      "slug": "sans-titre-12",
+      "untitled": true,
+      "file": "sans-titre-12.jpg",
+      "short": null
+    },
+    {
+      "n": 73,
+      "title": "Sans titre 13",
+      "series": "peintures",
+      "group": "Sans titre",
+      "technique": "Acrylique sur toile",
+      "dimensions": [],
+      "note": null,
+      "slug": "sans-titre-13",
+      "untitled": true,
+      "file": "sans-titre-13.jpg",
+      "short": null
+    },
+    {
+      "n": 74,
+      "title": "Sans titre 14",
+      "series": "peintures",
+      "group": "Sans titre",
+      "technique": "Acrylique sur toile",
+      "dimensions": [],
+      "note": null,
+      "slug": "sans-titre-14",
+      "untitled": true,
+      "file": "sans-titre-14.jpg",
+      "short": null
+    },
+    {
+      "n": 75,
+      "title": "Sans titre 15",
+      "series": "peintures",
+      "group": "Sans titre",
+      "technique": "Acrylique sur toile",
+      "dimensions": [],
+      "note": null,
+      "slug": "sans-titre-15",
+      "untitled": true,
+      "file": "sans-titre-15.jpg",
+      "short": null
+    },
+    {
+      "n": 88,
+      "title": "Affection",
+      "series": "carregraphies",
+      "group": "Carrégraphies",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "20 × 20"
+      ],
+      "note": "情",
+      "slug": "carregraphie-affection",
+      "untitled": false,
+      "file": "carregraphie-affection.jpg",
+      "short": null
+    },
+    {
+      "n": 89,
+      "title": "Serpent",
+      "series": "carregraphies",
+      "group": "Carrégraphies",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "20 × 20"
+      ],
+      "note": "蛇",
+      "slug": "carregraphie-serpent",
+      "untitled": false,
+      "file": "carregraphie-serpent.jpg",
+      "short": null
+    },
+    {
+      "n": 90,
+      "title": "Harmonie",
+      "series": "carregraphies",
+      "group": "Carrégraphies",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "20 × 20"
+      ],
+      "note": "和",
+      "slug": "carregraphie-harmonie",
+      "untitled": false,
+      "file": "carregraphie-harmonie.jpg",
+      "short": null
+    },
+    {
+      "n": 91,
+      "title": "Dragon",
+      "series": "carregraphies",
+      "group": "Carrégraphies",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "20 × 20"
+      ],
+      "note": "龍",
+      "slug": "carregraphie-dragon",
+      "untitled": false,
+      "file": "carregraphie-dragon.jpg",
+      "short": null
+    },
+    {
+      "n": 92,
+      "title": "Joie",
+      "series": "carregraphies",
+      "group": "Carrégraphies",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "20 × 20"
+      ],
+      "note": "喜",
+      "slug": "carregraphie-joie",
+      "untitled": false,
+      "file": "carregraphie-joie.jpg",
+      "short": null
+    },
+    {
+      "n": 93,
+      "title": "Bleu",
+      "series": "carregraphies",
+      "group": "Carrégraphies",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "20 × 20"
+      ],
+      "note": "青",
+      "slug": "carregraphie-bleu",
+      "untitled": false,
+      "file": "carregraphie-bleu.jpg",
+      "short": null
+    },
+    {
+      "n": 94,
+      "title": "Résistance",
+      "series": "carregraphies",
+      "group": "Carrégraphies",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "20 × 20"
+      ],
+      "note": "抗",
+      "slug": "carregraphie-resistance",
+      "untitled": false,
+      "file": "carregraphie-resistance.jpg",
+      "short": null
+    },
+    {
+      "n": 95,
+      "title": "Cheval",
+      "series": "carregraphies",
+      "group": "Carrégraphies",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "20 × 20"
+      ],
+      "note": "馬",
+      "slug": "carregraphie-cheval",
+      "untitled": false,
+      "file": "carregraphie-cheval.jpg",
+      "short": null
+    },
+    {
+      "n": 96,
+      "title": "Chèvre",
+      "series": "carregraphies",
+      "group": "Carrégraphies",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "20 × 20"
+      ],
+      "note": "羊",
+      "slug": "carregraphie-chevre",
+      "untitled": false,
+      "file": "carregraphie-chevre.jpg",
+      "short": null
+    },
+    {
+      "n": 97,
+      "title": "Éternité",
+      "series": "carregraphies",
+      "group": "Carrégraphies",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "20 × 20"
+      ],
+      "note": "永",
+      "slug": "carregraphie-eternite",
+      "untitled": false,
+      "file": "carregraphie-eternite.jpg",
+      "short": null
+    },
+    {
+      "n": 98,
+      "title": "Noter",
+      "series": "carregraphies",
+      "group": "Carrégraphies",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "20 × 20"
+      ],
+      "note": "記",
+      "slug": "carregraphie-noter",
+      "untitled": false,
+      "file": "carregraphie-noter.jpg",
+      "short": null
+    },
+    {
+      "n": 103,
+      "title": "Géométrie d'encre et de papier I",
+      "series": "encres",
+      "group": "Géométrie d'encre et de papier",
+      "technique": "Encre de Chine sur papier xuan",
+      "dimensions": [
+        "35 × 137"
+      ],
+      "note": null,
+      "slug": "geometrie-encre-papier-1",
+      "untitled": false,
+      "file": "geometrie-encre-papier-1.jpg",
+      "short": "Kakémono I"
+    },
+    {
+      "n": 104,
+      "title": "Géométrie d'encre et de papier II",
+      "series": "encres",
+      "group": "Géométrie d'encre et de papier",
+      "technique": "Encre de Chine sur papier xuan",
+      "dimensions": [
+        "35 × 137"
+      ],
+      "note": null,
+      "slug": "geometrie-encre-papier-2",
+      "untitled": false,
+      "file": "geometrie-encre-papier-2.jpg",
+      "short": "Kakémono II"
+    },
+    {
+      "n": 105,
+      "title": "Géométrie d'encre et de papier III",
+      "series": "encres",
+      "group": "Géométrie d'encre et de papier",
+      "technique": "Encre de Chine sur papier xuan",
+      "dimensions": [
+        "35 × 137"
+      ],
+      "note": null,
+      "slug": "geometrie-encre-papier-3",
+      "untitled": false,
+      "file": "geometrie-encre-papier-3.jpg",
+      "short": "Kakémono III"
+    },
+    {
+      "n": 106,
+      "title": "Géométrie d'encre et de papier IV",
+      "series": "encres",
+      "group": "Géométrie d'encre et de papier",
+      "technique": "Encre de Chine sur papier xuan",
+      "dimensions": [
+        "35 × 137"
+      ],
+      "note": null,
+      "slug": "geometrie-encre-papier-4",
+      "untitled": false,
+      "file": "geometrie-encre-papier-4.jpg",
+      "short": "Kakémono IV"
+    },
+    {
+      "n": 107,
+      "title": "Géométrie d'encre et de papier V",
+      "series": "encres",
+      "group": "Géométrie d'encre et de papier",
+      "technique": "Encre de Chine sur papier xuan",
+      "dimensions": [
+        "35 × 137"
+      ],
+      "note": null,
+      "slug": "geometrie-encre-papier-5",
+      "untitled": false,
+      "file": "geometrie-encre-papier-5.jpg",
+      "short": "Kakémono V"
+    },
+    {
+      "n": 108,
+      "title": "Géométrie d'encre et de papier VI",
+      "series": "encres",
+      "group": "Géométrie d'encre et de papier",
+      "technique": "Encre de Chine sur papier xuan",
+      "dimensions": [
+        "35 × 137"
+      ],
+      "note": null,
+      "slug": "geometrie-encre-papier-6",
+      "untitled": false,
+      "file": "geometrie-encre-papier-6.jpg",
+      "short": "Kakémono VI"
+    },
+    {
+      "n": 109,
+      "title": "Géométrie d'encre et de papier VII",
+      "series": "encres",
+      "group": "Géométrie d'encre et de papier",
+      "technique": "Encre de Chine sur papier xuan",
+      "dimensions": [
+        "35 × 137"
+      ],
+      "note": null,
+      "slug": "geometrie-encre-papier-7",
+      "untitled": false,
+      "file": "geometrie-encre-papier-7.jpg",
+      "short": "Kakémono VII"
+    },
+    {
+      "n": 110,
+      "title": "Géométrie d'encre et de papier VIII",
+      "series": "encres",
+      "group": "Géométrie d'encre et de papier",
+      "technique": "Encre de Chine sur papier xuan",
+      "dimensions": [
+        "35 × 137"
+      ],
+      "note": null,
+      "slug": "geometrie-encre-papier-8",
+      "untitled": false,
+      "file": "geometrie-encre-papier-8.jpg",
+      "short": "Kakémono VIII"
+    },
+    {
+      "n": 111,
+      "title": "Géométrie d'encre et de papier IX",
+      "series": "encres",
+      "group": "Géométrie d'encre et de papier",
+      "technique": "Encre de Chine sur papier xuan",
+      "dimensions": [
+        "35 × 137"
+      ],
+      "note": null,
+      "slug": "geometrie-encre-papier-9",
+      "untitled": false,
+      "file": "geometrie-encre-papier-9.jpg",
+      "short": "Kakémono IX"
+    },
+    {
+      "n": 112,
+      "title": "Géométrie d'encre et de papier X",
+      "series": "encres",
+      "group": "Géométrie d'encre et de papier",
+      "technique": "Encre de Chine sur papier xuan",
+      "dimensions": [
+        "35 × 137"
+      ],
+      "note": null,
+      "slug": "geometrie-encre-papier-10",
+      "untitled": false,
+      "file": "geometrie-encre-papier-10.jpg",
+      "short": "Kakémono X"
+    },
+    {
+      "n": 113,
+      "title": "Aller Retour Double V",
+      "series": "encres",
+      "group": "Aller Retour Double",
+      "technique": "Encre de Chine sur papier",
+      "dimensions": [
+        "17,5 × 22"
+      ],
+      "note": null,
+      "slug": "aller-retour-double-v",
+      "untitled": false,
+      "file": "aller-retour-double-v.jpg",
+      "short": "AR D V"
+    },
+    {
+      "n": 114,
+      "title": "Aller Retour Double VI",
+      "series": "encres",
+      "group": "Aller Retour Double",
+      "technique": "Encre de Chine sur papier",
+      "dimensions": [
+        "17,5 × 22"
+      ],
+      "note": null,
+      "slug": "aller-retour-double-vi",
+      "untitled": false,
+      "file": "aller-retour-double-vi.jpg",
+      "short": "AR D VI"
+    },
+    {
+      "n": 115,
+      "title": "Aller Retour Double X",
+      "series": "encres",
+      "group": "Aller Retour Double",
+      "technique": "Encre de Chine sur papier",
+      "dimensions": [
+        "17,5 × 22"
+      ],
+      "note": null,
+      "slug": "aller-retour-double-x",
+      "untitled": false,
+      "file": "aller-retour-double-x.jpg",
+      "short": "AR D X"
+    },
+    {
+      "n": 116,
+      "title": "Aller Retour Double XVII",
+      "series": "encres",
+      "group": "Aller Retour Double",
+      "technique": "Encre de Chine sur papier",
+      "dimensions": [
+        "17,5 × 22"
+      ],
+      "note": null,
+      "slug": "aller-retour-double-xvii",
+      "untitled": false,
+      "file": "aller-retour-double-xvii.jpg",
+      "short": "AR D XVII"
+    },
+    {
+      "n": 117,
+      "title": "Aller Retour Double XIX",
+      "series": "encres",
+      "group": "Aller Retour Double",
+      "technique": "Encre de Chine sur papier",
+      "dimensions": [
+        "17,5 × 22"
+      ],
+      "note": null,
+      "slug": "aller-retour-double-xix",
+      "untitled": false,
+      "file": "aller-retour-double-xix.jpg",
+      "short": "AR D XIX"
+    },
+    {
+      "n": 118,
+      "title": "Aller Retour Double XXIX",
+      "series": "encres",
+      "group": "Aller Retour Double",
+      "technique": "Encre de Chine sur papier",
+      "dimensions": [
+        "17,5 × 22"
+      ],
+      "note": null,
+      "slug": "aller-retour-double-xxix",
+      "untitled": false,
+      "file": "aller-retour-double-xxix.jpg",
+      "short": "AR D XXIX"
+    },
+    {
+      "n": 119,
+      "title": "Aller Retour Double II",
+      "series": "encres",
+      "group": "Aller Retour Double",
+      "technique": "Encre de Chine sur papier",
+      "dimensions": [
+        "17,5 × 22"
+      ],
+      "note": null,
+      "slug": "aller-retour-double-ii",
+      "untitled": false,
+      "file": "aller-retour-double-ii.jpg",
+      "short": "AR D II"
+    },
+    {
+      "n": 120,
+      "title": "Aller Retour Double XXX",
+      "series": "encres",
+      "group": "Aller Retour Double",
+      "technique": "Encre de Chine sur papier",
+      "dimensions": [
+        "17,5 × 22"
+      ],
+      "note": null,
+      "slug": "aller-retour-double-xxx",
+      "untitled": false,
+      "file": "aller-retour-double-xxx.jpg",
+      "short": "AR D XXX"
+    },
+    {
+      "n": 121,
+      "title": "Liberté",
+      "series": "encres",
+      "group": "Les mots entre les lignes",
+      "technique": "Encre de Chine sur papier",
+      "dimensions": [
+        "30 × 30"
+      ],
+      "note": "自由",
+      "slug": "mots-entre-les-lignes-liberte",
+      "untitled": false,
+      "file": "mots-entre-les-lignes-liberte.jpg",
+      "short": null
+    },
+    {
+      "n": 122,
+      "title": "Harmonie",
+      "series": "encres",
+      "group": "Les mots entre les lignes",
+      "technique": "Encre de Chine sur papier",
+      "dimensions": [
+        "30 × 30"
+      ],
+      "note": "和",
+      "slug": "mots-entre-les-lignes-harmonie",
+      "untitled": false,
+      "file": "mots-entre-les-lignes-harmonie.jpg",
+      "short": null
+    },
+    {
+      "n": 123,
+      "title": "Bonheur",
+      "series": "encres",
+      "group": "Les mots entre les lignes",
+      "technique": "Encre de Chine sur papier",
+      "dimensions": [
+        "30 × 30"
+      ],
+      "note": "福",
+      "slug": "mots-entre-les-lignes-bonheur",
+      "untitled": false,
+      "file": "mots-entre-les-lignes-bonheur.jpg",
+      "short": null
+    },
+    {
+      "n": 124,
+      "title": "Énergie",
+      "series": "encres",
+      "group": "Les mots entre les lignes",
+      "technique": "Encre de Chine sur papier",
+      "dimensions": [
+        "30 × 30"
+      ],
+      "note": "氣",
+      "slug": "mots-entre-les-lignes-energie",
+      "untitled": false,
+      "file": "mots-entre-les-lignes-energie.jpg",
+      "short": null
+    },
+    {
+      "n": 125,
+      "title": "Dragon",
+      "series": "encres",
+      "group": "Les mots entre les lignes",
+      "technique": "Encre de Chine sur papier",
+      "dimensions": [
+        "30 × 30"
+      ],
+      "note": "龍",
+      "slug": "mots-entre-les-lignes-dragon",
+      "untitled": false,
+      "file": "mots-entre-les-lignes-dragon.jpg",
+      "short": null
+    },
+    {
+      "n": 126,
+      "title": "Penser",
+      "series": "encres",
+      "group": "Les mots entre les lignes",
+      "technique": "Encre de Chine sur papier",
+      "dimensions": [
+        "30 × 30"
+      ],
+      "note": "思",
+      "slug": "mots-entre-les-lignes-penser",
+      "untitled": false,
+      "file": "mots-entre-les-lignes-penser.jpg",
+      "short": null
+    },
+    {
+      "n": 127,
+      "title": "Joie",
+      "series": "encres",
+      "group": "Les mots entre les lignes",
+      "technique": "Encre de Chine sur papier",
+      "dimensions": [
+        "30 × 30"
+      ],
+      "note": "喜",
+      "slug": "mots-entre-les-lignes-joie",
+      "untitled": false,
+      "file": "mots-entre-les-lignes-joie.jpg",
+      "short": null
+    },
+    {
+      "n": 128,
+      "title": "Affection",
+      "series": "encres",
+      "group": "Les mots entre les lignes",
+      "technique": "Encre de Chine sur papier",
+      "dimensions": [
+        "30 × 30"
+      ],
+      "note": "情",
+      "slug": "mots-entre-les-lignes-affection",
+      "untitled": false,
+      "file": "mots-entre-les-lignes-affection.jpg",
+      "short": null
+    },
+    {
+      "n": 129,
+      "title": "Ombre et lumière I",
+      "series": "encres",
+      "group": "Ombre et lumière",
+      "technique": "Encre de Chine sur papier",
+      "dimensions": [],
+      "note": null,
+      "slug": "ombre-et-lumiere-1",
+      "untitled": false,
+      "file": "ombre-et-lumiere-1.jpg",
+      "short": "I"
+    },
+    {
+      "n": 130,
+      "title": "Ombre et lumière II",
+      "series": "encres",
+      "group": "Ombre et lumière",
+      "technique": "Encre de Chine sur papier",
+      "dimensions": [],
+      "note": null,
+      "slug": "ombre-et-lumiere-2",
+      "untitled": false,
+      "file": "ombre-et-lumiere-2.jpg",
+      "short": "II"
+    }
+  ]
 }

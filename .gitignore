@@ -1,3 +1,9 @@
 .venv/
 __pycache__/
 .DS_Store
+node_modules/
+.env.local
+.vercel/
+# le HTML est reconstruit par Vercel ; seules les images dérivées sont versionnées
+dist/*
+!dist/img/

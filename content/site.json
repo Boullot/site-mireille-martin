@@ -29,7 +29,14 @@
       "url": "https://realitesnouvelles.org/"
     }
   ],
-  "influences": ["Kazimir Malévitch", "Piet Mondrian", "Ellsworth Kelly", "Vera Molnár", "Josef Albers", "Aurélie Nemours"],
+  "influences": [
+    "Kazimir Malévitch",
+    "Piet Mondrian",
+    "Ellsworth Kelly",
+    "Vera Molnár",
+    "Josef Albers",
+    "Aurélie Nemours"
+  ],
   "credits_photo": "Patrick Le Baube",
-  "form_endpoint": "/api/contact"
+  "form_endpoint": "/api/contact/"
 }
