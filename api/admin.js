@@ -66,7 +66,20 @@ async function content() {
     docs[name] = { data: toClient(name, await readBlob(sha)), base: sha };
   }));
   const { repo, branch } = config();
-  return { head: snap.head, repo, branch, docs };
+  return { head: snap.head, repo, branch, docs, thumbs: thumbs(snap.files) };
+}
+
+/** Pour chaque image, son plus petit dérivé WebP (les kakémonos font moins de 420 px). */
+function thumbs(files) {
+  const out = {};
+  for (const p of files.keys()) {
+    const m = p.match(/^dist\/img\/((?:vues\/)?[a-z0-9][a-z0-9-]*)-(\d+)\.webp$/);
+    if (!m) continue;
+    const file = `${m[1]}.jpg`;
+    const w = Number(m[2]);
+    if (!out[file] || w < out[file].w) out[file] = { w, path: p.slice("dist".length) };
+  }
+  return Object.fromEntries(Object.entries(out).map(([k, v]) => [k, v.path]));
 }
 
 /* -------------------------------------------------------------- écriture */

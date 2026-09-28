@@ -117,12 +117,28 @@ export async function commit({ baseHead, baseTree, entries, message }) {
   return c.sha;
 }
 
-/** État de la mise en ligne d'un commit, tel que Vercel le publie sur GitHub. */
-export async function deployState(sha) {
+async function commitState(sha) {
   const s = (await gh("GET", `${repoPath()}/commits/${sha}/status`)).data;
   const v = (s.statuses || []).find((x) => /vercel/i.test(x.context));
   if (!v) return { state: "queued" };
-  return { state: v.state, url: v.target_url || null }; // pending | success | failure | error
+  // pending | success | failure | error
+  return { state: v.state, url: v.target_url || null, canceled: /cancel/i.test(v.description || "") };
+}
+
+/**
+ * État de la mise en ligne d'un commit, tel que Vercel le publie sur GitHub.
+ * Deux enregistrements rapprochés : Vercel annule le build du premier (statut
+ * « failure », description « Canceled ») au profit du second, qui contient les deux
+ * modifications. Ce n'est pas un échec : on suit alors le commit le plus récent.
+ */
+export async function deployState(sha) {
+  const st = await commitState(sha);
+  if (st.state !== "failure" || !st.canceled) return st;
+  const { branch } = config();
+  const head = (await gh("GET", `${repoPath()}/git/ref/heads/${encodeURIComponent(branch)}`)).data.object.sha;
+  if (head === sha) return st;
+  const next = await commitState(head);
+  return next.state === "failure" && next.canceled ? { state: "pending" } : next;
 }
 
 /* ---------------------------------------------------------------- variables

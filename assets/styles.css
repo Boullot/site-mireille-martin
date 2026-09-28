@@ -820,3 +820,10 @@ dialog.lightbox::backdrop { background: rgba(10, 9, 8, .82); }
 @media (hover: none) { .hint-mouse { display: none; } .hint-touch { display: inline; } }
 .critiques { display: grid; gap: var(--space-8); }
 .critique + .critique { padding-top: var(--space-8); border-top: 1px solid var(--rule); max-width: var(--measure); }
+@media (max-width: 640px) {
+  /* l'introduction d'une page et son contenu : un seul souffle, pas deux */
+  main > .wrap:first-child + section,
+  main > .wrap:first-child + section + section { padding-top: var(--space-6); }
+  main > .wrap:first-child + section { border-top: 0; }
+  .hero { padding-top: var(--space-6); gap: var(--space-6); }
+}

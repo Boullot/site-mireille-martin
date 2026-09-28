@@ -370,6 +370,20 @@ describe("statut de mise en ligne et sessions", () => {
     assert.equal(r.data.state, "success");
   });
 
+  test("un build annulé au profit d'un commit plus récent n'est pas un échec", async () => {
+    const first = gh.head;
+    const d = await docs();
+    d.gold.data.entries.push("Encore un mot.");
+    await call("POST", "save", { cookie, json: { docs: { gold: d.gold } } });
+    gh.setStatus(first, "failure", "Canceled from the Vercel Dashboard");
+    gh.setStatus(gh.head, "pending");
+    assert.equal((await call("GET", "status", { cookie, params: { sha: first } })).data.state, "pending");
+    gh.setStatus(gh.head, "success");
+    assert.equal((await call("GET", "status", { cookie, params: { sha: first } })).data.state, "success");
+    gh.setStatus(gh.head, "failure", "Build failed");
+    assert.equal((await call("GET", "status", { cookie, params: { sha: gh.head } })).data.state, "failure");
+  });
+
   test("un nouveau mot de passe ferme les anciennes sessions", async () => {
     const t = auth.inviteToken();
     await new Promise((r) => setTimeout(r, 5));

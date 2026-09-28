@@ -493,7 +493,7 @@ def build_home():
 <div class="wrap">
   <section class="hero">
     <div>
-      <p class="label">Peintre · Abstraction géométrique · Normandie</p>
+      <p class="label">Peintre&nbsp;· Abstraction géométrique&nbsp;· Normandie</p>
       <h1 class="hero__title">Autant de noir<em>que de blanc.</em></h1>
       <p class="hero__quote">« La géométrie a toujours été pour moi source de poésie
         et prétexte à m'évader. »</p>

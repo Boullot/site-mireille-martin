@@ -336,3 +336,16 @@ dialog.modal p { color: var(--fg-muted); overflow-wrap: anywhere; }
   .row { gap: var(--space-3); }
   .thumb { width: 48px; height: 48px; }
 }
+
+html { scroll-behavior: auto; }
+.row--new { background: var(--accent-soft); box-shadow: -8px 0 0 var(--accent-soft), 8px 0 0 var(--accent-soft); }
+.top__links .short { display: none; }
+@media (max-width: 640px) {
+  .top__inner { flex-wrap: nowrap; min-height: 52px; }
+  .top .wordmark { font-size: .82rem; letter-spacing: .18em; }
+  .top__links .long { display: none; }
+  .top__links .short { display: inline; }
+  /* les onglets défilent : un fondu à droite le laisse deviner */
+  .tabs { -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent); mask-image: linear-gradient(90deg, #000 85%, transparent); }
+}
+.tabs.at-end { -webkit-mask-image: none; mask-image: none; }

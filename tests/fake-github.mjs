@@ -79,7 +79,7 @@ export function fakeGitHub({ root, repo = "o/r", branch = "main", paths, stubs =
     }
     if (method === "GET" && (m = p.match(/^\/commits\/(\w+)\/status$/))) {
       const st = statuses.get(m[1]);
-      return ok({ state: st || "pending", statuses: st ? [{ context: "Vercel", state: st, target_url: "https://vercel.test" }] : [] });
+      return ok({ state: st?.state || "pending", statuses: st ? [{ context: "Vercel", state: st.state, description: st.description || "", target_url: "https://vercel.test" }] : [] });
     }
     if ((m = p.match(/^\/actions\/variables\/(\w+)$/))) {
       if (method === "GET") return vars.has(m[1]) ? ok({ name: m[1], value: vars.get(m[1]) }) : nope(404);
@@ -105,7 +105,7 @@ export function fakeGitHub({ root, repo = "o/r", branch = "main", paths, stubs =
     read(p) { const s = this.files().get(p); return s ? blobs.get(s).toString("utf8") : null; },
     readBuf(p) { const s = this.files().get(p); return s ? blobs.get(s) : null; },
     commits: () => commits,
-    setStatus: (sha, st) => statuses.set(sha, st),
+    setStatus: (sha, state, description = "") => statuses.set(sha, { state, description }),
     vars,
     /** Pousse un commit « extérieur » (quelqu'un d'autre modifie le dépôt). */
     external(pathName, content) {

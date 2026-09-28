@@ -4,104 +4,109 @@ Site statique, sans framework et sans dépendance côté navigateur. Un script P
 le contenu (`content/`) et les photographies (`assets/originals/`) et écrit un site
 complet dans `dist/`.
 
-Le pari : dans dix ans, ce dossier devra encore se construire. Pas de `node_modules`,
-pas de CMS, pas de webfont chargée depuis un CDN.
+Le pari : dans dix ans, ce dossier devra encore se construire. Le build n'a besoin que de
+Python ; pas de CMS, pas de webfont chargée depuis un CDN. La seule dépendance Node
+(sharp) sert à la fonction d'administration, jamais au site.
 
-## Construire
+## Comment le site se met à jour
+
+```
+admin (/admin/) ──► api/admin.js ──► un commit sur main ──► Vercel : npm ci + python3 build.py ──► en ligne
+```
+
+- **Git est la base de données.** Tout le contenu vit dans `content/` ; les images dans
+  `assets/originals/` (sources) et `dist/img/` (dérivés, versionnés).
+- **Le site reste 100 % statique.** L'admin n'écrit jamais dans le HTML : elle valide et
+  commite des données, Vercel reconstruit tout le site et le bascule d'un bloc (~30 s).
+  Rien n'est chargé après coup côté navigateur.
+- **Un build raté ne casse rien** : `build.py` vérifie l'intégrité du contenu (`validate()`)
+  et s'arrête en erreur ; Vercel garde alors la version précédente en ligne.
+- Le HTML de `dist/` n'est plus versionné (reconstruit par Vercel). `dist/img/` l'est.
+- Pillow n'est nécessaire qu'en local, pour fabriquer des dérivés manquants. Les images
+  envoyées depuis l'admin sont dérivées par sharp dans la fonction (mêmes tailles, même
+  carte Open Graph), si bien que le build distant n'utilise que la bibliothèque standard
+  (Python 3.9+).
+
+## Travailler en local
 
 ```bash
-python3 -m venv .venv
-.venv/bin/pip install -r requirements-build.txt
-.venv/bin/python build.py
+git pull                      # l'admin commite sur main : toujours partir de la dernière version
+python3 -m venv .venv && .venv/bin/pip install -r requirements-build.txt
+.venv/bin/python build.py     # → dist/
+npm ci && npm test            # 28 tests : API admin complète contre un faux GitHub + build
 ```
 
-Résultat : `dist/` (117 pages, ~700 fichiers image dérivés). Prévisualiser :
+Prévisualiser avec l'admin : `npm run dev` (http://localhost:3000), avec un `.env.local`
+(voir plus bas) et `GITHUB_BRANCH` pointé sur **une branche de test**, jamais `main`.
 
-```bash
-cd dist && python3 -m http.server 8000
-```
+## Espace administrateur
 
-Les images dérivées sont conservées entre deux builds (`dist/img/` n'est pas effacé).
-Pour tout régénérer : `rm -rf dist/img`.
+`/admin/` (lien discret « Administration » en pied de page). Un seul compte : `ADMIN_EMAIL`.
+Rubriques : œuvres (photo, série, technique, formats, texte, mise en avant), séries et
+familles, page d'accueil, démarche / critiques / récit, expositions et vues d'accrochage,
+livre d'or, coordonnées.
 
-## Déployer
+### Variables d'environnement (Vercel)
 
-Le site est préconstruit dans `dist/` (Pillow / Python 3.14 casse sur
-Vercel). Workflow :
+| Variable | Valeur | Qui |
+| --- | --- | --- |
+| `ADMIN_EMAIL` | `michel.martin54@free.fr` | posée |
+| `GITHUB_REPO` / `GITHUB_BRANCH` | `Boullot/site-mireille-martin` / `main` (preview : `admin-e2e`, inexistante exprès) | posées |
+| `SITE_URL` | `https://site-mireille-martin.vercel.app` → le domaine définitif | posée |
+| `CONTACT_TO` | `mireillemartin8@free.fr` | posée |
+| `ADMIN_SECRET` | la valeur de `.env.local` (64 caractères hex) | **à poser** |
+| `GITHUB_TOKEN` | jeton *fine-grained* limité à ce dépôt (voir ci-dessous) | **à poser** |
+| `RESEND_API_KEY` / `MAIL_FROM` | voir « E-mails » | **à poser** |
 
-1. Modifier le contenu ou les photos localement
-2. Relancer `build.py`
-3. Committer `dist/` et pousser — Vercel sert `dist/` tel quel
+Jeton GitHub : github.com → Settings → Developer settings → Fine-grained tokens → accès au
+seul dépôt `site-mireille-martin`, permissions **Contents : Read and write**, **Variables :
+Read and write**, **Commit statuses : Read**. Pas d'expiration (ou la plus longue possible,
+et un rappel pour le renouveler : un jeton expiré bloque l'admin, jamais le site).
 
-Dans le dashboard Vercel : Framework **Other**, pas d’override de
-Build / Install (tout est dans `vercel.json`).
+Diagnostic sans connexion : `/api/admin/?a=health` (ce qui est configuré, sharp chargé).
 
-### Formulaire de contact
+### Mot de passe
 
-`api/contact.js` est une fonction serverless qui envoie le message par
-[Resend](https://resend.com) (offre gratuite : 3 000 envois/mois). Trois variables
-d'environnement à définir dans le projet Vercel :
+- `npm run invite` affiche le lien de création du mot de passe (valable 30 jours, un seul
+  usage). Il lit `ADMIN_SECRET` et `SITE_URL` dans `.env.local`, qui doivent être identiques
+  à Vercel. Le même lien sert à réinitialiser un mot de passe oublié.
+- Le hachage (scrypt + clé serveur) vit dans la variable Actions privée `ADMIN_AUTH` du
+  dépôt ; changer de mot de passe ferme toutes les sessions.
+- Changer `ADMIN_SECRET` invalide le mot de passe et les sessions : renvoyer une invitation.
 
-| Variable | Valeur |
-| --- | --- |
-| `RESEND_API_KEY` | la clé API Resend |
-| `CONTACT_TO` | `mireillemartin8@free.fr` |
-| `CONTACT_FROM` | une adresse du domaine vérifié chez Resend, ex. `site@mireille-martin.fr` |
+### E-mails (contact + mot de passe oublié)
 
-Tant qu'elles ne sont pas définies, la fonction répond `503` et le formulaire bascule
-tout seul sur un lien `mailto:` pré-rempli. Rien n'est cassé, l'envoi passe juste par le
-logiciel de messagerie du visiteur.
-
-## Ajouter une œuvre
-
-1. Déposer la photographie dans `assets/originals/` sous le nom `mon-slug.jpg`
-   (JPEG, le plus grand côté à 2000 px au minimum, cadrage serré sur la toile).
-2. Ajouter une entrée dans `content/works.json` :
-
-```json
-{
-  "title": "Aller Retour XXXVI",
-  "series": "aller-retour",
-  "group": "Aller Retour",
-  "technique": "Acrylique sur toile",
-  "dimensions": ["60 × 80"],
-  "note": null,
-  "slug": "aller-retour-xxxvi",
-  "untitled": false,
-  "file": "aller-retour-xxxvi.jpg"
-}
-```
-
-3. Relancer `build.py`.
-
-`series` doit valoir `aller-retour`, `peintures`, `carregraphies` ou `encres`.
-`group` est le sous-ensemble affiché en intertitre. `note` sert à l'idéogramme chinois
-des Carrégraphies.
-
-## Ajouter une exposition
-
-`content/exhibitions.json`. Les entrées de `exhibitions` sont triées automatiquement par
-la clé `sort` (`"AAAA-MM"`). Les entrées de `upcoming` s'affichent en haut de la page
-Expositions **et** sur la page d'accueil, sous « Prochainement » ; quand `upcoming` est
-vide, l'accueil retombe sur les trois dernières expositions passées.
+[Resend](https://resend.com), offre gratuite. Il faut un domaine vérifié : créer le compte,
+ajouter le domaine du site, poser chez le registrar les enregistrements DNS donnés par
+Resend (SPF, DKIM), puis `RESEND_API_KEY` et `MAIL_FROM` (ex. `site@mireille-martin.fr`)
+sur Vercel, et redéployer. Tant que ce n'est pas fait, le formulaire bascule tout seul sur
+un lien `mailto:` pré-rempli, et « mot de passe oublié » renvoie vers Léo.
 
 ## Ce qu'il y a dans le dossier
 
 ```
 content/          tout le texte et toutes les données, en JSON et en markdown allégé
   site.json       identité, contacts, liens, appartenances
-  works.json      le catalogue : 108 œuvres
+  series.json     familles et séries, dans l'ordre d'affichage
+  home.json       œuvre en grand et « Un choix d'œuvres » de l'accueil
+  critiques.json  textes critiques de la page Démarche
+  works.json      le catalogue
   views.json      52 vues d'accrochage, légendées
   exhibitions.json 64 expositions
   livre-dor.json  les extraits du livre d'or
-  texts/          démarche, critique, récit
+  texts/          démarche, récit
 assets/
   styles.css      toute la feuille de style, tokens compris
   app.js          thème, menu, filtres, visionneuse, formulaire
   originals/      les photographies sources, jamais retouchées par le build
+admin/            l'espace administrateur (statique)
+api/admin.js      son API : session, lecture, envoi d'image, enregistrement → commit
+api/_lib/         auth, GitHub, validation des contenus, images (sharp), e-mails
 api/contact.js    fonction serverless d'envoi du formulaire
+scripts/          serveur local, lien d'invitation
+tests/            tests de l'API admin (faux GitHub) et du build
 build.py          le générateur
-dist/             le site produit — versionné pour Vercel ; régénéré par build.py
+dist/             le site produit ; seul dist/img/ est versionné
 ```
 
 ## Notes techniques

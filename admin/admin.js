@@ -156,6 +156,8 @@ const state = {
   repo: "",
   branch: "",
   tab: sessionStorage.getItem("mm-tab") || "oeuvres",
+  thumbs: {},
+  fresh: new Map(), // fichier → URL locale de l'aperçu
   dirty: false,
 };
 const D = (name) => state.docs[name].data;
@@ -165,15 +167,27 @@ async function loadContent() {
   state.docs = r.docs;
   state.repo = r.repo;
   state.branch = r.branch;
+  state.thumbs = r.thumbs || {};
+}
+
+/** Retient la miniature d'une image tout juste envoyée. */
+function rememberThumb(upload) {
+  const webps = upload.files.map((f) => f.path.match(/-(\d+)\.webp$/)).filter(Boolean)
+    .sort((a, b) => Number(a[1]) - Number(b[1]));
+  if (webps.length) state.thumbs[upload.file] = webps[0].input.slice("dist".length);
+  if (upload.preview) state.fresh.set(upload.file, upload.preview);
 }
 
 /**
- * Enregistre une ou plusieurs rubriques. change(copies) modifie des copies des
- * données ; rien n'est touché localement tant que le serveur n'a pas accepté.
+ * Enregistre une ou plusieurs rubriques. change() modifie des copies des données ;
+ * rien n'est touché localement tant que le serveur n'a pas accepté.
+ *   save("gold", (doc) => …)              une rubrique : change reçoit la rubrique
+ *   save(["works", "home"], (c) => …)     plusieurs : change reçoit { works, home }
  */
-async function save(names, change, summary, uploads = []) {
+async function save(which, change, summary, uploads = []) {
+  const names = Array.isArray(which) ? which : [which];
   const copies = Object.fromEntries(names.map((n) => [n, clone(D(n))]));
-  change(copies);
+  change(Array.isArray(which) ? copies : copies[which]);
   const r = await call("POST", "save", {
     json: {
       docs: Object.fromEntries(names.map((n) => [n, { data: copies[n], base: state.docs[n].base }])),
@@ -373,6 +387,7 @@ function imagePicker({ kind, name, current }) {
         status.textContent = "Envoi de la photo…";
         const r = await call("POST", "upload", { params: { kind, name: name() || "" }, blob: p.blob });
         st.upload = { file: r.file, files: r.files, url };
+        rememberThumb({ ...r, preview: url });
         status.className = "picker__status is-ok";
         status.textContent = p.small
           ? "Photo prête. Elle est un peu petite : elle risque d'être floue en grand."
@@ -404,12 +419,13 @@ function imagePicker({ kind, name, current }) {
 
 /** Miniature d'une image du dépôt : le site en ligne d'abord, GitHub si elle vient d'arriver. */
 function thumbImg(file, cls = "thumb") {
-  const stem = file.replace(/\.jpg$/, "");
-  const path = `${stem}-420.webp`;
-  const img = h("img", { src: `/img/${path}`, alt: "", class: cls, loading: "lazy", decoding: "async" });
+  const path = state.thumbs?.[file] || `/img/${file.replace(/\.jpg$/, "")}-420.webp`;
+  const raw = () => `https://raw.githubusercontent.com/${state.repo}/${state.branch}/dist${path}`;
+  // une image envoyée pendant cette visite n'est pas encore en ligne : son aperçu local
+  const img = h("img", { src: state.fresh.get(file) || path, alt: "", class: cls, loading: "lazy", decoding: "async" });
   img.addEventListener("error", function fallback() {
     img.removeEventListener("error", fallback);
-    if (state.repo) img.src = `https://raw.githubusercontent.com/${state.repo}/${state.branch}/dist/img/${path}`;
+    if (state.repo) img.src = raw();
   });
   return img;
 }
@@ -629,6 +645,12 @@ function shell() {
         window.scrollTo(0, 0);
       },
     }, label)));
+  const atEnd = () => tabs.classList.toggle("at-end", tabs.scrollLeft + tabs.clientWidth >= tabs.scrollWidth - 4);
+  tabs.addEventListener("scroll", atEnd, { passive: true });
+  requestAnimationFrame(() => {
+    atEnd();
+    tabs.querySelector('[aria-current="page"]')?.scrollIntoView({ inline: "nearest", block: "nearest" });
+  });
   const bar = h("div", { class: "publish", hidden: true, role: "status" });
   panel = h("main", { class: "panel wrap", id: "panel" });
   app.replaceChildren(
@@ -637,12 +659,13 @@ function shell() {
         h("a", { class: "wordmark", href: "/", target: "_blank", rel: "noopener" }, h("b", {}, "Mireille"), " ", h("span", {}, "Martin")),
         h("span", { class: "top__label label" }, "Administration"),
         h("span", { class: "top__links" },
-          h("a", { href: "/", target: "_blank", rel: "noopener", class: "linkish" }, "Voir le site ↗"),
-          button("Se déconnecter", async () => {
+          h("a", { href: "/", target: "_blank", rel: "noopener", class: "linkish" },
+            h("span", { class: "long" }, "Voir le site ↗"), h("span", { class: "short" }, "Site ↗")),
+          h("button", { type: "button", class: "linkish", onclick: async () => {
             if (!(await leaveOk())) return;
             await call("POST", "logout").catch(() => {});
             showLogin();
-          }, "linkish"))),
+          } }, h("span", { class: "long" }, "Se déconnecter"), h("span", { class: "short" }, "Quitter")))),
       h("div", { class: "wrap" }, tabs),
       bar),
     panel);
@@ -676,7 +699,7 @@ function seriesOptions() {
 
 function workRow(w, featured) {
   return h("li", {},
-    h("button", { type: "button", class: "row", onclick: () => editWork(w.slug) },
+    h("button", { type: "button", class: `row${state.highlight === w.file ? " row--new" : ""}`, onclick: () => editWork(w.slug) },
       thumbImg(w.file),
       h("span", { class: "row__main" },
         h("span", { class: "row__title" }, w.title, w.note ? h("span", { class: "row__ideo" }, w.note) : null),
@@ -704,10 +727,10 @@ function panelWorks(root) {
         const box = h("div", { class: "group-box" });
         const reorderBtn = items.length > 1 && !q
           ? button("Changer l'ordre", () => reorder(box, items.map((w) => ({ ...w, thumb: w.file })), (w) => w.title,
-            (order) => save(["works"], (c) => {
-              const slots = c.works.map((w, i) => (w.group === g.name ? i : -1)).filter((i) => i >= 0);
-              const bySlug = new Map(c.works.map((w) => [w.slug, w]));
-              slots.forEach((slot, k) => { c.works[slot] = bySlug.get(order[k].slug); });
+            (order) => save("works", (doc) => {
+              const slots = doc.works.map((w, i) => (w.group === g.name ? i : -1)).filter((i) => i >= 0);
+              const bySlug = new Map(doc.works.map((w) => [w.slug, w]));
+              slots.forEach((slot, k) => { doc.works[slot] = bySlug.get(order[k].slug); });
             }, `ordre de la série « ${g.name} »`)), "btn btn--small btn--ghost")
           : null;
         box.append(
@@ -846,18 +869,23 @@ function editWork(slug) {
         // la nouvelle série se place après la dernière série de sa famille
         insertInGroup(c.series.groups, newGroup, (g) => g.family);
       }
+      const list = c.works.works;
       if (orig) {
-        const i = c.works.findIndex((x) => x.slug === orig.slug);
-        if (orig.group === data.group) c.works[i] = data;
-        else { c.works.splice(i, 1); insertInGroup(c.works, data, (x) => x.group); }
+        const i = list.findIndex((x) => x.slug === orig.slug);
+        if (orig.group === data.group) list[i] = data;
+        else { list.splice(i, 1); insertInGroup(list, data, (x) => x.group); }
       } else {
-        insertInGroup(c.works, data, (x) => x.group);
+        insertInGroup(list, data, (x) => x.group);
       }
       if (!wantFeat) c.home.featured = c.home.featured.filter((s) => s !== key);
       else if (!c.home.featured.includes(key)) c.home.featured.push(key);
     }, orig ? `œuvre modifiée « ${t} »` : `œuvre ajoutée « ${t} »`, upload ? [upload] : []);
     toast(orig ? "Œuvre enregistrée." : "Œuvre ajoutée. Elle sera sur le site dans une minute.");
+    state.highlight = data.file;
     render();
+    // retour à la liste, sur l'œuvre qui vient d'être enregistrée
+    requestAnimationFrame(() => $(".row--new")?.scrollIntoView({ block: "center" }));
+    setTimeout(() => { state.highlight = null; }, 0);
   }));
 
   const form = h("div", { class: "card card--edit" },
@@ -886,7 +914,7 @@ function editWork(slug) {
           ok: "Supprimer", danger: true,
         }))) return;
         try {
-          await save(["works"], (c) => { c.works = c.works.filter((x) => x.slug !== orig.slug); }, `œuvre supprimée « ${orig.title} »`);
+          await save("works", (doc) => { doc.works = doc.works.filter((x) => x.slug !== orig.slug); }, `œuvre supprimée « ${orig.title} »`);
           toast("Œuvre supprimée.");
           render();
         } catch (e) { if (!e.handled) err.textContent = explain(e); }
@@ -914,7 +942,7 @@ function panelSeries(root) {
     const btn = h("button", { type: "button", class: "btn" }, "Enregistrer");
     btn.addEventListener("click", () => withSaving(btn, err, async () => {
       if (!t.value.trim()) throw new Error("Donnez un nom à la famille.");
-      await save(["series"], (c) => {
+      await save("series", (c) => {
         const data = { key: fam?.key, title: t.value, medium: med.value, lede: lede.value };
         if (fam) c.families[c.families.findIndex((f) => f.key === fam.key)] = data;
         else c.families.push(data);
@@ -933,7 +961,7 @@ function panelSeries(root) {
         ? h("div", { class: "danger-zone" }, button("Supprimer cette famille", async () => {
           if (!(await dialog({ title: `Supprimer la famille « ${fam.title} » ?`, ok: "Supprimer", danger: true }))) return;
           try {
-            await save(["series"], (c) => { c.families = c.families.filter((f) => f.key !== fam.key); }, `famille supprimée « ${fam.title} »`);
+            await save("series", (c) => { c.families = c.families.filter((f) => f.key !== fam.key); }, `famille supprimée « ${fam.title} »`);
             render();
           } catch (e) { if (!e.handled) err.textContent = explain(e); }
         }, "btn btn--danger-ghost"))
@@ -956,8 +984,8 @@ function panelSeries(root) {
       if (!nm) throw new Error("Donnez un nom à la série.");
       if (s.groups.some((x) => x !== g && x.name.toLowerCase() === nm.toLowerCase())) throw new Error(`Une série s'appelle déjà « ${nm} ».`);
       const data = { name: nm, family: fam.value, note: note.value, tall: tall.input.checked };
-      const renamed = g && g.name !== nm;
-      await save(renamed ? ["series", "works"] : ["series"], (c) => {
+      const renamed = g && g.name !== nm; // les œuvres suivent, dans le même enregistrement
+      await save(["series", "works"], (c) => {
         if (g) {
           const i = c.series.groups.findIndex((x) => x.name === g.name);
           if (g.family === data.family) c.series.groups[i] = data;
@@ -985,7 +1013,7 @@ function panelSeries(root) {
           : button("Supprimer cette série", async () => {
             if (!(await dialog({ title: `Supprimer la série « ${g.name} » ?`, ok: "Supprimer", danger: true }))) return;
             try {
-              await save(["series"], (c) => { c.groups = c.groups.filter((x) => x.name !== g.name); }, `série supprimée « ${g.name} »`);
+              await save("series", (c) => { c.groups = c.groups.filter((x) => x.name !== g.name); }, `série supprimée « ${g.name} »`);
               render();
             } catch (e) { if (!e.handled) err.textContent = explain(e); }
           }, "btn btn--danger-ghost")) : null);
@@ -1027,7 +1055,7 @@ function panelSeries(root) {
       h("div", { class: "actions" },
         button("+ Nouvelle série", () => groupForm(null, f.key, addBox), "btn btn--small"),
         groups.length > 1 ? button("Changer l'ordre des séries", () => reorder(listBox, groups, (g) => g.name,
-          (order) => save(["series"], (c) => {
+          (order) => save("series", (c) => {
             const slots = c.groups.map((g, i) => (g.family === f.key ? i : -1)).filter((i) => i >= 0);
             const byName = new Map(c.groups.map((g) => [g.name, g]));
             slots.forEach((slot, k) => { c.groups[slot] = byName.get(order[k].name); });
@@ -1036,7 +1064,7 @@ function panelSeries(root) {
   if (s.families.length > 1) {
     const famBox = h("div", {});
     root.append(h("div", { class: "actions" }, button("Changer l'ordre des familles", () => reorder(famBox, s.families, (f) => f.title,
-      (order) => save(["series"], (c) => {
+      (order) => save("series", (c) => {
         const byKey = new Map(c.families.map((f) => [f.key, f]));
         c.families = order.map((f) => byKey.get(f.key));
       }, "ordre des familles")), "btn btn--small btn--ghost")), famBox);
@@ -1084,7 +1112,7 @@ function panelHome(root) {
   const err = h("p", { class: "form-error", role: "alert" });
   const btn = h("button", { type: "button", class: "btn" }, "Enregistrer et publier");
   btn.addEventListener("click", () => withSaving(btn, err, async () => {
-    await save(["home"], (c) => { c.hero = home.hero; c.featured = home.featured; }, "page d'accueil");
+    await save("home", (c) => { c.hero = home.hero; c.featured = home.featured; }, "page d'accueil");
     toast("Page d'accueil enregistrée.");
     render();
   }));
@@ -1123,7 +1151,7 @@ function critiqueForm(c, index, box) {
     const blocks = ed.get();
     if (!blocks.length) throw new Error("Le texte de la critique est vide.");
     const data = { title: title.value, author: author.value, role: role.value, blocks };
-    await save(["critiques"], (cc) => {
+    await save("critiques", (cc) => {
       if (index == null) cc.critiques.push(data); else cc.critiques[index] = data;
     }, index == null ? `critique ajoutée (${author.value.trim()})` : `critique modifiée (${author.value.trim()})`);
     toast("Critique enregistrée.");
@@ -1140,7 +1168,7 @@ function critiqueForm(c, index, box) {
     c ? h("div", { class: "danger-zone" }, button("Supprimer cette critique", async () => {
       if (!(await dialog({ title: "Supprimer cette critique ?", text: `Le texte de ${c.author} disparaîtra de la page Démarche.`, ok: "Supprimer", danger: true }))) return;
       try {
-        await save(["critiques"], (cc) => { cc.critiques.splice(index, 1); }, `critique supprimée (${c.author})`);
+        await save("critiques", (cc) => { cc.critiques.splice(index, 1); }, `critique supprimée (${c.author})`);
         render();
       } catch (e) { if (!e.handled) err.textContent = explain(e); }
     }, "btn btn--danger-ghost")) : null);
@@ -1170,17 +1198,17 @@ function panelDemarche(root) {
   root.append(
     head("Démarche", "Les textes de la page Démarche : la démarche, les critiques, le récit."),
     textCard("La démarche", "Le texte principal, écrit à la première personne.", dem, null,
-      () => save(["demarche"], (c) => { c.blocks = dem.get(); }, "texte de la démarche")),
+      () => save("demarche", (c) => { c.blocks = dem.get(); }, "texte de la démarche")),
     h("section", { class: "card" },
       h("div", { class: "group-box__head" }, h("h2", {}, "Critiques"),
         button("+ Ajouter une critique", () => critiqueForm(null, null, newBox), "btn btn--small")),
       h("p", { class: "hint" }, "Les textes de critiques et d'historiens, affichés dans cet ordre sous la démarche."),
       newBox, critBox,
       crits.length > 1 ? h("div", { class: "actions" }, button("Changer l'ordre", () => reorder(critBox, crits.map((c, i) => ({ ...c, i })), (c) => `${c.author}${c.title ? " — " + c.title : ""}`,
-        (order) => save(["critiques"], (cc) => { const old = cc.critiques; cc.critiques = order.map((o) => old[o.i]); }, "ordre des critiques")), "btn btn--small btn--ghost")) : null),
+        (order) => save("critiques", (cc) => { const old = cc.critiques; cc.critiques = order.map((o) => old[o.i]); }, "ordre des critiques")), "btn btn--small btn--ghost")) : null),
     textCard("Récit", "« Mireille, aller et retour » : le texte d'Annette Pharamond.", rec,
       field("Signature", sig, "Affichée en bas du récit, précédée d'un tiret."),
-      () => save(["recit"], (c) => { c.blocks = rec.get(); c.signature = sig.value; }, "récit")));
+      () => save("recit", (c) => { c.blocks = rec.get(); c.signature = sig.value; }, "récit")));
 }
 
 /* ============================================================ expositions */
@@ -1212,7 +1240,7 @@ function expoForm(x, where, index, box) {
     if (!/^(19|20)\d{2}$/.test(year.value.trim())) throw new Error("Indiquez l'année sur quatre chiffres.");
     const data = { sort: `${year.value.trim()}-${month.value}`, when: when.value, title: title.value, venue: venue.value, city: city.value, solo: solo.input.checked };
     const to = upcoming.input.checked ? "upcoming" : "exhibitions";
-    await save(["exhibitions"], (c) => {
+    await save("exhibitions", (c) => {
       if (x) c[where].splice(index, 1);
       if (x && where === to) c[to].splice(index, 0, data);
       else if (to === "upcoming") { c.upcoming.push(data); c.upcoming.sort((a, b) => a.sort.localeCompare(b.sort)); }
@@ -1235,7 +1263,7 @@ function expoForm(x, where, index, box) {
     x ? h("div", { class: "danger-zone" }, button("Supprimer cette exposition", async () => {
       if (!(await dialog({ title: `Supprimer « ${x.title} » ?`, ok: "Supprimer", danger: true }))) return;
       try {
-        await save(["exhibitions"], (c) => { c[where].splice(index, 1); }, `exposition supprimée « ${x.title} »`);
+        await save("exhibitions", (c) => { c[where].splice(index, 1); }, `exposition supprimée « ${x.title} »`);
         render();
       } catch (e) { if (!e.handled) err.textContent = explain(e); }
     }, "btn btn--danger-ghost")) : null);
@@ -1258,7 +1286,7 @@ function expoRow(x, where, index) {
     past ? h("p", { class: "notice" }, "Cette exposition semble passée. ",
       button("La classer dans les expositions passées", async () => {
         try {
-          await save(["exhibitions"], (c) => { const [e] = c.upcoming.splice(index, 1); c.exhibitions.unshift(e); }, `exposition passée « ${x.title} »`);
+          await save("exhibitions", (c) => { const [e] = c.upcoming.splice(index, 1); c.exhibitions.unshift(e); }, `exposition passée « ${x.title} »`);
           render();
         } catch (e) { if (!e.handled) toast(explain(e), "err"); }
       }, "linkish")) : null,
@@ -1316,7 +1344,9 @@ function viewsUploader(caption, onDone) {
         status.textContent = `Préparation de la photo ${k + 1} sur ${files.length}…`;
         const p = await prepare(f);
         status.textContent = `Envoi de la photo ${k + 1} sur ${files.length}…`;
-        uploads.push(await call("POST", "upload", { params: { kind: "view", name: cap }, blob: p.blob }));
+        const up = await call("POST", "upload", { params: { kind: "view", name: cap }, blob: p.blob });
+        rememberThumb({ ...up, preview: URL.createObjectURL(p.blob) });
+        uploads.push(up);
       }
       status.textContent = "Publication…";
       await onDone(cap, uploads.map((u) => ({ file: u.file, files: u.files })));
@@ -1339,7 +1369,7 @@ function panelViews(root) {
     newBox.replaceChildren(h("div", { class: "card card--edit card--nested" },
       h("h3", {}, "Nouveau groupe de photos"),
       field("Légende", cap, "Le nom de l'exposition, le lieu, la date. Elle s'affiche au-dessus des photos."),
-      viewsUploader(() => cap.value.trim(), (c, uploads) => save(["views"], (d) => {
+      viewsUploader(() => cap.value.trim(), (c, uploads) => save("views", (d) => {
         d.views.unshift(...uploads.map((u) => ({ caption: c, file: u.file })));
       }, `vues ajoutées « ${c} »`, uploads)),
       h("div", { class: "actions" }, button("Annuler", () => newBox.replaceChildren(), "btn btn--ghost"))));
@@ -1361,7 +1391,7 @@ function panelViews(root) {
             const btn = h("button", { type: "button", class: "btn btn--small" }, "Enregistrer");
             btn.addEventListener("click", () => withSaving(btn, err, async () => {
               if (!cap.value.trim()) throw new Error("La légende ne peut pas être vide.");
-              await save(["views"], (d) => { for (const v of d.views) if (v.caption === g.caption) v.caption = cap.value; }, `légende « ${cap.value.trim()} »`);
+              await save("views", (d) => { for (const v of d.views) if (v.caption === g.caption) v.caption = cap.value; }, `légende « ${cap.value.trim()} »`);
               render();
             }));
             capEdit.replaceChildren(h("div", { class: "subform" }, field("Légende", cap), err,
@@ -1375,11 +1405,11 @@ function panelViews(root) {
             onclick: async () => {
               if (!(await dialog({ title: "Supprimer cette photo ?", text: g.caption, ok: "Supprimer", danger: true }))) return;
               try {
-                await save(["views"], (d) => { d.views = d.views.filter((x) => x.file !== v.file); }, `vue supprimée « ${g.caption} »`);
+                await save("views", (d) => { d.views = d.views.filter((x) => x.file !== v.file); }, `vue supprimée « ${g.caption} »`);
                 render();
               } catch (e) { if (!e.handled) toast(explain(e), "err"); }
             } }, "✕")))),
-        viewsUploader(() => g.caption, (c, uploads) => save(["views"], (d) => {
+        viewsUploader(() => g.caption, (c, uploads) => save("views", (d) => {
           let at = -1;
           d.views.forEach((x, i) => { if (x.caption === c) at = i; });
           d.views.splice(at + 1, 0, ...uploads.map((u) => ({ caption: c, file: u.file })));
@@ -1401,7 +1431,7 @@ function panelGold(root) {
     const btn = h("button", { type: "button", class: "btn" }, "Enregistrer et publier");
     btn.addEventListener("click", () => withSaving(btn, err, async () => {
       if (!t.value.trim()) throw new Error("Le mot est vide.");
-      await save(["gold"], (c) => {
+      await save("gold", (c) => {
         if (index != null) c.entries[index] = t.value;
         else if (where.input.checked) c.entries.unshift(t.value);
         else c.entries.push(t.value);
@@ -1416,7 +1446,7 @@ function panelGold(root) {
       index != null ? h("div", { class: "danger-zone" }, button("Supprimer ce mot", async () => {
         if (!(await dialog({ title: "Supprimer ce mot du livre d'or ?", ok: "Supprimer", danger: true }))) return;
         try {
-          await save(["gold"], (c) => { c.entries.splice(index, 1); }, "livre d'or : mot supprimé");
+          await save("gold", (c) => { c.entries.splice(index, 1); }, "livre d'or : mot supprimé");
           render();
         } catch (e) { if (!e.handled) err.textContent = explain(e); }
       }, "btn btn--danger-ghost")) : null);
@@ -1436,7 +1466,7 @@ function panelGold(root) {
     head("Livre d'or", `${entries.length} mots de visiteurs.`, button("+ Ajouter un mot", () => form(null, newBox))),
     newBox,
     h("div", { class: "actions" }, button("Changer l'ordre", () => reorder(listBox, entries.map((t, i) => ({ t, i })), (e) => e.t.length > 110 ? e.t.slice(0, 110) + "…" : e.t,
-      (order) => save(["gold"], (c) => { const old = c.entries; c.entries = order.map((o) => old[o.i]); }, "livre d'or : ordre")), "btn btn--small btn--ghost")),
+      (order) => save("gold", (c) => { const old = c.entries; c.entries = order.map((o) => old[o.i]); }, "livre d'or : ordre")), "btn btn--small btn--ghost")),
     listBox);
 }
 
@@ -1451,7 +1481,7 @@ function panelContact(root) {
   const err = h("p", { class: "form-error", role: "alert" });
   const btn = h("button", { type: "button", class: "btn" }, "Enregistrer et publier");
   btn.addEventListener("click", () => withSaving(btn, err, async () => {
-    await save(["site"], (c) => { Object.assign(c, { email: email.value, phone: phone.value, instagram: insta.value, credits_photo: credits.value }); }, "coordonnées");
+    await save("site", (c) => { Object.assign(c, { email: email.value, phone: phone.value, instagram: insta.value, credits_photo: credits.value }); }, "coordonnées");
     toast("Coordonnées enregistrées.");
     render();
   }));
