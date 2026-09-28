@@ -101,7 +101,7 @@ export async function commit({ baseHead, baseTree, entries, message }) {
   })).data;
   const author = {
     name: "Espace administrateur",
-    email: "admin@mireille-martin.fr",
+    email: "admin@mireillemartin.com",
     date: new Date().toISOString(),
   };
   const c = (await gh("POST", `${repoPath()}/git/commits`, {

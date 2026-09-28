@@ -41,7 +41,8 @@ Prévisualiser avec l'admin : `npm run dev` (http://localhost:3000), avec un `.e
 
 ## Espace administrateur
 
-`/admin/` (lien discret « Administration » en pied de page). Un seul compte : `ADMIN_EMAIL`.
+`/admin/` (lien discret « Administration » en pied de page). Les comptes sont listés dans
+`ADMIN_EMAIL`, séparés par des virgules ; chacun a son mot de passe.
 Rubriques : œuvres (photo, série, technique, formats, texte, mise en avant), séries et
 familles, page d'accueil, démarche / critiques / récit, expositions et vues d'accrochage,
 livre d'or, coordonnées.
@@ -50,13 +51,14 @@ livre d'or, coordonnées.
 
 | Variable | Valeur | Qui |
 | --- | --- | --- |
-| `ADMIN_EMAIL` | `michel.martin54@free.fr` | posée |
+| `ADMIN_EMAIL` | `michel.martin54@free.fr,leo.parleur@icloud.com` (un mot de passe par compte) | posée |
 | `GITHUB_REPO` / `GITHUB_BRANCH` | `Boullot/site-mireille-martin` / `main` (preview : `admin-e2e`, inexistante exprès) | posées |
-| `SITE_URL` | `https://site-mireille-martin.vercel.app` → le domaine définitif | posée |
+| `SITE_URL` | `https://www.mireillemartin.com` | posée |
 | `CONTACT_TO` | `mireillemartin8@free.fr` | posée |
 | `ADMIN_SECRET` | la valeur de `.env.local` (64 caractères hex) | **à poser** |
 | `GITHUB_TOKEN` | jeton *fine-grained* limité à ce dépôt (voir ci-dessous) | **à poser** |
-| `RESEND_API_KEY` / `MAIL_FROM` | voir « E-mails » | **à poser** |
+| `MAIL_FROM` | `site@mireillemartin.com` | posée |
+| `RESEND_API_KEY` | injectée par l'intégration Resend de Vercel | en cours |
 
 Jeton GitHub : github.com → Settings → Developer settings → Fine-grained tokens → accès au
 seul dépôt `site-mireille-martin`, permissions **Contents : Read and write**, **Variables :
@@ -67,8 +69,8 @@ Diagnostic sans connexion : `/api/admin/?a=health` (ce qui est configuré, sharp
 
 ### Mot de passe
 
-- `npm run invite` affiche le lien de création du mot de passe (valable 30 jours, un seul
-  usage). Il lit `ADMIN_SECRET` et `SITE_URL` dans `.env.local`, qui doivent être identiques
+- `npm run invite -- adresse@exemple.fr` affiche le lien de création du mot de passe de ce
+  compte (valable 30 jours, un seul usage ; sans adresse : le premier compte). Il lit `ADMIN_SECRET` et `SITE_URL` dans `.env.local`, qui doivent être identiques
   à Vercel. Le même lien sert à réinitialiser un mot de passe oublié.
 - Le hachage (scrypt + clé serveur) vit dans la variable Actions privée `ADMIN_AUTH` du
   dépôt ; changer de mot de passe ferme toutes les sessions.
@@ -78,7 +80,7 @@ Diagnostic sans connexion : `/api/admin/?a=health` (ce qui est configuré, sharp
 
 [Resend](https://resend.com), offre gratuite. Il faut un domaine vérifié : créer le compte,
 ajouter le domaine du site, poser chez le registrar les enregistrements DNS donnés par
-Resend (SPF, DKIM), puis `RESEND_API_KEY` et `MAIL_FROM` (ex. `site@mireille-martin.fr`)
+Resend (SPF, DKIM), puis `RESEND_API_KEY` et `MAIL_FROM` (ex. `site@mireillemartin.com`)
 sur Vercel, et redéployer. Tant que ce n'est pas fait, le formulaire bascule tout seul sur
 un lien `mailto:` pré-rempli, et « mot de passe oublié » renvoie vers Léo.
 

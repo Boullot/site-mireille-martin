@@ -1,5 +1,6 @@
 /**
- * Authentification de l'administrateur (un seul compte : ADMIN_EMAIL).
+ * Authentification des administrateurs. ADMIN_EMAIL : une adresse, ou plusieurs séparées
+ * par des virgules ; chaque compte a son propre mot de passe et ses propres sessions.
  *
  * - Mot de passe : scrypt, après un HMAC avec une clé serveur (« poivre »). Même si le
  *   hachage fuitait, il serait inutilisable sans ADMIN_SECRET.
@@ -20,10 +21,16 @@ const SCRYPT = { N: 32768, r: 8, p: 1, maxmem: 64 * 1024 * 1024 };
 const SESSION_DAYS = 120;
 export const COOKIE = "mm_admin";
 
-export function adminEmail() {
-  const e = (process.env.ADMIN_EMAIL || "").trim().toLowerCase();
-  if (!e) throw new HttpError(503, "admin_not_configured");
-  return e;
+export function adminEmails() {
+  const list = (process.env.ADMIN_EMAIL || "").split(",").map((e) => e.trim().toLowerCase()).filter(Boolean);
+  if (!list.length) throw new HttpError(503, "admin_not_configured");
+  return list;
+}
+
+/** Adresse normalisée si elle fait partie des comptes, sinon null. */
+export function knownEmail(email) {
+  const e = String(email || "").trim().toLowerCase();
+  return adminEmails().includes(e) ? e : null;
 }
 
 function secret() {
@@ -56,27 +63,39 @@ export function verify(purpose, token) {
   return p;
 }
 
-/** Lien pour créer (ou recréer) le mot de passe. Utilisé par scripts/admin-invite.mjs. */
-export function inviteToken(days = 30) {
-  return sign("setup", { e: adminEmail(), iat: Date.now(), exp: Date.now() + days * 864e5 });
+/** Lien pour créer (ou recréer) un mot de passe. Utilisé par scripts/admin-invite.mjs. */
+export function inviteToken(email = adminEmails()[0], days = 30) {
+  const e = knownEmail(email);
+  if (!e) throw new Error(`${email} n'est pas dans ADMIN_EMAIL`);
+  return sign("setup", { e, iat: Date.now(), exp: Date.now() + days * 864e5 });
 }
 
-export function resetToken() {
-  return sign("setup", { e: adminEmail(), iat: Date.now(), exp: Date.now() + 3600e3, reset: 1 });
+export function resetToken(email) {
+  return sign("setup", { e: knownEmail(email), iat: Date.now(), exp: Date.now() + 3600e3, reset: 1 });
 }
 
-/* --------------------------------------------------------------- stockage */
+/* --------------------------------------------------------------- stockage
+   { accounts: { "adresse": { v, salt, hash, at } } } */
 
 const VAR = () => process.env.ADMIN_AUTH_VAR || "ADMIN_AUTH";
 let cache = null; // { at, value }
 
-export async function loadAuth({ fresh = false } = {}) {
+async function loadAll({ fresh = false } = {}) {
   if (!fresh && cache && Date.now() - cache.at < 30_000) return cache.value;
   const raw = await readVariable(VAR());
   let value = null;
   try { value = raw ? JSON.parse(raw) : null; } catch { value = null; }
+  // ancien format (un seul compte à plat) : il appartient au premier compte
+  if (value && value.hash) value = { accounts: { [adminEmails()[0]]: value } };
+  value = value && value.accounts ? value : { accounts: {} };
   cache = { at: Date.now(), value };
   return value;
+}
+
+/** Données d'un compte, ou null s'il n'a pas encore de mot de passe. */
+export async function loadAuth(email, opts) {
+  const e = knownEmail(email);
+  return e ? (await loadAll(opts)).accounts[e] || null : null;
 }
 
 async function hashPassword(password, salt) {
@@ -90,42 +109,44 @@ export function checkPasswordRules(password) {
   return null;
 }
 
-export async function setPassword(password) {
-  const current = await loadAuth({ fresh: true });
+export async function setPassword(email, password) {
+  const e = knownEmail(email);
+  if (!e) throw new HttpError(403, "forbidden");
+  const all = await loadAll({ fresh: true });
   const salt = crypto.randomBytes(16).toString("base64");
-  const value = {
-    v: (current?.v || 0) + 1,
+  const account = {
+    v: (all.accounts[e]?.v || 0) + 1,
     salt,
     hash: await hashPassword(password, salt),
     at: Date.now(),
   };
-  await writeVariable(VAR(), JSON.stringify(value));
-  cache = { at: Date.now(), value };
-  return value;
+  const next = { accounts: { ...all.accounts, [e]: account } };
+  await writeVariable(VAR(), JSON.stringify(next));
+  cache = { at: Date.now(), value: next };
+  return account;
 }
 
 export async function checkPassword(email, password) {
-  const auth = await loadAuth({ fresh: true });
+  const e = knownEmail(email);
+  const auth = e ? await loadAuth(e, { fresh: true }) : null;
   // le calcul est fait même si l'adresse est fausse : même durée de réponse
   const salt = auth?.salt || "c2VsLWZpeGUtcG91ci1sZS10ZW1wcw==";
   const h = await hashPassword(String(password || "").slice(0, 200), salt);
   if (!auth) return null;
-  const ok = crypto.timingSafeEqual(Buffer.from(h), Buffer.from(auth.hash)) &&
-    String(email || "").trim().toLowerCase() === adminEmail();
-  return ok ? auth : null;
+  return crypto.timingSafeEqual(Buffer.from(h), Buffer.from(auth.hash)) ? { email: e, ...auth } : null;
 }
 
-/** Un lien d'invitation est valable s'il a été émis après le dernier mot de passe. */
+/** Un lien d'invitation est valable s'il a été émis après le dernier mot de passe du compte. */
 export async function setupAllowed(payload) {
-  if (!payload || payload.e !== adminEmail()) return false;
-  const auth = await loadAuth({ fresh: true });
+  if (!payload || !knownEmail(payload.e)) return false;
+  const auth = await loadAuth(payload.e, { fresh: true });
   return !auth || payload.iat > auth.at;
 }
 
 /* ---------------------------------------------------------------- session */
 
-export function sessionCookie(auth) {
-  const token = sign("session", { e: adminEmail(), v: auth.v, exp: Date.now() + SESSION_DAYS * 864e5 });
+export function sessionCookie(email, auth) {
+  const token = sign("session", { e: knownEmail(email), v: auth.v, exp: Date.now() + SESSION_DAYS * 864e5 });
   return cookie(token, SESSION_DAYS * 86400);
 }
 
@@ -150,8 +171,8 @@ export function readCookie(request) {
 /** Renvoie la session valide ou null. */
 export async function session(request) {
   const p = verify("session", readCookie(request));
-  if (!p || p.e !== adminEmail()) return null;
-  const auth = await loadAuth();
+  if (!p || !knownEmail(p.e)) return null; // compte retiré de ADMIN_EMAIL : session close
+  const auth = await loadAuth(p.e);
   if (!auth || auth.v !== p.v) return null;
   return { email: p.e, exp: p.exp, auth };
 }

@@ -12,7 +12,7 @@
 import crypto from "node:crypto";
 import {
   checkPassword, checkPasswordRules, clearCookie, rateLimit, resetToken, session,
-  sessionCookie, setPassword, setupAllowed, verify, adminEmail,
+  sessionCookie, setPassword, setupAllowed, verify, knownEmail,
 } from "./_lib/auth.js";
 import { DOCS, ORDER, Invalid, crossCheck, normalize, parseDoc, toClient } from "./_lib/content.js";
 import { HttpError, commit, config, createBlob, deployState, readBlob, snapshot } from "./_lib/github.js";
@@ -202,7 +202,7 @@ async function login(request) {
     await new Promise((r) => setTimeout(r, 400));
     throw new HttpError(401, "bad_credentials", "Adresse e-mail ou mot de passe incorrect.");
   }
-  return json({ ok: true, email: adminEmail() }, 200, { "Set-Cookie": sessionCookie(auth) });
+  return json({ ok: true, email: auth.email }, 200, { "Set-Cookie": sessionCookie(auth.email, auth) });
 }
 
 async function setup(request) {
@@ -215,18 +215,19 @@ async function setup(request) {
   }
   const rule = checkPasswordRules(password);
   if (rule) throw new Invalid("Le mot de passe doit faire au moins 8 caractères.");
-  const auth = await setPassword(password);
-  return json({ ok: true, email: adminEmail() }, 200, { "Set-Cookie": sessionCookie(auth) });
+  const auth = await setPassword(p.e, password);
+  return json({ ok: true, email: p.e }, 200, { "Set-Cookie": sessionCookie(p.e, auth) });
 }
 
 async function forgot(request) {
   rateLimit(request, "forgot", 4, 60 * 60e3);
   const { email } = await body(request);
   if (!mailConfigured()) return json({ ok: true, sent: false });
-  if (String(email || "").trim().toLowerCase() === adminEmail()) {
-    const link = `${siteUrl(request)}/admin/#reinitialisation=${resetToken()}`;
+  const account = knownEmail(email);
+  if (account) {
+    const link = `${siteUrl(request)}/admin/#reinitialisation=${resetToken(account)}`;
     await sendMail({
-      to: adminEmail(),
+      to: account,
       subject: "Site Mireille Martin — nouveau mot de passe",
       text: `Bonjour,\n\nPour choisir un nouveau mot de passe, ouvrez ce lien (valable une heure) :\n${link}\n\nSi vous n'avez rien demandé, ignorez ce message.`,
       html: `<div style="font:16px/1.6 -apple-system,Segoe UI,sans-serif;color:#14120f">

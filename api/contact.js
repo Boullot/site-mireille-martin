@@ -3,7 +3,7 @@
  *
  * Variables d'environnement (voir README) :
  *   RESEND_API_KEY   clé API Resend (resend.com, offre gratuite : 3 000 envois/mois)
- *   MAIL_FROM        expéditeur d'un domaine vérifié chez Resend (ex. site@mireille-martin.fr)
+ *   MAIL_FROM        expéditeur d'un domaine vérifié chez Resend (ex. site@mireillemartin.com)
  *   CONTACT_TO       adresse de destination (ex. mireillemartin8@free.fr)
  *
  * Tant qu'elles ne sont pas définies, la fonction renvoie 503 et le formulaire bascule

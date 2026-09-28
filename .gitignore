@@ -7,3 +7,6 @@ node_modules/
 # le HTML est reconstruit par Vercel ; seules les images dérivées sont versionnées
 dist/*
 !dist/img/
+# copies de conflit iCloud (« fichier 2.js ») : jamais dans le dépôt
+* [0-9].*
+* [0-9]

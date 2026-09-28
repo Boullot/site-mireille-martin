@@ -17,7 +17,7 @@ import { fakeGitHub } from "./fake-github.mjs";
 const ROOT = path.resolve(import.meta.dirname, "..");
 Object.assign(process.env, {
   GITHUB_TOKEN: "test", GITHUB_REPO: "o/r", GITHUB_BRANCH: "main",
-  ADMIN_EMAIL: "michel.martin54@free.fr",
+  ADMIN_EMAIL: "michel.martin54@free.fr, Leo.Parleur@icloud.com",
   ADMIN_SECRET: crypto.randomBytes(32).toString("hex"),
   ADMIN_AUTH_VAR: "ADMIN_AUTH_TEST",
   SITE_URL: "https://exemple.test",
@@ -384,6 +384,21 @@ describe("statut de mise en ligne et sessions", () => {
     assert.equal((await call("GET", "status", { cookie, params: { sha: gh.head } })).data.state, "failure");
   });
 
+  test("deuxième compte : son propre mot de passe, sans toucher au premier", async () => {
+    assert.throws(() => auth.inviteToken("inconnu@exemple.fr"));
+    const r = await call("POST", "setup", { json: { token: auth.inviteToken("leo.parleur@icloud.com"), password: "mot de passe de léo" } });
+    assert.equal(r.status, 200);
+    assert.equal(r.data.email, "leo.parleur@icloud.com");
+    const leo = r.cookie;
+    assert.equal((await call("GET", "content", { cookie: leo })).status, 200);
+    assert.equal((await call("GET", "content", { cookie })).status, 200, "la session de Michel reste ouverte");
+    // chaque compte n'ouvre qu'avec son propre mot de passe
+    assert.equal((await call("POST", "login", { json: { email: "michel.martin54@free.fr", password: "mot de passe de léo" } })).status, 401);
+    assert.equal((await call("POST", "login", { json: { email: "leo.parleur@icloud.com", password: "mot de passe de léo" } })).status, 200);
+    const stored = JSON.parse(gh.vars.get("ADMIN_AUTH_TEST"));
+    assert.deepEqual(Object.keys(stored.accounts).sort(), ["leo.parleur@icloud.com", "michel.martin54@free.fr"]);
+  });
+
   test("un nouveau mot de passe ferme les anciennes sessions", async () => {
     const t = auth.inviteToken();
     await new Promise((r) => setTimeout(r, 5));
@@ -391,5 +406,13 @@ describe("statut de mise en ligne et sessions", () => {
     assert.equal(r.status, 200);
     assert.equal((await call("GET", "content", { cookie })).status, 401);
     assert.equal((await call("GET", "content", { cookie: r.cookie })).status, 200);
+  });
+
+  test("ancien format de stockage (un seul compte) : repris pour le premier compte", async () => {
+    const all = JSON.parse(gh.vars.get("ADMIN_AUTH_TEST"));
+    gh.vars.set("ADMIN_AUTH_TEST", JSON.stringify(all.accounts["michel.martin54@free.fr"]));
+    const r = await call("POST", "login", { json: { email: "michel.martin54@free.fr", password: "une autre phrase secrète" } });
+    assert.equal(r.status, 200);
+    assert.equal((await call("POST", "login", { json: { email: "leo.parleur@icloud.com", password: "mot de passe de léo" } })).status, 401);
   });
 });
