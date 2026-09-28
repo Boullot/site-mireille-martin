@@ -170,13 +170,20 @@ export function toClient(name, raw) {
 const NORMALIZE = {
   series(data, ctx) {
     const cur = ctx.current("series");
+    // L'admin ne parle que de « séries ». Une série créée depuis l'admin devient sa propre
+    // section de la page Œuvres : une famille du même nom, qui ne contient qu'elle.
+    // La clé proposée par l'admin est gardée si elle est valide et libre.
     const families = [];
     const keys = new Set();
-    for (const f of list(data.families, "Familles", 30)) {
-      const title = line(f?.title, "Nom de la famille", { max: 60, required: true });
-      let key = typeof f?.key === "string" && cur.families.some((x) => x.key === f.key) ? f.key : null;
+    const used = new Set((data.groups || []).map((g) => g?.family));
+    for (const f of list(data.families, "Familles", 60)) {
+      if (!used.has(f?.key)) continue; // section devenue vide : elle disparaît
+      const title = line(f?.title, "Nom de la série", { max: 60, required: true });
+      const known = typeof f?.key === "string" && cur.families.some((x) => x.key === f.key);
+      const proposed = typeof f?.key === "string" && /^[a-z0-9]+(-[a-z0-9]+)*$/.test(f.key) && f.key.length <= 60;
+      let key = known || proposed ? f.key : null;
       if (!key) key = uniqueSlug(slugify(title), new Set([...keys, ...cur.families.map((x) => x.key)]));
-      if (keys.has(key)) throw new Invalid(`Famille en double : ${title}.`);
+      if (keys.has(key)) throw new Invalid(`Série en double : ${title}.`);
       keys.add(key);
       families.push({
         key, title,
@@ -184,14 +191,14 @@ const NORMALIZE = {
         medium: line(f?.medium, `Technique de « ${title} »`, { max: 80 }),
       });
     }
-    if (!families.length) throw new Invalid("Il faut au moins une famille.");
+    if (!families.length) throw new Invalid("Il faut au moins une série.");
     const groups = [];
     const names = new Set();
     for (const g of list(data.groups, "Séries", 200)) {
       const name = line(g?.name, "Nom de la série", { max: 60, required: true });
       if (names.has(name.toLowerCase())) throw new Invalid(`Deux séries portent le nom « ${name} ».`);
       names.add(name.toLowerCase());
-      if (!keys.has(g?.family)) throw new Invalid(`Série « ${name} » : famille inconnue.`);
+      if (!keys.has(g?.family)) throw new Invalid(`Série « ${name} » : section de la page Œuvres inconnue.`);
       groups.push({ name, family: g.family,
         note: line(g?.note, `Note de « ${name} »`, { max: 240 }), tall: bool(g?.tall) });
     }

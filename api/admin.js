@@ -219,6 +219,20 @@ async function setup(request) {
   return json({ ok: true, email: p.e }, 200, { "Set-Cookie": sessionCookie(p.e, auth) });
 }
 
+/** Changement de mot de passe, une fois connecté : l'ancien est redemandé. */
+async function changePassword(request, s) {
+  rateLimit(request, "password", 10, 15 * 60e3);
+  const { current, password } = await body(request);
+  if (!(await checkPassword(s.email, current))) {
+    await new Promise((r) => setTimeout(r, 400));
+    throw new HttpError(403, "bad_password", "Le mot de passe actuel n'est pas le bon.");
+  }
+  if (checkPasswordRules(password)) throw new Invalid("Le nouveau mot de passe doit faire au moins 8 caractères.");
+  const auth = await setPassword(s.email, password);
+  // les autres appareils sont déconnectés ; celui-ci reçoit une session neuve
+  return json({ ok: true }, 200, { "Set-Cookie": sessionCookie(s.email, auth) });
+}
+
 async function forgot(request) {
   rateLimit(request, "forgot", 4, 60 * 60e3);
   const { email } = await body(request);
@@ -282,7 +296,8 @@ async function route(request) {
   if (a === "forgot") return forgot(request);
   if (a === "logout") return json({ ok: true }, 200, { "Set-Cookie": clearCookie() });
 
-  await requireSession(request);
+  const s = await requireSession(request);
+  if (a === "password") return changePassword(request, s);
   if (a === "upload") return json(await upload(request, url.searchParams));
   if (a === "save") return json(await save(await body(request)));
   throw new HttpError(404, "not_found");

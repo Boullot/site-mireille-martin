@@ -285,17 +285,32 @@ describe("œuvres et images", () => {
     assert.match(r.data.message, /série qui n'existe plus/);
   });
 
-  test("nouvelle famille et nouvelle série, puis une œuvre dedans", async () => {
+  test("nouvelle série : sa section est créée avec elle, et disparaît avec elle", async () => {
     const d = await docs();
-    d.series.data.families.push({ title: "Gravures", medium: "Gravure sur papier", lede: "" });
+    d.series.data.families.push({ key: "gravures", title: "Gravures", lede: "Des gravures.", medium: "" });
+    d.series.data.groups.push({ name: "Gravures", family: "gravures", note: "", tall: false });
     const r1 = await call("POST", "save", { cookie, json: { docs: { series: d.series } } });
     assert.equal(r1.status, 200, JSON.stringify(r1.data));
-    const fam = JSON.parse(gh.read("content/series.json")).families.at(-1);
-    assert.equal(fam.key, "gravures");
+    let s = JSON.parse(gh.read("content/series.json"));
+    assert.equal(s.families.at(-1).key, "gravures", "la clé proposée par l'admin est gardée");
+    assert.equal(s.groups.at(-1).family, "gravures");
     const d2 = await docs();
-    d2.series.data.groups.push({ name: "Premières gravures", family: "gravures", note: "", tall: false });
+    d2.series.data.groups = d2.series.data.groups.filter((g) => g.name !== "Gravures");
     const r2 = await call("POST", "save", { cookie, json: { docs: { series: d2.series } } });
     assert.equal(r2.status, 200);
+    s = JSON.parse(gh.read("content/series.json"));
+    assert.ok(!s.families.some((f) => f.key === "gravures"), "une section sans série disparaît");
+  });
+
+  test("déplacer toutes les œuvres d'une série puis la supprimer, en un enregistrement", async () => {
+    const d = await docs();
+    for (const w of d.works.data.works) if (w.group === "Grands carrés") w.group = "Sans titre";
+    d.series.data.groups = d.series.data.groups.filter((g) => g.name !== "Grands carrés");
+    const r = await call("POST", "save", { cookie, json: { docs: { series: d.series, works: d.works } } });
+    assert.equal(r.status, 200, JSON.stringify(r.data));
+    const works = JSON.parse(gh.read("content/works.json")).works;
+    assert.equal(works.filter((w) => w.group === "Grands carrés").length, 0);
+    assert.ok(works.filter((w) => w.group === "Sans titre").every((w) => w.series === "peintures"));
   });
 
   test("supprimer une œuvre retire ses images et la retire de l'accueil", async () => {
@@ -399,6 +414,19 @@ describe("statut de mise en ligne et sessions", () => {
     assert.deepEqual(Object.keys(stored.accounts).sort(), ["leo.parleur@icloud.com", "michel.martin54@free.fr"]);
   });
 
+  test("changer son mot de passe une fois connecté", async () => {
+    const login = await call("POST", "login", { json: { email: "leo.parleur@icloud.com", password: "mot de passe de léo" } });
+    const other = (await call("POST", "login", { json: { email: "leo.parleur@icloud.com", password: "mot de passe de léo" } })).cookie;
+    const bad = await call("POST", "password", { cookie: login.cookie, json: { current: "faux", password: "nouveau mot de passe" } });
+    assert.equal(bad.status, 403, "un mauvais mot de passe actuel ne déconnecte pas pour autant");
+    assert.equal((await call("POST", "password", { cookie: login.cookie, json: { current: "mot de passe de léo", password: "court" } })).status, 400);
+    const ok = await call("POST", "password", { cookie: login.cookie, json: { current: "mot de passe de léo", password: "nouveau mot de passe" } });
+    assert.equal(ok.status, 200);
+    assert.equal((await call("GET", "content", { cookie: ok.cookie })).status, 200, "cet appareil reste connecté");
+    assert.equal((await call("GET", "content", { cookie: other })).status, 401, "les autres appareils sont déconnectés");
+    assert.equal((await call("POST", "password", { json: { current: "x", password: "yyyyyyyyyy" } })).status, 401);
+  });
+
   test("un nouveau mot de passe ferme les anciennes sessions", async () => {
     const t = auth.inviteToken();
     await new Promise((r) => setTimeout(r, 5));
@@ -413,6 +441,6 @@ describe("statut de mise en ligne et sessions", () => {
     gh.vars.set("ADMIN_AUTH_TEST", JSON.stringify(all.accounts["michel.martin54@free.fr"]));
     const r = await call("POST", "login", { json: { email: "michel.martin54@free.fr", password: "une autre phrase secrète" } });
     assert.equal(r.status, 200);
-    assert.equal((await call("POST", "login", { json: { email: "leo.parleur@icloud.com", password: "mot de passe de léo" } })).status, 401);
+    assert.equal((await call("POST", "login", { json: { email: "leo.parleur@icloud.com", password: "nouveau mot de passe" } })).status, 401);
   });
 });

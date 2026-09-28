@@ -460,57 +460,6 @@ function reorder(container, items, label, onSave) {
       button("Annuler", async () => { if (await leaveOk()) render(); }, "btn btn--ghost"))));
 }
 
-/* ============================================================ blocs de texte */
-
-const BLOCK_TYPES = [
-  { value: "p", label: "Paragraphe" },
-  { value: "h", label: "Intertitre" },
-  { value: "quote", label: "Citation" },
-];
-
-function blockEditor(blocks, { allowHeadings = true } = {}) {
-  const items = clone(blocks.length ? blocks : [{ type: "p", text: "" }]);
-  const list = h("div", { class: "blocks" });
-  const types = allowHeadings ? BLOCK_TYPES : BLOCK_TYPES.filter((t) => t.value !== "h");
-  const draw = () => {
-    list.replaceChildren(...items.map((b, i) => {
-      const t = textarea(b.text, { class: `block__text block__text--${b.type}`, "aria-label": `Bloc ${i + 1}`,
-        rows: b.type === "h" ? 1 : 3 });
-      t.addEventListener("input", () => { b.text = t.value; });
-      const kind = select(types, b.type, { "aria-label": "Type de bloc", class: "block__type" });
-      kind.addEventListener("change", () => { b.type = kind.value; draw(); });
-      return h("div", { class: `block block--${b.type}` },
-        h("div", { class: "block__bar" }, kind,
-          h("span", { class: "block__btns" },
-            h("button", { type: "button", class: "icon-btn", "aria-label": "Monter", disabled: i === 0,
-              onclick: () => { [items[i - 1], items[i]] = [items[i], items[i - 1]]; state.dirty = true; draw(); } }, "↑"),
-            h("button", { type: "button", class: "icon-btn", "aria-label": "Descendre", disabled: i === items.length - 1,
-              onclick: () => { [items[i + 1], items[i]] = [items[i], items[i + 1]]; state.dirty = true; draw(); } }, "↓"),
-            h("button", { type: "button", class: "icon-btn", "aria-label": "Supprimer ce bloc",
-              onclick: async () => {
-                if (items[i].text.trim() && !(await dialog({ title: "Supprimer ce bloc ?", text: items[i].text.slice(0, 160) + (items[i].text.length > 160 ? "…" : ""), ok: "Supprimer", danger: true }))) return;
-                items.splice(i, 1);
-                if (!items.length) items.push({ type: "p", text: "" });
-                state.dirty = true;
-                draw();
-              } }, "✕"))),
-        t,
-        h("button", { type: "button", class: "block__add", onclick: () => {
-          items.splice(i + 1, 0, { type: "p", text: "" });
-          state.dirty = true;
-          draw();
-          list.children[i + 1]?.querySelector("textarea")?.focus();
-        } }, "+ Insérer un paragraphe ici"));
-    }));
-  };
-  draw();
-  return {
-    el: h("div", {}, list,
-      h("p", { class: "hint" }, "Chaque bloc est un paragraphe. Une ligne vide dans un bloc le coupe en deux paragraphes. Pour mettre un mot en gras : **comme ceci**.")),
-    get: () => items.filter((b) => b.text.trim()).map((b) => ({ type: b.type, text: b.text })),
-  };
-}
-
 /* ========================================================== authentification */
 
 function authShell(title, lede, form) {
@@ -670,6 +619,9 @@ function shell() {
       bar),
     panel);
   publish.mount(bar);
+  // hauteur réelle de l'en-tête (le bandeau de publication la change) pour ce qui colle dessous
+  const top = app.querySelector(".top");
+  new ResizeObserver(() => document.documentElement.style.setProperty("--top-h", `${top.offsetHeight}px`)).observe(top);
 }
 
 function render() {
@@ -684,22 +636,106 @@ function head(title, lede, ...actions) {
     actions.length ? h("div", { class: "panel__actions" }, actions) : null);
 }
 
-/* =============================================================== œuvres */
+/* =============================================================== séries
 
-const familyTitle = (key) => D("series").families.find((f) => f.key === key)?.title || key;
+   L'administration ne connaît que des « séries ». Sur la page Œuvres, certaines sont
+   regroupées sous une même section (Peintures, Encres de Chine) : cette section est
+   gérée en coulisse. Une série créée ici devient sa propre section, avec son bouton
+   de filtre ; sa présentation est le texte affiché sous son nom. */
+
 const dimsLabel = (w) => (w.dimensions.length ? w.dimensions.map((d) => `${d} cm`).join(" · ") : "");
 
-function seriesOptions() {
+/** Les séries, dans l'ordre de la page Œuvres. */
+function seriesList() {
   const s = D("series");
-  return s.families.map((f) => ({
-    group: f.title,
-    options: s.groups.filter((g) => g.family === f.key).map((g) => ({ value: g.name, label: g.name })),
-  })).filter((g) => g.options.length);
+  return s.families.flatMap((f) => s.groups.filter((g) => g.family === f.key));
 }
 
-function workRow(w, featured) {
+/** Une série seule dans sa section : sa présentation est celle de la section. */
+function isSolo(doc, g) {
+  return doc.groups.filter((x) => x.family === g.family).length === 1;
+}
+
+function seriesIntro(g) {
+  const s = D("series");
+  const f = s.families.find((x) => x.key === g.family);
+  return isSolo(s, g) ? f?.lede || "" : g.note || "";
+}
+
+function seriesOptions() {
+  return seriesList().map((g) => ({ value: g.name, label: g.name }));
+}
+
+function slugify(t) {
+  return String(t || "").normalize("NFKD").replace(/[̀-ͯ]/g, "")
+    .replace(/œ/gi, "oe").replace(/æ/gi, "ae")
+    .toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "serie";
+}
+
+/** Ajoute une série (et sa section) à une copie de series.json. */
+function addSeries(doc, { name, intro = "", tall = false }) {
+  let key = slugify(name).slice(0, 50);
+  const taken = new Set(doc.families.map((f) => f.key));
+  for (let i = 2; taken.has(key); i++) key = `${slugify(name).slice(0, 46)}-${i}`;
+  doc.families.push({ key, title: name, lede: intro, medium: "" });
+  doc.groups.push({ name, family: key, note: "", tall });
+}
+
+function nameTaken(name, except) {
+  return D("series").groups.some((g) => g !== except && g.name.toLowerCase() === name.toLowerCase());
+}
+
+/**
+ * Que devient une œuvre (ou toutes celles d'une série) qui quitte sa série ?
+ * Renvoie le nom de la série d'accueil, « __delete__ », ou null si l'on annule.
+ */
+function chooseFate({ title, text, exclude, ok = "Confirmer" }) {
+  return new Promise((resolve) => {
+    const DELETE = "__delete__";
+    const choices = select([
+      { value: "", label: "— Choisir —" },
+      { group: "La déplacer dans la série…", options: seriesOptions().filter((o) => o.value !== exclude) },
+      { group: "Ou bien", options: [{ value: DELETE, label: "La supprimer du site" }] },
+    ], "");
+    const warn = h("p", { class: "form-error", role: "alert" });
+    const okBtn = button(ok, () => {
+      if (!choices.value) { warn.textContent = "Choisissez ce que devient l'œuvre."; return; }
+      d.close("yes");
+    }, "btn");
+    const d = h("dialog", { class: "modal" },
+      h("h2", {}, title),
+      h("p", {}, text),
+      field("Que faire de l'œuvre ?", choices,
+        "Une œuvre appartient toujours à une série : sans série, elle ne pourrait pas s'afficher sur le site."),
+      warn,
+      h("div", { class: "modal__actions" }, button("Annuler", () => d.close("no"), "btn btn--ghost"), okBtn));
+    choices.addEventListener("change", () => {
+      okBtn.className = choices.value === DELETE ? "btn btn--danger" : "btn";
+      warn.textContent = "";
+    });
+    d.addEventListener("close", () => { d.remove(); resolve(d.returnValue === "yes" ? choices.value : null); });
+    document.body.append(d);
+    d.showModal();
+  });
+}
+
+/** Applique ce choix aux œuvres d'une copie de works.json. */
+function moveOrDelete(doc, slugs, fate) {
+  const set = new Set(slugs);
+  if (fate === "__delete__") {
+    doc.works = doc.works.filter((w) => !set.has(w.slug));
+    return;
+  }
+  const moving = doc.works.filter((w) => set.has(w.slug)).map((w) => ({ ...w, group: fate }));
+  doc.works = doc.works.filter((w) => !set.has(w.slug));
+  for (const w of moving) insertInGroup(doc.works, w, (x) => x.group);
+}
+
+/* =============================================================== œuvres */
+
+function workRow(w, featured, back) {
   return h("li", {},
-    h("button", { type: "button", class: `row${state.highlight === w.file ? " row--new" : ""}`, onclick: () => editWork(w.slug) },
+    h("button", { type: "button", class: `row${state.highlight === w.file ? " row--new" : ""}`, onclick: () => editWork(w.slug, { back }) },
       thumbImg(w.file),
       h("span", { class: "row__main" },
         h("span", { class: "row__title" }, w.title, w.note ? h("span", { class: "row__ideo" }, w.note) : null),
@@ -708,9 +744,17 @@ function workRow(w, featured) {
       h("span", { class: "row__go", "aria-hidden": "true" }, "›")));
 }
 
+function reorderWorks(box, g, items) {
+  reorder(box, items.map((w) => ({ ...w, thumb: w.file })), (w) => w.title,
+    (order) => save("works", (doc) => {
+      const slots = doc.works.map((w, i) => (w.group === g.name ? i : -1)).filter((i) => i >= 0);
+      const bySlug = new Map(doc.works.map((w) => [w.slug, w]));
+      slots.forEach((slot, k) => { doc.works[slot] = bySlug.get(order[k].slug); });
+    }, `ordre de la série « ${g.name} »`));
+}
+
 function panelWorks(root) {
   const works = D("works").works;
-  const s = D("series");
   const featured = new Set(D("home").featured);
   const search = input("", { type: "search", placeholder: "Rechercher une œuvre par son titre", "aria-label": "Rechercher" });
   const listRoot = h("div", {});
@@ -718,31 +762,18 @@ function panelWorks(root) {
   const draw = () => {
     const q = search.value.trim().toLowerCase();
     const blocks = [];
-    for (const f of s.families) {
-      const groups = s.groups.filter((g) => g.family === f.key);
-      const inner = [];
-      for (const g of groups) {
-        const items = works.filter((w) => w.group === g.name && (!q || w.title.toLowerCase().includes(q)));
-        if (q && !items.length) continue;
-        const box = h("div", { class: "group-box" });
-        const reorderBtn = items.length > 1 && !q
-          ? button("Changer l'ordre", () => reorder(box, items.map((w) => ({ ...w, thumb: w.file })), (w) => w.title,
-            (order) => save("works", (doc) => {
-              const slots = doc.works.map((w, i) => (w.group === g.name ? i : -1)).filter((i) => i >= 0);
-              const bySlug = new Map(doc.works.map((w) => [w.slug, w]));
-              slots.forEach((slot, k) => { doc.works[slot] = bySlug.get(order[k].slug); });
-            }, `ordre de la série « ${g.name} »`)), "btn btn--small btn--ghost")
-          : null;
-        box.append(
-          h("div", { class: "group-box__head" },
-            h("h3", {}, g.name, h("span", { class: "count" }, String(items.length))),
-            reorderBtn),
-          items.length
-            ? h("ul", { class: "rows" }, items.map((w) => workRow(w, featured.has(w.slug))))
-            : h("p", { class: "empty" }, "Aucune œuvre dans cette série pour l'instant."));
-        inner.push(box);
-      }
-      if (inner.length) blocks.push(h("section", { class: "family" }, h("h2", {}, f.title), inner));
+    for (const g of seriesList()) {
+      const items = works.filter((w) => w.group === g.name && (!q || w.title.toLowerCase().includes(q)));
+      if (q && !items.length) continue;
+      const box = h("section", { class: "group-box" });
+      box.append(
+        h("div", { class: "group-box__head" },
+          h("h2", {}, g.name, h("span", { class: "count" }, String(items.length))),
+          items.length > 1 && !q ? button("Changer l'ordre", () => reorderWorks(box, g, items), "btn btn--small btn--ghost") : null),
+        items.length
+          ? h("ul", { class: "rows" }, items.map((w) => workRow(w, featured.has(w.slug))))
+          : h("p", { class: "empty" }, "Aucune œuvre dans cette série pour l'instant."));
+      blocks.push(box);
     }
     listRoot.replaceChildren(...(blocks.length ? blocks : [h("p", { class: "empty" }, "Aucune œuvre ne correspond à cette recherche.")]));
   };
@@ -750,7 +781,7 @@ function panelWorks(root) {
   draw();
 
   root.append(
-    head("Œuvres", `${works.length} œuvres au catalogue. Touchez une œuvre pour la modifier.`,
+    head("Œuvres", `${works.length} œuvres au catalogue, rangées par série. Touchez une œuvre pour la modifier.`,
       button("+ Ajouter une œuvre", () => editWork(null))),
     h("div", { class: "searchbar" }, search),
     listRoot);
@@ -798,10 +829,15 @@ function insertInGroup(list, item, groupOf) {
   if (at < 0) list.push(item); else list.splice(at + 1, 0, item);
 }
 
-function editWork(slug) {
+/**
+ * Fiche d'une œuvre. opts.back : où revenir (par défaut la rubrique courante),
+ * opts.group : série proposée pour une nouvelle œuvre.
+ */
+function editWork(slug, opts = {}) {
+  const back = opts.back || render;
   const works = D("works").works;
   const orig = slug ? works.find((w) => w.slug === slug) : null;
-  const w = orig ? clone(orig) : { title: "", group: "", technique: "Acrylique sur toile", dimensions: [], note: "", short: "", description: "", file: "" };
+  const w = orig ? clone(orig) : { title: "", group: opts.group || "", technique: "Acrylique sur toile", dimensions: [], note: "", short: "", description: "", file: "" };
   const home = D("home");
   panel.replaceChildren();
   window.scrollTo(0, 0);
@@ -810,14 +846,12 @@ function editWork(slug) {
   const picker = imagePicker({ kind: "work", name: () => title.value, current: w.file || null });
   const NEW = "__nouvelle__";
   const group = select([{ value: "", label: "— Choisir une série —" }, ...seriesOptions(),
-    { group: "Autre", options: [{ value: NEW, label: "+ Créer une nouvelle série…" }] }], w.group);
+    { value: NEW, label: "+ Créer une nouvelle série…" }], w.group);
   const newName = input("", { placeholder: "Par exemple : Équinoxe" });
-  const newFamily = select(D("series").families.map((f) => ({ value: f.key, label: f.title })), null);
-  const newNote = input("", { placeholder: "Facultatif : une phrase sous le nom de la série" });
-  const newBox = h("div", { class: "subform", hidden: w.group !== NEW },
+  const newIntro = textarea("", { rows: 2, placeholder: "Facultatif : quelques mots affichés sous le nom de la série" });
+  const newBox = h("div", { class: "subform", hidden: true },
     field("Nom de la nouvelle série", newName),
-    field("Dans la famille", newFamily),
-    field("Petite phrase de présentation", newNote));
+    field("Présentation (facultatif)", newIntro));
   group.addEventListener("change", () => { newBox.hidden = group.value !== NEW; if (!newBox.hidden) newName.focus(); });
 
   const techniques = [...new Set(works.map((x) => x.technique))];
@@ -840,14 +874,12 @@ function editWork(slug) {
     if (!technique.value.trim()) throw new Error("Indiquez la technique (par exemple : Acrylique sur toile).");
     let groupName = group.value;
     const names = ["works", "home"];
-    let newGroup = null;
+    let newSeries = null;
     if (groupName === NEW) {
       groupName = newName.value.trim();
       if (!groupName) throw new Error("Donnez un nom à la nouvelle série.");
-      if (D("series").groups.some((g) => g.name.toLowerCase() === groupName.toLowerCase())) {
-        throw new Error(`La série « ${groupName} » existe déjà : choisissez-la dans la liste.`);
-      }
-      newGroup = { name: groupName, family: newFamily.value, note: newNote.value.trim(), tall: false };
+      if (nameTaken(groupName)) throw new Error(`La série « ${groupName} » existe déjà : choisissez-la dans la liste.`);
+      newSeries = { name: groupName, intro: newIntro.value.trim() };
       names.unshift("series");
     }
     const data = {
@@ -865,10 +897,7 @@ function editWork(slug) {
     // une œuvre nouvelle n'a pas encore de référence : le serveur résout « file:… »
     const key = orig ? orig.slug : `file:${data.file}`;
     await save(names, (c) => {
-      if (newGroup) {
-        // la nouvelle série se place après la dernière série de sa famille
-        insertInGroup(c.series.groups, newGroup, (g) => g.family);
-      }
+      if (newSeries) addSeries(c.series, newSeries);
       const list = c.works.works;
       if (orig) {
         const i = list.findIndex((x) => x.slug === orig.slug);
@@ -882,7 +911,7 @@ function editWork(slug) {
     }, orig ? `œuvre modifiée « ${t} »` : `œuvre ajoutée « ${t} »`, upload ? [upload] : []);
     toast(orig ? "Œuvre enregistrée." : "Œuvre ajoutée. Elle sera sur le site dans une minute.");
     state.highlight = data.file;
-    render();
+    back();
     // retour à la liste, sur l'œuvre qui vient d'être enregistrée
     requestAnimationFrame(() => $(".row--new")?.scrollIntoView({ block: "center" }));
     setTimeout(() => { state.highlight = null; }, 0);
@@ -891,7 +920,7 @@ function editWork(slug) {
   const form = h("div", { class: "card card--edit" },
     picker.el,
     field("Titre", title),
-    field("Série", group, "La série regroupe les œuvres sur la page Œuvres."),
+    field("Série", group),
     newBox,
     field("Technique", technique),
     h("datalist", { id: listId }, techniques.map((t) => h("option", { value: t }))),
@@ -904,7 +933,7 @@ function editWork(slug) {
       field("Titre court sur les vignettes", short, "Si le titre est long, une version courte pour la grille des œuvres. Sinon, laissez vide.")),
     err,
     h("div", { class: "actions" }, saveBtn,
-      button("Annuler", async () => { if (await leaveOk()) render(); }, "btn btn--ghost"),
+      button("Annuler", async () => { if (await leaveOk()) back(); }, "btn btn--ghost"),
       orig ? h("a", { class: "linkish", href: `/oeuvres/${orig.slug}/`, target: "_blank", rel: "noopener" }, "Voir sur le site ↗") : null),
     orig ? h("div", { class: "danger-zone" },
       button("Supprimer cette œuvre", async () => {
@@ -916,159 +945,161 @@ function editWork(slug) {
         try {
           await save("works", (doc) => { doc.works = doc.works.filter((x) => x.slug !== orig.slug); }, `œuvre supprimée « ${orig.title} »`);
           toast("Œuvre supprimée.");
-          render();
+          back();
         } catch (e) { if (!e.handled) err.textContent = explain(e); }
       }, "btn btn--danger-ghost")) : null);
   watchDirty(form);
 
   panel.append(
-    h("p", {}, button("← Toutes les œuvres", async () => { if (await leaveOk()) render(); }, "linkish back")),
-    head(orig ? orig.title : "Nouvelle œuvre", orig ? `${familyTitle(orig.series)} · ${orig.group}` : "Remplissez la fiche, puis ajoutez l'œuvre au site."),
+    h("p", {}, button(opts.back ? "← Retour à la série" : "← Toutes les œuvres", async () => { if (await leaveOk()) back(); }, "linkish back")),
+    head(orig ? orig.title : "Nouvelle œuvre", orig ? `Série : ${orig.group}` : "Remplissez la fiche, puis ajoutez l'œuvre au site."),
     form);
 }
 
-/* ================================================================ séries */
+/* ------------------------------------------------------- rubrique Séries */
 
 function panelSeries(root) {
-  const s = D("series");
   const works = D("works").works;
   const count = (name) => works.filter((w) => w.group === name).length;
+  const newBox = h("div", {});
 
-  const familyForm = (fam, box) => {
-    const t = input(fam?.title || "");
-    const med = input(fam?.medium || "", { placeholder: "Par exemple : Acrylique sur toile" });
-    const lede = textarea(fam?.lede || "", { rows: 3 });
+  const newForm = () => {
+    const name = input("", { placeholder: "Par exemple : Équinoxe" });
+    const intro = textarea("", { rows: 3 });
+    const tall = checkbox("Vignettes hautes et étroites", false, "Pour des œuvres très verticales, comme les kakémonos.");
     const err = h("p", { class: "form-error", role: "alert" });
-    const btn = h("button", { type: "button", class: "btn" }, "Enregistrer");
-    btn.addEventListener("click", () => withSaving(btn, err, async () => {
-      if (!t.value.trim()) throw new Error("Donnez un nom à la famille.");
-      await save("series", (c) => {
-        const data = { key: fam?.key, title: t.value, medium: med.value, lede: lede.value };
-        if (fam) c.families[c.families.findIndex((f) => f.key === fam.key)] = data;
-        else c.families.push(data);
-      }, fam ? `famille modifiée « ${t.value.trim()} »` : `famille ajoutée « ${t.value.trim()} »`);
-      toast("Enregistré.");
-      render();
-    }));
-    const form = h("div", { class: "card card--edit" },
-      h("h3", {}, fam ? `Modifier la famille « ${fam.title} »` : "Nouvelle famille"),
-      field("Nom", t, "Une famille est une grande section de la page Œuvres, avec son bouton de filtre."),
-      field("Technique principale", med),
-      field("Présentation", lede, "Le paragraphe affiché sous le nom de la famille."),
-      err,
-      h("div", { class: "actions" }, btn, button("Annuler", async () => { if (await leaveOk()) render(); }, "btn btn--ghost")),
-      fam && !s.groups.some((g) => g.family === fam.key)
-        ? h("div", { class: "danger-zone" }, button("Supprimer cette famille", async () => {
-          if (!(await dialog({ title: `Supprimer la famille « ${fam.title} » ?`, ok: "Supprimer", danger: true }))) return;
-          try {
-            await save("series", (c) => { c.families = c.families.filter((f) => f.key !== fam.key); }, `famille supprimée « ${fam.title} »`);
-            render();
-          } catch (e) { if (!e.handled) err.textContent = explain(e); }
-        }, "btn btn--danger-ghost"))
-        : null);
-    watchDirty(form);
-    box.replaceChildren(form);
-    t.focus();
-  };
-
-  const groupForm = (g, familyKey, box) => {
-    const name = input(g?.name || "");
-    const fam = select(s.families.map((f) => ({ value: f.key, label: f.title })), g?.family || familyKey);
-    const note = input(g?.note || "", { placeholder: "Facultatif" });
-    const tall = checkbox("Vignettes hautes et étroites", g?.tall, "Pour des œuvres très verticales, comme les kakémonos.");
-    const err = h("p", { class: "form-error", role: "alert" });
-    const btn = h("button", { type: "button", class: "btn" }, "Enregistrer");
-    const n = g ? count(g.name) : 0;
+    const btn = h("button", { type: "button", class: "btn" }, "Créer la série");
     btn.addEventListener("click", () => withSaving(btn, err, async () => {
       const nm = name.value.trim();
       if (!nm) throw new Error("Donnez un nom à la série.");
-      if (s.groups.some((x) => x !== g && x.name.toLowerCase() === nm.toLowerCase())) throw new Error(`Une série s'appelle déjà « ${nm} ».`);
-      const data = { name: nm, family: fam.value, note: note.value, tall: tall.input.checked };
-      const renamed = g && g.name !== nm; // les œuvres suivent, dans le même enregistrement
-      await save(["series", "works"], (c) => {
-        if (g) {
-          const i = c.series.groups.findIndex((x) => x.name === g.name);
-          if (g.family === data.family) c.series.groups[i] = data;
-          else { c.series.groups.splice(i, 1); insertInGroup(c.series.groups, data, (x) => x.family); }
-        } else {
-          insertInGroup(c.series.groups, data, (x) => x.family);
-        }
-        // renommer une série renomme la série de toutes ses œuvres, dans le même enregistrement
-        if (renamed) for (const w of c.works.works) if (w.group === g.name) w.group = nm;
-      }, g ? `série modifiée « ${nm} »` : `série ajoutée « ${nm} »`);
-      toast("Enregistré.");
+      if (nameTaken(nm)) throw new Error(`Une série s'appelle déjà « ${nm} ».`);
+      await save("series", (doc) => addSeries(doc, { name: nm, intro: intro.value.trim(), tall: tall.input.checked }), `série ajoutée « ${nm} »`);
+      toast("Série créée. Ajoutez-y des œuvres depuis la rubrique Œuvres, ou ici même.");
       render();
     }));
     const form = h("div", { class: "card card--edit" },
-      h("h3", {}, g ? `Modifier la série « ${g.name} »` : "Nouvelle série"),
+      h("h2", {}, "Nouvelle série"),
       field("Nom de la série", name),
-      field("Famille", fam, g && n ? `Changer de famille déplace aussi ses ${n} œuvre${n > 1 ? "s" : ""}.` : null),
-      field("Petite phrase de présentation", note, "Affichée à côté du nom de la série sur la page Œuvres."),
-      tall.el,
-      err,
-      h("div", { class: "actions" }, btn, button("Annuler", async () => { if (await leaveOk()) render(); }, "btn btn--ghost")),
-      g ? h("div", { class: "danger-zone" },
-        n
-          ? h("p", { class: "hint" }, `Pour supprimer cette série, déplacez d'abord ses ${n} œuvre${n > 1 ? "s" : ""} dans une autre série.`)
-          : button("Supprimer cette série", async () => {
-            if (!(await dialog({ title: `Supprimer la série « ${g.name} » ?`, ok: "Supprimer", danger: true }))) return;
-            try {
-              await save("series", (c) => { c.groups = c.groups.filter((x) => x.name !== g.name); }, `série supprimée « ${g.name} »`);
-              render();
-            } catch (e) { if (!e.handled) err.textContent = explain(e); }
-          }, "btn btn--danger-ghost")) : null);
+      field("Présentation (facultatif)", intro, "Quelques mots affichés sous le nom de la série, sur la page Œuvres."),
+      tall.el, err,
+      h("div", { class: "actions" }, btn, button("Annuler", async () => { if (await leaveOk()) render(); }, "btn btn--ghost")));
     watchDirty(form);
-    box.replaceChildren(form);
+    newBox.replaceChildren(form);
     name.focus();
   };
 
-  root.append(head("Séries",
-    "Les œuvres sont rangées en familles (les grandes sections de la page Œuvres), elles-mêmes divisées en séries.",
-    button("+ Nouvelle famille", () => familyForm(null, newFam), "btn btn--ghost")));
-  const newFam = h("div", {});
-  root.append(newFam);
-
-  for (const f of s.families) {
-    const groups = s.groups.filter((g) => g.family === f.key);
-    const box = h("div", {});
-    const listBox = h("div", {});
-    listBox.append(h("ul", { class: "rows" }, groups.map((g) => {
+  root.append(
+    head("Séries", "Les séries de la page Œuvres. Touchez une série pour voir ses œuvres, la renommer ou la supprimer.",
+      button("+ Nouvelle série", newForm)),
+    newBox,
+    h("section", { class: "card" }, h("ul", { class: "rows" }, seriesList().map((g) => {
       const n = count(g.name);
-      const edit = h("div", {});
-      return h("li", {}, h("div", { class: "row row--static" },
+      const intro = seriesIntro(g);
+      return h("li", {}, h("button", { type: "button", class: "row", onclick: () => seriesDetail(g.name) },
         h("span", { class: "row__main" },
           h("span", { class: "row__title" }, g.name),
-          h("span", { class: "row__meta" }, `${n} œuvre${n > 1 ? "s" : ""}${g.note ? " · " + g.note : ""}`)),
-        button("Modifier", () => groupForm(g, f.key, edit), "btn btn--small btn--ghost")), edit);
-    })));
-    if (!groups.length) listBox.append(h("p", { class: "empty" }, "Aucune série dans cette famille."));
-    const addBox = h("div", {});
-    root.append(h("section", { class: "family card" },
-      h("div", { class: "group-box__head" },
-        h("h2", {}, f.title),
-        h("span", { class: "head-btns" },
-          button("Modifier la famille", () => familyForm(f, box), "btn btn--small btn--ghost"))),
-      f.lede ? h("p", { class: "panel__lede" }, f.lede) : null,
-      box,
-      listBox,
-      addBox,
-      h("div", { class: "actions" },
-        button("+ Nouvelle série", () => groupForm(null, f.key, addBox), "btn btn--small"),
-        groups.length > 1 ? button("Changer l'ordre des séries", () => reorder(listBox, groups, (g) => g.name,
-          (order) => save("series", (c) => {
-            const slots = c.groups.map((g, i) => (g.family === f.key ? i : -1)).filter((i) => i >= 0);
-            const byName = new Map(c.groups.map((g) => [g.name, g]));
-            slots.forEach((slot, k) => { c.groups[slot] = byName.get(order[k].name); });
-          }, `ordre des séries de « ${f.title} »`)), "btn btn--small btn--ghost") : null)));
-  }
-  if (s.families.length > 1) {
-    const famBox = h("div", {});
-    root.append(h("div", { class: "actions" }, button("Changer l'ordre des familles", () => reorder(famBox, s.families, (f) => f.title,
-      (order) => save("series", (c) => {
-        const byKey = new Map(c.families.map((f) => [f.key, f]));
-        c.families = order.map((f) => byKey.get(f.key));
-      }, "ordre des familles")), "btn btn--small btn--ghost")), famBox);
-  }
+          h("span", { class: "row__meta" }, `${n} œuvre${n > 1 ? "s" : ""}${intro ? " · " + (intro.length > 90 ? intro.slice(0, 90) + "…" : intro) : ""}`)),
+        h("span", { class: "row__go", "aria-hidden": "true" }, "›")));
+    }))));
+}
+
+function seriesDetail(name) {
+  const g = D("series").groups.find((x) => x.name === name);
+  if (!g) { render(); return; }
+  const again = () => seriesDetail(g.name);
+  const items = D("works").works.filter((w) => w.group === g.name);
+  const featured = new Set(D("home").featured);
+  panel.replaceChildren();
+  window.scrollTo(0, 0);
+
+  // --- nom et présentation
+  const nm = input(g.name);
+  const intro = textarea(seriesIntro(g), { rows: 3 });
+  const tall = checkbox("Vignettes hautes et étroites", g.tall, "Pour des œuvres très verticales, comme les kakémonos.");
+  const err = h("p", { class: "form-error", role: "alert" });
+  const btn = h("button", { type: "button", class: "btn" }, "Enregistrer et publier");
+  btn.addEventListener("click", () => withSaving(btn, err, async () => {
+    const newName = nm.value.trim();
+    if (!newName) throw new Error("La série doit avoir un nom.");
+    if (nameTaken(newName, g)) throw new Error(`Une série s'appelle déjà « ${newName} ».`);
+    await save(["series", "works"], (c) => {
+      const grp = c.series.groups.find((x) => x.name === g.name);
+      const fam = c.series.families.find((f) => f.key === grp.family);
+      const solo = isSolo(c.series, grp);
+      grp.name = newName;
+      grp.tall = tall.input.checked;
+      if (solo) { fam.title = newName; fam.lede = intro.value.trim(); } else grp.note = intro.value.trim();
+      // les œuvres suivent le nouveau nom, dans le même enregistrement
+      for (const w of c.works.works) if (w.group === g.name) w.group = newName;
+    }, `série modifiée « ${newName} »`);
+    toast("Série enregistrée.");
+    seriesDetail(newName);
+  }));
+  const editCard = h("section", { class: "card card--edit" },
+    field("Nom de la série", nm),
+    field("Présentation", intro, "Affichée sous le nom de la série, sur la page Œuvres."),
+    tall.el, err,
+    h("div", { class: "actions" }, btn));
+  watchDirty(editCard);
+
+  // --- les œuvres de la série
+  const listBox = h("div", {});
+  const worksCard = h("section", { class: "card" },
+    h("div", { class: "group-box__head" },
+      h("h2", {}, "Les œuvres", h("span", { class: "count" }, String(items.length))),
+      h("span", { class: "head-btns" },
+        items.length > 1 ? button("Changer l'ordre", () => reorderWorks(listBox, g, items), "btn btn--small btn--ghost") : null,
+        button("+ Ajouter une œuvre", async () => { if (await leaveOk()) editWork(null, { group: g.name, back: again }); }, "btn btn--small"))),
+    listBox);
+  listBox.append(items.length
+    ? h("ul", { class: "rows" }, items.map((w) => h("li", { class: "row-with-action" },
+      workRow(w, featured.has(w.slug), again).firstChild,
+      button("Retirer", async () => {
+        const fate = await chooseFate({
+          title: `Retirer « ${w.title} » de la série ?`,
+          text: `L'œuvre ne fera plus partie de « ${g.name} ».`,
+          exclude: g.name,
+        });
+        if (!fate) return;
+        try {
+          await save("works", (doc) => moveOrDelete(doc, [w.slug], fate),
+            fate === "__delete__" ? `œuvre supprimée « ${w.title} »` : `« ${w.title} » déplacée dans « ${fate} »`);
+          toast(fate === "__delete__" ? "Œuvre supprimée." : `Œuvre déplacée dans « ${fate} ».`);
+          again();
+        } catch (e) { if (!e.handled) toast(explain(e), "err"); }
+      }, "btn btn--small btn--ghost"))))
+    : h("p", { class: "empty" }, "Aucune œuvre dans cette série pour l'instant."));
+
+  // --- suppression
+  const danger = h("div", { class: "danger-zone" }, button("Supprimer cette série", async () => {
+    let fate = null;
+    if (items.length) {
+      if (seriesList().length < 2) { toast("C'est la seule série : elle ne peut pas être supprimée.", "err"); return; }
+      fate = await chooseFate({
+        title: `Supprimer la série « ${g.name} » ?`,
+        text: `Elle contient ${items.length} œuvre${items.length > 1 ? "s" : ""}. Que deviennent-elles ?`,
+        exclude: g.name, ok: "Supprimer la série",
+      });
+      if (!fate) return;
+    } else if (!(await dialog({ title: `Supprimer la série « ${g.name} » ?`, text: "Elle ne contient aucune œuvre.", ok: "Supprimer", danger: true }))) {
+      return;
+    }
+    try {
+      await save(["series", "works"], (c) => {
+        if (fate) moveOrDelete(c.works, items.map((w) => w.slug), fate);
+        c.series.groups = c.series.groups.filter((x) => x.name !== g.name);
+        // une section qui n'a plus de série disparaît avec elle
+        c.series.families = c.series.families.filter((f) => c.series.groups.some((x) => x.family === f.key));
+      }, `série supprimée « ${g.name} »`);
+      toast("Série supprimée.");
+      render();
+    } catch (e) { if (!e.handled) toast(explain(e), "err"); }
+  }, "btn btn--danger-ghost"));
+
+  panel.append(
+    h("p", {}, button("← Toutes les séries", async () => { if (await leaveOk()) render(); }, "linkish back")),
+    head(g.name, `${items.length} œuvre${items.length > 1 ? "s" : ""}`),
+    editCard, worksCard, danger);
 }
 
 /* ================================================================ accueil */
@@ -1077,10 +1108,10 @@ function panelHome(root) {
   const works = D("works").works;
   const home = clone(D("home"));
   const bySlug = new Map(works.map((w) => [w.slug, w]));
-  const opts = seriesOptions().map((g) => ({
-    group: g.group,
-    options: works.filter((w) => g.options.some((o) => o.value === w.group)).map((w) => ({ value: w.slug, label: w.title })),
-  }));
+  const opts = seriesList().map((g) => ({
+    group: g.name,
+    options: works.filter((w) => w.group === g.name).map((w) => ({ value: w.slug, label: w.title })),
+  })).filter((g) => g.options.length);
   const heroPreview = h("div", { class: "hero-preview" });
   const hero = select(opts, home.hero);
   const drawHero = () => heroPreview.replaceChildren(bySlug.get(hero.value) ? thumbImg(bySlug.get(hero.value).file, "hero-preview__img") : "");
@@ -1129,86 +1160,228 @@ function panelHome(root) {
 
 /* ============================================================= démarche */
 
+/**
+ * Champ de texte « comme sur le site » : on écrit d'un seul tenant, Entrée commence un
+ * nouveau paragraphe, et deux boutons transforment la ligne en cours en intertitre ou
+ * en citation. Le contenu est relu en blocs (paragraphe / intertitre / citation) au
+ * moment d'enregistrer ; le collage se fait toujours en texte brut.
+ */
+function richEditor(blocks, { headings = true, quotes = true, label = "Texte" } = {}) {
+  const TAG = { p: "P", h: "H2", quote: "BLOCKQUOTE" };
+  const ed = h("div", { class: "rich", contenteditable: "true", role: "textbox", "aria-multiline": "true", "aria-label": label, spellcheck: "true" });
+  const fill = (list) => {
+    ed.replaceChildren();
+    for (const b of list.length ? list : [{ type: "p", text: "" }]) {
+      const el = document.createElement(TAG[b.type] || "P");
+      if (b.text) el.textContent = b.text; else el.append(document.createElement("br"));
+      ed.append(el);
+    }
+  };
+  fill(blocks);
+
+  /** Le bloc (enfant direct du champ) où se trouve le curseur. */
+  const current = () => {
+    const sel = window.getSelection();
+    let n = sel && sel.rangeCount ? sel.anchorNode : null;
+    if (!n || !ed.contains(n)) return null;
+    while (n && n.parentNode !== ed) n = n.parentNode;
+    return n;
+  };
+  const caretAtEnd = (el) => {
+    const r = document.createRange();
+    r.selectNodeContents(el);
+    r.collapse(false);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(r);
+  };
+  const setType = (type) => {
+    ed.focus();
+    let blk = current();
+    if (!blk) { blk = ed.lastChild; }
+    if (!blk) return;
+    const el = document.createElement(TAG[type]);
+    if (blk.nodeType === 3) el.textContent = blk.textContent;
+    else while (blk.firstChild) el.append(blk.firstChild);
+    if (!el.textContent) el.append(document.createElement("br"));
+    blk.replaceWith(el);
+    caretAtEnd(el);
+    state.dirty = true;
+    sync();
+  };
+
+  const tools = [["p", "Paragraphe"]];
+  if (headings) tools.push(["h", "Intertitre"]);
+  if (quotes) tools.push(["quote", "Citation"]);
+  const btns = tools.map(([type, text]) => {
+    const b = h("button", { type: "button", class: "rich__tool", "aria-pressed": "false" }, text);
+    b.addEventListener("mousedown", (ev) => ev.preventDefault()); // garder le curseur dans le texte
+    b.addEventListener("click", () => setType(type));
+    b.dataset.type = type;
+    return b;
+  });
+  const sync = () => {
+    if (!ed.isConnected && !ed.dataset.fresh) { document.removeEventListener("selectionchange", sync); return; }
+    delete ed.dataset.fresh;
+    const blk = current();
+    const t = blk?.nodeName === "H2" ? "h" : blk?.nodeName === "BLOCKQUOTE" ? "quote" : "p";
+    for (const b of btns) b.setAttribute("aria-pressed", String(Boolean(blk) && b.dataset.type === t));
+  };
+  ed.dataset.fresh = "1"; // pas encore dans la page au premier appel
+  document.addEventListener("selectionchange", sync);
+
+  ed.addEventListener("focus", () => { try { document.execCommand("defaultParagraphSeparator", false, "p"); } catch { /* */ } });
+  // Entrée au bout d'un intertitre ou d'une citation : on repart sur un paragraphe
+  ed.addEventListener("keydown", (ev) => {
+    if (ev.key !== "Enter" || ev.shiftKey || ev.isComposing) return;
+    const blk = current();
+    if (!blk || (blk.nodeName !== "H2" && blk.nodeName !== "BLOCKQUOTE")) return;
+    ev.preventDefault();
+    const p = document.createElement("p");
+    p.append(document.createElement("br"));
+    blk.after(p);
+    caretAtEnd(p);
+    state.dirty = true;
+    sync();
+  });
+  ed.addEventListener("paste", (ev) => {
+    ev.preventDefault();
+    const text = (ev.clipboardData || window.clipboardData).getData("text/plain");
+    const parts = text.replace(/\r\n?/g, "\n").split(/\n\s*\n/);
+    // un seul paragraphe collé : insertion simple ; plusieurs : autant de paragraphes
+    if (parts.length === 1) { document.execCommand("insertText", false, parts[0].replace(/\n/g, " ")); return; }
+    const blk = current();
+    let anchor = blk;
+    parts.forEach((part, i) => {
+      const clean = part.replace(/\s+/g, " ").trim();
+      if (!clean) return;
+      if (i === 0 && anchor && anchor.nodeType === 1) { document.execCommand("insertText", false, clean); return; }
+      const p = document.createElement("p");
+      p.textContent = clean;
+      if (anchor) anchor.after(p); else ed.append(p);
+      anchor = p;
+    });
+    if (anchor) caretAtEnd(anchor);
+    state.dirty = true;
+  });
+
+  const get = () => {
+    const out = [];
+    for (const n of ed.childNodes) {
+      const raw = n.nodeType === 3 ? n.textContent : n.innerText ?? n.textContent;
+      const type = n.nodeName === "H2" || /^H[1-6]$/.test(n.nodeName) ? "h" : n.nodeName === "BLOCKQUOTE" ? "quote" : "p";
+      if (type === "p") {
+        for (const line of String(raw || "").split(/\n+/)) {
+          const text = line.replace(/\s+/g, " ").trim();
+          if (text) out.push({ type, text });
+        }
+      } else {
+        const text = String(raw || "").replace(/\s+/g, " ").trim();
+        if (text) out.push({ type, text });
+      }
+    }
+    return out;
+  };
+
+  const el = h("div", { class: "rich-wrap" },
+    tools.length > 1 ? h("div", { class: "rich__bar", role: "toolbar", "aria-label": "Mise en forme" },
+      h("span", { class: "rich__hint" }, "La ligne en cours :"), btns) : null,
+    ed);
+  return { el, get, focus: () => { ed.focus(); caretAtEnd(ed.lastChild || ed); } };
+}
+
 function textCard(title, lede, editor, extra, onSave) {
   const err = h("p", { class: "form-error", role: "alert" });
   const btn = h("button", { type: "button", class: "btn" }, "Enregistrer et publier");
-  btn.addEventListener("click", () => withSaving(btn, err, async () => { await onSave(); toast("Texte enregistré."); render(); }));
+  btn.addEventListener("click", () => withSaving(btn, err, async () => {
+    if (!editor.get().length) throw new Error("Le texte est vide.");
+    await onSave();
+    toast("Texte enregistré.");
+    render();
+  }));
   const card = h("section", { class: "card card--edit" }, h("h2", {}, title), lede ? h("p", { class: "hint" }, lede) : null,
     editor.el, extra, err, h("div", { class: "actions" }, btn));
   watchDirty(card);
   return card;
 }
 
-function critiqueForm(c, index, box) {
-  const title = input(c?.title || "", { placeholder: "Facultatif" });
-  const author = input(c?.author || "");
+/** Formulaire d'une critique : nouvelle (index null) ou existante. */
+function critiqueForm(c, index, onCancel) {
+  const author = input(c?.author || "", { autocomplete: "off" });
   const role = input(c?.role || "", { placeholder: "Par exemple : historienne de l'art" });
-  const ed = blockEditor(c?.blocks || [], { allowHeadings: false });
+  const title = input(c?.title || "", { placeholder: "Facultatif" });
+  const text = richEditor(c?.blocks || [], { headings: false, label: "Texte de la critique" });
   const err = h("p", { class: "form-error", role: "alert" });
-  const btn = h("button", { type: "button", class: "btn" }, "Enregistrer et publier");
+  const btn = h("button", { type: "button", class: "btn" }, c ? "Enregistrer et publier" : "Publier la critique");
   btn.addEventListener("click", () => withSaving(btn, err, async () => {
     if (!author.value.trim()) throw new Error("Indiquez l'auteur de la critique.");
-    const blocks = ed.get();
+    const blocks = text.get();
     if (!blocks.length) throw new Error("Le texte de la critique est vide.");
     const data = { title: title.value, author: author.value, role: role.value, blocks };
-    await save("critiques", (cc) => {
-      if (index == null) cc.critiques.push(data); else cc.critiques[index] = data;
+    await save("critiques", (doc) => {
+      if (index == null) doc.critiques.push(data); else doc.critiques[index] = data;
     }, index == null ? `critique ajoutée (${author.value.trim()})` : `critique modifiée (${author.value.trim()})`);
-    toast("Critique enregistrée.");
+    toast(c ? "Critique enregistrée." : "Critique publiée.");
     render();
   }));
-  const form = h("div", { class: "card card--edit card--nested" },
-    h("h3", {}, c ? "Modifier la critique" : "Nouvelle critique"),
-    field("Titre (facultatif)", title),
+  const form = h("div", { class: c ? "card card--edit card--nested" : "" },
+    c ? h("h3", {}, "Modifier la critique") : null,
     field("Auteur", author),
-    field("Qualité de l'auteur", role, "Affichée après le nom, dans la signature."),
-    h("div", { class: "field" }, h("p", { class: "field-label" }, "Texte"), ed.el),
+    field("Qualité de l'auteur (facultatif)", role, "Affichée après le nom, dans la signature."),
+    field("Titre (facultatif)", title),
+    h("div", { class: "field" }, h("p", { class: "field-label" }, "Texte"), text.el,
+      h("p", { class: "hint" }, "Collez ou tapez le texte ; Entrée commence un nouveau paragraphe.")),
     err,
-    h("div", { class: "actions" }, btn, button("Annuler", async () => { if (await leaveOk()) render(); }, "btn btn--ghost")),
+    h("div", { class: "actions" }, btn,
+      onCancel ? button("Annuler", async () => { if (await leaveOk()) onCancel(); }, "btn btn--ghost") : null),
     c ? h("div", { class: "danger-zone" }, button("Supprimer cette critique", async () => {
       if (!(await dialog({ title: "Supprimer cette critique ?", text: `Le texte de ${c.author} disparaîtra de la page Démarche.`, ok: "Supprimer", danger: true }))) return;
       try {
-        await save("critiques", (cc) => { cc.critiques.splice(index, 1); }, `critique supprimée (${c.author})`);
+        await save("critiques", (doc) => { doc.critiques.splice(index, 1); }, `critique supprimée (${c.author})`);
+        toast("Critique supprimée.");
         render();
       } catch (e) { if (!e.handled) err.textContent = explain(e); }
     }, "btn btn--danger-ghost")) : null);
   watchDirty(form);
-  box.replaceChildren(form);
-  (c ? title : author).focus();
+  return form;
 }
 
 function panelDemarche(root) {
-  const dem = blockEditor(D("demarche").blocks);
-  const rec = blockEditor(D("recit").blocks);
+  const dem = richEditor(D("demarche").blocks, { label: "Texte de la démarche" });
+  const rec = richEditor(D("recit").blocks, { label: "Texte du récit" });
   const sig = input(D("recit").signature || "");
   const crits = D("critiques").critiques;
 
-  const critBox = h("div", {});
-  const newBox = h("div", {});
-  const listEl = h("ul", { class: "rows" }, crits.map((c, i) => {
+  const critList = h("ul", { class: "rows" }, crits.map((c, i) => {
     const edit = h("div", {});
-    return h("li", {}, h("button", { type: "button", class: "row", onclick: () => critiqueForm(c, i, edit) },
+    const excerpt = c.title || (c.blocks[0]?.text || "").slice(0, 80) + "…";
+    return h("li", {}, h("button", { type: "button", class: "row", onclick: () => edit.replaceChildren(critiqueForm(c, i, () => edit.replaceChildren())) },
       h("span", { class: "row__main" },
-        h("span", { class: "row__title" }, c.title || c.blocks[0]?.text.slice(0, 80) + "…"),
-        h("span", { class: "row__meta" }, [c.author, c.role].filter(Boolean).join(", "))),
+        h("span", { class: "row__title" }, [c.author, c.role].filter(Boolean).join(", ")),
+        h("span", { class: "row__meta" }, excerpt)),
       h("span", { class: "row__go", "aria-hidden": "true" }, "›")), edit);
   }));
-  critBox.append(listEl);
+  const listBox = h("div", {}, critList);
 
   root.append(
-    head("Démarche", "Les textes de la page Démarche : la démarche, les critiques, le récit."),
-    textCard("La démarche", "Le texte principal, écrit à la première personne.", dem, null,
-      () => save("demarche", (c) => { c.blocks = dem.get(); }, "texte de la démarche")),
+    head("Démarche", "Les textes de la page Démarche."),
+    textCard("La démarche", "Le texte principal, écrit à la première personne. Écrivez-le comme dans un document : Entrée commence un nouveau paragraphe.", dem, null,
+      () => save("demarche", (doc) => { doc.blocks = dem.get(); }, "texte de la démarche")),
     h("section", { class: "card" },
-      h("div", { class: "group-box__head" }, h("h2", {}, "Critiques"),
-        button("+ Ajouter une critique", () => critiqueForm(null, null, newBox), "btn btn--small")),
-      h("p", { class: "hint" }, "Les textes de critiques et d'historiens, affichés dans cet ordre sous la démarche."),
-      newBox, critBox,
-      crits.length > 1 ? h("div", { class: "actions" }, button("Changer l'ordre", () => reorder(critBox, crits.map((c, i) => ({ ...c, i })), (c) => `${c.author}${c.title ? " — " + c.title : ""}`,
-        (order) => save("critiques", (cc) => { const old = cc.critiques; cc.critiques = order.map((o) => old[o.i]); }, "ordre des critiques")), "btn btn--small btn--ghost")) : null),
-    textCard("Récit", "« Mireille, aller et retour » : le texte d'Annette Pharamond.", rec,
+      h("h2", {}, "Critiques"),
+      h("p", { class: "hint" }, crits.length
+        ? "Affichées sous la démarche, dans cet ordre. Touchez une critique pour la modifier."
+        : "Aucune critique pour l'instant."),
+      listBox,
+      crits.length > 1 ? h("div", { class: "actions" }, button("Changer l'ordre", () => reorder(listBox, crits.map((c, i) => ({ ...c, i })), (c) => c.author,
+        (order) => save("critiques", (doc) => { const old = doc.critiques; doc.critiques = order.map((o) => old[o.i]); }, "ordre des critiques")), "btn btn--small btn--ghost")) : null),
+    h("section", { class: "card card--edit" },
+      h("h2", {}, "Ajouter une critique"),
+      h("p", { class: "hint" }, "Un article, un texte de catalogue, un mot de critique : il s'ajoutera à la suite des autres."),
+      critiqueForm(null, null, null)),
+    textCard("Récit", "« Mireille, aller et retour », le texte d'Annette Pharamond.", rec,
       field("Signature", sig, "Affichée en bas du récit, précédée d'un tiret."),
-      () => save("recit", (c) => { c.blocks = rec.get(); c.signature = sig.value; }, "récit")));
+      () => save("recit", (doc) => { doc.blocks = rec.get(); doc.signature = sig.value; }, "récit")));
 }
 
 /* ============================================================ expositions */
@@ -1497,6 +1670,35 @@ function panelContact(root) {
 
 /* ==================================================================== aide */
 
+function passwordCard() {
+  const cur = passwordInput({ autocomplete: "current-password", id: "pw-current" });
+  const pw1 = passwordInput({ autocomplete: "new-password", id: "pw-new" });
+  const pw2 = passwordInput({ autocomplete: "new-password", id: "pw-new2" });
+  const err = h("p", { class: "form-error", role: "alert" });
+  const btn = h("button", { type: "button", class: "btn" }, "Changer mon mot de passe");
+  btn.addEventListener("click", () => withSaving(btn, err, async () => {
+    if (!cur.inp.value) throw new Error("Indiquez votre mot de passe actuel.");
+    if (pw1.inp.value.length < 8) throw new Error("Le nouveau mot de passe doit faire au moins 8 caractères.");
+    if (pw1.inp.value !== pw2.inp.value) throw new Error("Les deux nouveaux mots de passe ne sont pas identiques.");
+    await call("POST", "password", { json: { current: cur.inp.value, password: pw1.inp.value } });
+    for (const x of [cur, pw1, pw2]) x.inp.value = "";
+    state.dirty = false;
+    toast("Mot de passe changé. Les autres appareils devront se reconnecter.");
+  }));
+  const card = h("section", { class: "card card--edit" },
+    h("h2", {}, "Changer mon mot de passe"),
+    h("p", { class: "hint" }, `Pour le compte ${state.email}. Les autres appareils connectés à ce compte seront déconnectés.`),
+    h("div", { class: "field" }, h("label", { for: "pw-current" }, "Mot de passe actuel"), cur.el),
+    h("div", { class: "field" }, h("label", { for: "pw-new" }, "Nouveau mot de passe"), pw1.el,
+      h("p", { class: "hint" }, "Au moins 8 caractères. Une petite phrase facile à retenir fait un excellent mot de passe.")),
+    h("div", { class: "field" }, h("label", { for: "pw-new2" }, "Le nouveau, une seconde fois"), pw2.el),
+    err, h("div", { class: "actions" }, btn),
+    h("p", { class: "hint", style: "margin-top:var(--space-5)" },
+      "Mot de passe oublié ? Sur la page de connexion, « Mot de passe oublié ? » envoie un lien par e-mail pour en choisir un nouveau."));
+  watchDirty(card);
+  return card;
+}
+
 function panelHelp(root) {
   root.append(head("Aide", null), h("div", { class: "card prose-admin" },
     h("h2", {}, "Comment ça marche"),
@@ -1504,12 +1706,14 @@ function panelHelp(root) {
     h("p", {}, "Pendant cette minute, le site en ligne reste tel qu'il était. Il n'est jamais à moitié à jour, et si quelque chose se passait mal, il resterait simplement dans son état précédent."),
     h("h2", {}, "Ajouter une œuvre"),
     h("p", {}, "Rubrique Œuvres, bouton « Ajouter une œuvre ». Choisissez la photo (depuis le téléphone, on peut aussi la prendre directement), remplissez le titre, la série, la technique et les formats, puis « Ajouter l'œuvre au site »."),
-    h("p", {}, "Pour une nouvelle série, choisissez « Créer une nouvelle série… » tout en bas de la liste des séries."),
+    h("p", {}, "Pour une nouvelle série, choisissez « Créer une nouvelle série… » tout en bas de la liste des séries, ou passez par la rubrique Séries."),
+    h("h2", {}, "Les séries"),
+    h("p", {}, "La rubrique Séries montre chaque série avec toutes ses œuvres. On peut y renommer une série, en retirer une œuvre (il faut alors dire dans quelle série la ranger, ou la supprimer) ou supprimer la série."),
     h("h2", {}, "Les photos"),
     h("p", {}, "Une photo bien droite, cadrée au plus près de la toile, en lumière du jour. Elle est réduite et préparée automatiquement : inutile de la retoucher."),
     h("h2", {}, "En cas de souci"),
-    h("p", {}, "Rien de ce qui est fait ici ne peut casser le site : les informations sont vérifiées avant d'être publiées, et chaque version est conservée. Léo peut revenir en arrière sur n'importe quelle modification."),
-    h("p", {}, `Vous êtes connecté avec l'adresse ${state.email}.`)));
+    h("p", {}, "Rien de ce qui est fait ici ne peut casser le site : les informations sont vérifiées avant d'être publiées, et chaque version est conservée. Léo peut revenir en arrière sur n'importe quelle modification.")),
+  passwordCard());
 }
 
 const PANELS = {

@@ -349,3 +349,47 @@ html { scroll-behavior: auto; }
   .tabs { -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent); mask-image: linear-gradient(90deg, #000 85%, transparent); }
 }
 .tabs.at-end { -webkit-mask-image: none; mask-image: none; }
+
+/* ------------------------------------------- champ de texte « comme sur le site » */
+
+.rich-wrap { border: 1px solid var(--rule-strong); border-radius: var(--r-xs); background: var(--bg); margin: var(--space-3) 0; }
+.rich-wrap:focus-within { border-color: var(--accent); }
+.rich__bar {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2);
+  padding: var(--space-2) var(--space-3); border-bottom: 1px solid var(--rule);
+  position: sticky; top: var(--top-h, 100px); z-index: 5; background: var(--bg);
+}
+.rich__hint { font-size: var(--fs-xs); color: var(--fg-faint); margin-right: var(--space-1); }
+.rich__tool {
+  appearance: none; cursor: pointer; font: inherit; font-size: var(--fs-sm); color: var(--fg-muted);
+  background: none; border: 1px solid var(--rule); border-radius: var(--r-xs);
+  min-height: 40px; padding: 0 var(--space-4);
+}
+.rich__tool[aria-pressed="true"] { background: var(--fg); border-color: var(--fg); color: var(--bg); }
+.rich {
+  padding: var(--space-4) var(--space-5); min-height: 12rem; outline: none;
+  font-size: var(--fs-md); line-height: 1.62; color: var(--fg);
+  max-width: 44rem;
+}
+.rich > * { margin: 0 0 var(--space-4); }
+.rich > *:last-child { margin-bottom: 0; }
+.rich h2 { font-family: var(--font-display); font-size: var(--fs-xl); font-weight: 400; margin-top: var(--space-6); }
+.rich h2:first-child { margin-top: 0; }
+.rich blockquote {
+  padding-left: var(--space-5); border-left: 2px solid var(--accent);
+  font-family: var(--font-display); font-size: var(--fs-lg); line-height: 1.45;
+}
+@media (max-width: 640px) {
+  .rich { padding: var(--space-3) var(--space-4); }
+  .rich__hint { display: none; }
+}
+
+.group-box__head h2 { font-size: var(--fs-lg); }
+.row-with-action { display: flex; align-items: center; gap: var(--space-3); }
+.row-with-action > .row { flex: 1; min-width: 0; }
+dialog.modal select {
+  font: inherit; font-size: 1rem; color: var(--fg); width: 100%; min-height: 48px;
+  padding: var(--space-3); background: var(--bg); border: 1px solid var(--rule-strong); border-radius: var(--r-xs);
+}
+dialog.modal .field { margin: var(--space-5) 0 0; }
+@media (max-width: 640px) { .rich__tool { padding: 0 var(--space-3); } }
