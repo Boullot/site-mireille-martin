@@ -226,6 +226,19 @@ async function forgot(request) {
   return json({ ok: true, sent: true });
 }
 
+/** Diagnostic sans session : ce qui est configuré, et si sharp se charge. Aucun secret. */
+async function health() {
+  let sharp = null;
+  try { sharp = (await import("sharp")).default.versions.sharp; } catch (err) { sharp = `erreur : ${err.message}`; }
+  return {
+    github: Boolean(process.env.GITHUB_TOKEN),
+    secret: (process.env.ADMIN_SECRET || "").length >= 32,
+    email: Boolean(process.env.ADMIN_EMAIL),
+    mail: mailConfigured(),
+    sharp,
+  };
+}
+
 /* ------------------------------------------------------------------ routeur */
 
 async function route(request) {
@@ -233,6 +246,7 @@ async function route(request) {
   const a = url.searchParams.get("a");
 
   if (request.method === "GET") {
+    if (a === "health") return json(await health());
     if (a === "session") {
       const s = await session(request);
       return json(s ? { authenticated: true, email: s.email, mail: mailConfigured() } : { authenticated: false });

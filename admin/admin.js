@@ -139,6 +139,9 @@ async function call(method, action, { params = {}, json, blob } = {}) {
 
 function explain(err) {
   if (err instanceof ApiError && err.data?.message) return err.data.message;
+  if (err instanceof ApiError && /not_configured/.test(err.data?.error || "")) {
+    return "L'espace d'administration n'est pas encore activé sur le serveur. Léo doit terminer sa mise en place.";
+  }
   if (err instanceof ApiError && err.status === 429) return "Trop d'essais. Patientez un quart d'heure.";
   if (err instanceof ApiError && err.status >= 500) return "Le serveur n'a pas répondu correctement. Réessayez dans un instant ; si cela persiste, prévenez Léo.";
   return err.message || "Une erreur est survenue.";
