@@ -845,19 +845,6 @@
       "short": "Triangles IV"
     },
     {
-      "n": 25,
-      "title": "Sans titre 11",
-      "series": "peintures",
-      "group": "Sans titre",
-      "technique": "Acrylique sur toile",
-      "dimensions": [],
-      "note": null,
-      "slug": "sans-titre-11",
-      "untitled": true,
-      "file": "sans-titre-11.jpg",
-      "short": null
-    },
-    {
       "n": 30,
       "title": "Ligne brisée-N",
       "series": "peintures",
@@ -1033,6 +1020,21 @@
       "slug": "carregraphie-noter",
       "untitled": false,
       "file": "carregraphie-noter.jpg",
+      "short": null
+    },
+    {
+      "n": 25,
+      "title": "LIberté",
+      "series": "carregraphies",
+      "group": "Carrégraphies",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "30 × 30"
+      ],
+      "note": null,
+      "slug": "sans-titre-11",
+      "untitled": true,
+      "file": "sans-titre-11.jpg",
       "short": null
     },
     {
