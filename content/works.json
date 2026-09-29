@@ -532,6 +532,19 @@
       "short": null
     },
     {
+      "n": 1,
+      "title": "Aller Retour",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [],
+      "note": null,
+      "slug": "sans-titre-01",
+      "untitled": true,
+      "file": "sans-titre-01.jpg",
+      "short": null
+    },
+    {
       "n": 69,
       "title": "Icône laïque · V",
       "series": "peintures",
@@ -822,19 +835,6 @@
       "untitled": false,
       "file": "triangles-aux-carres-4.jpg",
       "short": "Triangles IV"
-    },
-    {
-      "n": 1,
-      "title": "Sans titre 01",
-      "series": "peintures",
-      "group": "Sans titre",
-      "technique": "Acrylique sur toile",
-      "dimensions": [],
-      "note": null,
-      "slug": "sans-titre-01",
-      "untitled": true,
-      "file": "sans-titre-01.jpg",
-      "short": null
     },
     {
       "n": 6,
