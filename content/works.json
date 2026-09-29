@@ -733,21 +733,6 @@
       "short": null
     },
     {
-      "n": 83,
-      "title": "Joie",
-      "series": "peintures",
-      "group": "Grands carrés",
-      "technique": "Acrylique sur toile",
-      "dimensions": [
-        "80 × 80"
-      ],
-      "note": null,
-      "slug": "joie-80x80",
-      "untitled": false,
-      "file": "joie-80x80.jpg",
-      "short": null
-    },
-    {
       "n": 84,
       "title": "Ligne brisée 1",
       "series": "peintures",
@@ -1524,6 +1509,21 @@
       "slug": "grands-carres-liberte-s",
       "untitled": false,
       "file": "grands-carres-liberte-s.jpg",
+      "short": null
+    },
+    {
+      "n": 83,
+      "title": "Joie",
+      "series": "carres",
+      "group": "Carrés",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "80 × 80"
+      ],
+      "note": null,
+      "slug": "joie-80x80",
+      "untitled": false,
+      "file": "joie-80x80.jpg",
       "short": null
     }
   ]
