@@ -2,6 +2,14 @@
   "note": "sort = clé de tri AAAA-MM (début). solo = exposition personnelle. Ajouter les nouvelles expositions en haut de la liste, le tri est automatique.",
   "exhibitions": [
     {
+      "sort": "2026-09",
+      "when": "25 Septembre au 1 Novembre 2026",
+      "title": "Impressions Géométriques",
+      "venue": "Atelier Michel Debully",
+      "city": "Giverny",
+      "solo": false
+    },
+    {
       "sort": "2026-05",
       "when": "Mai 2026",
       "title": "Less is more",
