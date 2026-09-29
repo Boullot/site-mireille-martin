@@ -85,7 +85,7 @@
       "name": "Aller Retour Double",
       "family": "encres",
       "note": "Huit encres de petit format, 17,5 × 22 cm.",
-      "tall": false
+      "tall": true
     },
     {
       "name": "Les mots entre les lignes",
