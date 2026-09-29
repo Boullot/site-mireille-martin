@@ -1,6 +1,19 @@
 {
   "works": [
     {
+      "n": 1,
+      "title": "Aller Retour",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [],
+      "note": null,
+      "slug": "sans-titre-01",
+      "untitled": true,
+      "file": "sans-titre-01.jpg",
+      "short": null
+    },
+    {
       "n": 35,
       "title": "Aller Retour I",
       "series": "aller-retour",
@@ -412,21 +425,6 @@
       "short": null
     },
     {
-      "n": 61,
-      "title": "Aller Retour XXVIII",
-      "series": "aller-retour",
-      "group": "Aller Retour",
-      "technique": "Acrylique sur toile",
-      "dimensions": [
-        "80 × 100"
-      ],
-      "note": null,
-      "slug": "aller-retour-xxviii",
-      "untitled": false,
-      "file": "aller-retour-xxviii.jpg",
-      "short": null
-    },
-    {
       "n": 62,
       "title": "Aller Retour XXVII",
       "series": "aller-retour",
@@ -439,6 +437,21 @@
       "slug": "aller-retour-xxvii",
       "untitled": false,
       "file": "aller-retour-xxvii.jpg",
+      "short": null
+    },
+    {
+      "n": 61,
+      "title": "Aller Retour XXVIII",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "80 × 100"
+      ],
+      "note": null,
+      "slug": "aller-retour-xxviii",
+      "untitled": false,
+      "file": "aller-retour-xxviii.jpg",
       "short": null
     },
     {
@@ -529,19 +542,6 @@
       "slug": "aller-retour-trait-d-union",
       "untitled": false,
       "file": "aller-retour-trait-d-union.jpg",
-      "short": null
-    },
-    {
-      "n": 1,
-      "title": "Aller Retour",
-      "series": "aller-retour",
-      "group": "Aller Retour",
-      "technique": "Acrylique sur toile",
-      "dimensions": [],
-      "note": null,
-      "slug": "sans-titre-01",
-      "untitled": true,
-      "file": "sans-titre-01.jpg",
       "short": null
     },
     {
