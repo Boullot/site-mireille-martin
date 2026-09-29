@@ -522,5 +522,14 @@
       "solo": true
     }
   ],
-  "upcoming": []
+  "upcoming": [
+    {
+      "sort": "2026-10",
+      "when": "3 au 17 Octobre 2026",
+      "title": "Quand les maths prennent forme",
+      "venue": "Galerie HCE",
+      "city": "Saint Denis",
+      "solo": false
+    }
+  ]
 }
