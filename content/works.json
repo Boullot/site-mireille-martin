@@ -901,19 +901,6 @@
       "short": null
     },
     {
-      "n": 75,
-      "title": "Sans titre 15",
-      "series": "peintures",
-      "group": "Sans titre",
-      "technique": "Acrylique sur toile",
-      "dimensions": [],
-      "note": null,
-      "slug": "sans-titre-15",
-      "untitled": true,
-      "file": "sans-titre-15.jpg",
-      "short": null
-    },
-    {
       "n": 88,
       "title": "Affection",
       "series": "carregraphies",
@@ -1522,6 +1509,21 @@
       "slug": "sans-titre-14",
       "untitled": true,
       "file": "sans-titre-14.jpg",
+      "short": null
+    },
+    {
+      "n": 75,
+      "title": "Carr'Eclair N",
+      "series": "carres",
+      "group": "Carrés",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "30 × 30"
+      ],
+      "note": null,
+      "slug": "sans-titre-15",
+      "untitled": true,
+      "file": "sans-titre-15.jpg",
       "short": null
     }
   ]
