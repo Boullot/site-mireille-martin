@@ -418,21 +418,6 @@
       "short": null
     },
     {
-      "n": 59,
-      "title": "Aller Retour XXVI",
-      "series": "aller-retour",
-      "group": "Aller Retour",
-      "technique": "Acrylique sur toile",
-      "dimensions": [
-        "60 × 80"
-      ],
-      "note": null,
-      "slug": "aller-retour-xxv",
-      "untitled": false,
-      "file": "aller-retour-xxv.jpg",
-      "short": null
-    },
-    {
       "n": 60,
       "title": "Aller Retour XXV",
       "series": "aller-retour",
@@ -445,6 +430,21 @@
       "slug": "aller-retour-xxvi",
       "untitled": false,
       "file": "aller-retour-xxvi.jpg",
+      "short": null
+    },
+    {
+      "n": 59,
+      "title": "Aller Retour XXVI",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "60 × 80"
+      ],
+      "note": null,
+      "slug": "aller-retour-xxv",
+      "untitled": false,
+      "file": "aller-retour-xxv.jpg",
       "short": null
     },
     {
