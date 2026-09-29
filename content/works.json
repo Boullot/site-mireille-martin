@@ -901,19 +901,6 @@
       "short": null
     },
     {
-      "n": 73,
-      "title": "Sans titre 13",
-      "series": "peintures",
-      "group": "Sans titre",
-      "technique": "Acrylique sur toile",
-      "dimensions": [],
-      "note": null,
-      "slug": "sans-titre-13",
-      "untitled": true,
-      "file": "sans-titre-13.jpg",
-      "short": null
-    },
-    {
       "n": 74,
       "title": "Sans titre 14",
       "series": "peintures",
@@ -1519,6 +1506,21 @@
       "untitled": false,
       "file": "ombre-et-lumiere-2.jpg",
       "short": "II"
+    },
+    {
+      "n": 73,
+      "title": "Carré Noir",
+      "series": "carres",
+      "group": "Carrés",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "50 × 50"
+      ],
+      "note": null,
+      "slug": "sans-titre-13",
+      "untitled": true,
+      "file": "sans-titre-13.jpg",
+      "short": null
     }
   ]
 }

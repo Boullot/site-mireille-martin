@@ -24,6 +24,12 @@
       "title": "Encres de Chine",
       "lede": "Quatre projets menés au pinceau et à l'encre sur papier : les kakémonos de « Géométrie d'encre et de papier », les doubles, les mots, l'ombre et la lumière.",
       "medium": "Encre de Chine sur papier"
+    },
+    {
+      "key": "carres",
+      "title": "Carrés",
+      "lede": "",
+      "medium": ""
     }
   ],
   "groups": [
@@ -97,6 +103,12 @@
       "name": "Ombre et lumière",
       "family": "encres",
       "note": "Projet en cours.",
+      "tall": false
+    },
+    {
+      "name": "Carrés",
+      "family": "carres",
+      "note": "",
       "tall": false
     }
   ]
