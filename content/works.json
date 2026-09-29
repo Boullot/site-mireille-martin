@@ -733,21 +733,6 @@
       "short": null
     },
     {
-      "n": 82,
-      "title": "Liberté[s]",
-      "series": "peintures",
-      "group": "Grands carrés",
-      "technique": "Acrylique sur toile",
-      "dimensions": [
-        "80 × 80"
-      ],
-      "note": null,
-      "slug": "grands-carres-liberte-s",
-      "untitled": false,
-      "file": "grands-carres-liberte-s.jpg",
-      "short": null
-    },
-    {
       "n": 83,
       "title": "Joie",
       "series": "peintures",
@@ -1524,6 +1509,21 @@
       "slug": "sans-titre-15",
       "untitled": true,
       "file": "sans-titre-15.jpg",
+      "short": null
+    },
+    {
+      "n": 82,
+      "title": "Liberté[s]",
+      "series": "carres",
+      "group": "Carrés",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "80 × 80"
+      ],
+      "note": null,
+      "slug": "grands-carres-liberte-s",
+      "untitled": false,
+      "file": "grands-carres-liberte-s.jpg",
       "short": null
     }
   ]
