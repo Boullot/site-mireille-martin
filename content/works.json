@@ -493,8 +493,8 @@
       "short": null
     },
     {
-      "n": 64,
-      "title": "Aller Retour XXXIV-G",
+      "n": 131,
+      "title": "AR XXXII-G",
       "series": "aller-retour",
       "group": "Aller Retour",
       "technique": "Acrylique sur toile",
@@ -502,9 +502,9 @@
         "40 × 120"
       ],
       "note": null,
-      "slug": "aller-retour-xxxiv",
+      "slug": "ar-xxxiii-g",
       "untitled": false,
-      "file": "aller-retour-xxxiv.jpg",
+      "file": "oeuvre-9262d6.jpg",
       "short": null
     },
     {
@@ -520,6 +520,21 @@
       "slug": "aller-retour-xxxiii",
       "untitled": false,
       "file": "aller-retour-xxxiii-0c67fc.jpg",
+      "short": null
+    },
+    {
+      "n": 64,
+      "title": "Aller Retour XXXIV-G",
+      "series": "aller-retour",
+      "group": "Aller Retour",
+      "technique": "Acrylique sur toile",
+      "dimensions": [
+        "40 × 120"
+      ],
+      "note": null,
+      "slug": "aller-retour-xxxiv",
+      "untitled": false,
+      "file": "aller-retour-xxxiv.jpg",
       "short": null
     },
     {
@@ -565,21 +580,6 @@
       "slug": "aller-retour-trait-d-union",
       "untitled": false,
       "file": "aller-retour-trait-d-union.jpg",
-      "short": null
-    },
-    {
-      "n": 131,
-      "title": "AR XXXII-G",
-      "series": "aller-retour",
-      "group": "Aller Retour",
-      "technique": "Acrylique sur toile",
-      "dimensions": [
-        "40 × 120"
-      ],
-      "note": null,
-      "slug": "ar-xxxiii-g",
-      "untitled": false,
-      "file": "oeuvre-9262d6.jpg",
       "short": null
     },
     {
