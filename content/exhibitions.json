@@ -530,6 +530,14 @@
       "venue": "Galerie HCE",
       "city": "Saint Denis",
       "solo": false
+    },
+    {
+      "sort": "2026-11",
+      "when": "4 au 29 Novembre 2026",
+      "title": "Abstraction",
+      "venue": "Chapelle du Foyer des Marins",
+      "city": "Rouen",
+      "solo": true
     }
   ]
 }
