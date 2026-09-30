@@ -285,6 +285,10 @@ section + section { border-top: 1px solid var(--rule); }
   background: var(--bg);
   border-bottom: 1px solid var(--rule);
   padding-top: env(safe-area-inset-top);
+  /* iPhone à encoche : le bandeau se colle sous la barre d'état et la page
+     continue de défiler visiblement au-dessus. Ce prolongement opaque vers le
+     haut bouche cette bande, quelle que soit sa hauteur. */
+  box-shadow: 0 -120px 0 0 var(--bg);
   view-transition-name: masthead;
 }
 .masthead__inner {
