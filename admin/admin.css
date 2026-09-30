@@ -12,7 +12,6 @@
   background: var(--bg);
   border-bottom: 1px solid var(--rule);
   padding-top: env(safe-area-inset-top);
-  box-shadow: 0 -120px 0 0 var(--bg); /* bande sous la barre d'état des iPhone à encoche */
 }
 .top__inner { display: flex; align-items: center; gap: var(--space-4); min-height: 56px; flex-wrap: wrap; }
 .top__label { margin-right: auto; }

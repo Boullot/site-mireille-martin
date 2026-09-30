@@ -172,7 +172,9 @@ body {
 body::after {
   content: "";
   position: fixed;
-  inset: 0;
+  /* en retrait du bord haut : un calque transparent collé à ce bord est
+     échantillonné par Safari iOS 26 à la place du bandeau (bande sous l'heure) */
+  top: 12px; right: 0; bottom: 0; left: 0;
   z-index: 9999;
   pointer-events: none;
   opacity: var(--grain-opacity);
@@ -285,11 +287,10 @@ section + section { border-top: 1px solid var(--rule); }
   background: var(--bg);
   border-bottom: 1px solid var(--rule);
   padding-top: env(safe-area-inset-top);
-  /* iPhone à encoche : le bandeau se colle sous la barre d'état et la page
-     continue de défiler visiblement au-dessus. Ce prolongement opaque vers le
-     haut bouche cette bande, quelle que soit sa hauteur. */
-  box-shadow: 0 -120px 0 0 var(--bg);
-  view-transition-name: masthead;
+  /* Safari iOS 26 remplit la bande sous la barre d'état avec le fond de
+     l'élément fixe ou collant qui touche le bord haut ; sans cela, la page y
+     défile visiblement. Donc : aucun calque transparent ne doit recouvrir ce
+     bord (voir le grain) et le bandeau ne porte pas de view-transition-name. */
 }
 .masthead__inner {
   display: flex;
