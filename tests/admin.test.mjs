@@ -30,6 +30,12 @@ const walk = (dir) => fs.readdirSync(path.join(ROOT, dir), { withFileTypes: true
 let gh, api, auth, content;
 const HOST = "http://localhost:3000";
 
+// Michel ajoute et retire des œuvres : les tests se calent sur le contenu réel.
+const WORKS = JSON.parse(fs.readFileSync(path.join(ROOT, "content/works.json"), "utf8")).works;
+const FIRST = WORKS[0];
+const LAST = WORKS.at(-1);
+const stem = (f) => f.replace(/\.jpg$/, "");
+
 before(async () => {
   gh = fakeGitHub({
     root: ROOT,
@@ -116,7 +122,7 @@ describe("authentification", () => {
 describe("contenu", () => {
   test("lecture de toutes les rubriques", async () => {
     const d = await docs();
-    assert.equal(d.works.data.works.length, 108);
+    assert.equal(d.works.data.works.length, WORKS.length);
     assert.ok(d.demarche.data.blocks.some((b) => b.type === "h"));
     assert.ok(d.critiques.data.critiques[0].blocks.length >= 3);
     assert.equal(d.recit.data.signature, "Annette Pharamond");
@@ -159,7 +165,7 @@ describe("contenu", () => {
     assert.equal(r.status, 200);
     const w = JSON.parse(gh.read("content/works.json")).works[0];
     assert.deepEqual(w.dimensions, ["60 × 80", "80,5 × 100"]);
-    assert.equal(w.slug, "aller-retour-i", "la référence d'une œuvre existante ne change jamais");
+    assert.equal(w.slug, FIRST.slug, "la référence d'une œuvre existante ne change jamais");
   });
 
   test("conflit : une rubrique modifiée entre-temps n'est pas écrasée", async () => {
@@ -198,7 +204,7 @@ describe("œuvres et images", () => {
   let upload;
 
   test("envoi d'une photo : dérivés identiques à ceux du build", async () => {
-    const jpg = fs.readFileSync(path.join(ROOT, "assets/originals/aller-retour-i.jpg"));
+    const jpg = fs.readFileSync(path.join(ROOT, "assets/originals", FIRST.file));
     const r = await call("POST", "upload", { cookie, blob: jpg, params: { kind: "work", name: "Géométrie nouvelle" } });
     assert.equal(r.status, 200, JSON.stringify(r.data));
     upload = r.data;
@@ -253,7 +259,7 @@ describe("œuvres et images", () => {
     }
     // sans Pillow, comme sur Vercel : le build ne doit rien avoir à fabriquer
     const out = execFileSync("/usr/bin/python3", ["-S", "build.py"], { cwd: tmp, encoding: "utf8" });
-    assert.match(out, /109 œuvres/);
+    assert.match(out, new RegExp(`${WORKS.length + 1} œuvres`));
     const html = fs.readFileSync(path.join(tmp, "dist/oeuvres/geometrie-nouvelle/index.html"), "utf8");
     assert.match(html, /<h1 class="work__title">Géométrie nouvelle<\/h1>/);
     assert.match(html, /Une toile de 2026\.<\/p><p>Deuxième ligne\./);
@@ -261,9 +267,9 @@ describe("œuvres et images", () => {
     assert.match(html, new RegExp(`/img/${upload.stem}-2000\\.webp 2000w`));
     const home = fs.readFileSync(path.join(tmp, "dist/index.html"), "utf8");
     assert.match(home, /\/oeuvres\/geometrie-nouvelle\//);
-    assert.match(home, /Les 109 œuvres/);
+    assert.match(home, new RegExp(`Les ${WORKS.length + 1} œuvres`));
     const index = fs.readFileSync(path.join(tmp, "dist/oeuvres/index.html"), "utf8");
-    assert.match(index, /Cent neuf œuvres/);
+    assert.match(index, /œuvres, [^.]+ familles?\./);
     fs.rmSync(tmp, { recursive: true, force: true });
   });
 
@@ -320,8 +326,8 @@ describe("œuvres et images", () => {
     assert.equal(r.status, 200);
     for (const f of upload.files) assert.equal(gh.files().has(f.path), false, f.path);
     assert.ok(!JSON.parse(gh.read("content/home.json")).featured.includes("geometrie-nouvelle"));
-    assert.ok(gh.files().has("dist/img/aller-retour-i-420.webp"), "les images voisines ne sont pas touchées");
-    assert.ok(gh.files().has("dist/img/2111-v-420.webp"));
+    assert.ok(gh.files().has(`dist/img/${stem(FIRST.file)}-420.webp`), "les images voisines ne sont pas touchées");
+    assert.ok(gh.files().has(`dist/img/${stem(LAST.file)}-420.webp`));
   });
 
   test("vues d'accrochage : ajout puis suppression", async () => {
