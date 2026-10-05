@@ -376,7 +376,6 @@ def page(path, title, description, body, og=None, extra_head="", nav_key=None,
         <ul>
           <li><a href="{e(SITE['instagram_url'])}" rel="me noopener" target="_blank">Instagram</a></li>
           <li><a href="http://cac-normandie.org/martin.html" rel="noopener" target="_blank">CAC-Normandie</a></li>
-          <li><a href="https://realitesnouvelles.org/" rel="noopener" target="_blank">Réalités Nouvelles</a></li>
         </ul>
       </div>
       <div>

@@ -1549,45 +1549,53 @@ function panelViews(root) {
     cap.focus();
   };
 
+  const listBox = h("div", {});
   root.append(h("section", { class: "card" },
     h("div", { class: "group-box__head" }, h("h2", {}, "Vues d'accrochage"),
-      button("+ Nouveau groupe de photos", newGroup, "btn btn--small")),
-    h("p", { class: "hint" }, "Les photographies d'expositions, regroupées par légende, en bas de la page Expositions."),
+      h("span", { class: "head-btns" },
+        groups.length > 1 ? button("Changer l'ordre", () => reorder(listBox, groups.map((g) => ({ ...g, thumb: g.items[0].file })), (g) => g.caption,
+          (order) => save("views", (d) => {
+            const rank = new Map(order.map((g, i) => [g.caption, i]));
+            d.views.sort((a, b) => (rank.get(a.caption) ?? -1) - (rank.get(b.caption) ?? -1));
+          }, "ordre des vues d'accrochage")), "btn btn--small btn--ghost") : null,
+        button("+ Nouveau groupe de photos", newGroup, "btn btn--small"))),
+    h("p", { class: "hint" }, "Les photographies d'expositions, regroupées par légende, en bas de la page Expositions, dans cet ordre. Un nouveau groupe se place en tête."),
     newBox,
-    groups.map((g) => {
-      const capEdit = h("div", {});
-      return h("div", { class: "views-group" },
-        h("div", { class: "group-box__head" }, h("h3", {}, g.caption),
-          button("Modifier la légende", () => {
-            const cap = input(g.caption);
-            const err = h("p", { class: "form-error", role: "alert" });
-            const btn = h("button", { type: "button", class: "btn btn--small" }, "Enregistrer");
-            btn.addEventListener("click", () => withSaving(btn, err, async () => {
-              if (!cap.value.trim()) throw new Error("La légende ne peut pas être vide.");
-              await save("views", (d) => { for (const v of d.views) if (v.caption === g.caption) v.caption = cap.value; }, `légende « ${cap.value.trim()} »`);
+    listBox));
+  listBox.append(...groups.map((g) => {
+    const capEdit = h("div", {});
+    return h("div", { class: "views-group" },
+      h("div", { class: "group-box__head" }, h("h3", {}, g.caption),
+        button("Modifier la légende", () => {
+          const cap = input(g.caption);
+          const err = h("p", { class: "form-error", role: "alert" });
+          const btn = h("button", { type: "button", class: "btn btn--small" }, "Enregistrer");
+          btn.addEventListener("click", () => withSaving(btn, err, async () => {
+            if (!cap.value.trim()) throw new Error("La légende ne peut pas être vide.");
+            await save("views", (d) => { for (const v of d.views) if (v.caption === g.caption) v.caption = cap.value; }, `légende « ${cap.value.trim()} »`);
+            render();
+          }));
+          capEdit.replaceChildren(h("div", { class: "subform" }, field("Légende", cap), err,
+            h("div", { class: "actions" }, btn, button("Annuler", () => capEdit.replaceChildren(), "btn btn--small btn--ghost"))));
+          cap.focus();
+        }, "btn btn--small btn--ghost")),
+      capEdit,
+      h("div", { class: "views-grid" }, g.items.map((v) => h("figure", {},
+        thumbImg(v.file),
+        h("button", { type: "button", class: "icon-btn views-grid__del", "aria-label": "Supprimer cette photo",
+          onclick: async () => {
+            if (!(await dialog({ title: "Supprimer cette photo ?", text: g.caption, ok: "Supprimer", danger: true }))) return;
+            try {
+              await save("views", (d) => { d.views = d.views.filter((x) => x.file !== v.file); }, `vue supprimée « ${g.caption} »`);
               render();
-            }));
-            capEdit.replaceChildren(h("div", { class: "subform" }, field("Légende", cap), err,
-              h("div", { class: "actions" }, btn, button("Annuler", () => capEdit.replaceChildren(), "btn btn--small btn--ghost"))));
-            cap.focus();
-          }, "btn btn--small btn--ghost")),
-        capEdit,
-        h("div", { class: "views-grid" }, g.items.map((v) => h("figure", {},
-          thumbImg(v.file),
-          h("button", { type: "button", class: "icon-btn views-grid__del", "aria-label": "Supprimer cette photo",
-            onclick: async () => {
-              if (!(await dialog({ title: "Supprimer cette photo ?", text: g.caption, ok: "Supprimer", danger: true }))) return;
-              try {
-                await save("views", (d) => { d.views = d.views.filter((x) => x.file !== v.file); }, `vue supprimée « ${g.caption} »`);
-                render();
-              } catch (e) { if (!e.handled) toast(explain(e), "err"); }
-            } }, "✕")))),
-        viewsUploader(() => g.caption, (c, uploads) => save("views", (d) => {
-          let at = -1;
-          d.views.forEach((x, i) => { if (x.caption === c) at = i; });
-          d.views.splice(at + 1, 0, ...uploads.map((u) => ({ caption: c, file: u.file })));
-        }, `vues ajoutées « ${c} »`, uploads)));
-    })));
+            } catch (e) { if (!e.handled) toast(explain(e), "err"); }
+          } }, "✕")))),
+      viewsUploader(() => g.caption, (c, uploads) => save("views", (d) => {
+        let at = -1;
+        d.views.forEach((x, i) => { if (x.caption === c) at = i; });
+        d.views.splice(at + 1, 0, ...uploads.map((u) => ({ caption: c, file: u.file })));
+      }, `vues ajoutées « ${c} »`, uploads)));
+  }));
 }
 
 /* ============================================================ livre d'or */
