@@ -988,11 +988,14 @@ function panelSeries(root) {
     name.focus();
   };
 
+  const listBox = h("section", { class: "card" });
   root.append(
-    head("Séries", "Les séries de la page Œuvres. Touchez une série pour voir ses œuvres, la renommer ou la supprimer.",
+    head("Séries", "Les séries de la page Œuvres, dans cet ordre. Touchez une série pour voir ses œuvres, la renommer ou la supprimer.",
+      seriesList().length > 1 ? button("Changer l'ordre", () => reorderSeries(listBox), "btn btn--ghost") : null,
       button("+ Nouvelle série", newForm)),
     newBox,
-    h("section", { class: "card" }, h("ul", { class: "rows" }, seriesList().map((g) => {
+    listBox);
+  listBox.append(h("ul", { class: "rows" }, seriesList().map((g) => {
       const n = count(g.name);
       const intro = seriesIntro(g);
       return h("li", {}, h("button", { type: "button", class: "row", onclick: () => seriesDetail(g.name) },
@@ -1000,7 +1003,60 @@ function panelSeries(root) {
           h("span", { class: "row__title" }, g.name),
           h("span", { class: "row__meta" }, `${n} œuvre${n > 1 ? "s" : ""}${intro ? " · " + (intro.length > 90 ? intro.slice(0, 90) + "…" : intro) : ""}`)),
         h("span", { class: "row__go", "aria-hidden": "true" }, "›")));
-    }))));
+    })));
+}
+
+/**
+ * L'ordre des séries. Celles qui partagent un titre sur la page Œuvres (Peintures,
+ * Encres de Chine) se déplacent en bloc, et s'ordonnent entre elles à l'intérieur.
+ */
+function reorderSeries(container) {
+  const s = D("series");
+  const works = D("works").works;
+  const blocks = s.families
+    .map((f) => ({ f, groups: s.groups.filter((g) => g.family === f.key) }))
+    .filter((b) => b.groups.length);
+  const errBox = h("p", { class: "form-error", role: "alert" });
+  const listEl = h("ol", { class: "reorder" });
+  const swap = (arr, i, j) => { [arr[i], arr[j]] = [arr[j], arr[i]]; state.dirty = true; draw(); };
+  const arrows = (arr, i, what) => h("span", { class: "reorder__btns" },
+    h("button", { type: "button", class: "icon-btn", "aria-label": `Monter ${what}`, disabled: i === 0, onclick: () => swap(arr, i, i - 1) }, "↑"),
+    h("button", { type: "button", class: "icon-btn", "aria-label": `Descendre ${what}`, disabled: i === arr.length - 1, onclick: () => swap(arr, i, i + 1) }, "↓"));
+  const thumb = (g) => {
+    const w = works.find((x) => x.group === g.name);
+    return w ? thumbImg(w.file) : null;
+  };
+  const draw = () => {
+    listEl.replaceChildren(...blocks.map((b, i) => {
+      if (b.groups.length === 1) {
+        const g = b.groups[0];
+        return h("li", {}, thumb(g), h("span", { class: "reorder__label" }, g.name), arrows(blocks, i, g.name));
+      }
+      return h("li", { class: "reorder__block" },
+        h("div", { class: "reorder__blockhead" },
+          h("span", { class: "reorder__label" }, h("b", {}, b.f.title), ` · ${b.groups.length} séries`),
+          arrows(blocks, i, `le groupe ${b.f.title}`)),
+        h("ol", { class: "reorder reorder--sub" }, b.groups.map((g, k) =>
+          h("li", {}, thumb(g), h("span", { class: "reorder__label" }, g.name), arrows(b.groups, k, g.name)))));
+    }));
+  };
+  draw();
+  const saveBtn = h("button", { type: "button", class: "btn" }, "Enregistrer l'ordre");
+  saveBtn.addEventListener("click", () => withSaving(saveBtn, errBox, async () => {
+    await save("series", (doc) => {
+      const rank = new Map(blocks.map((b, i) => [b.f.key, i]));
+      const pos = new Map(blocks.flatMap((b) => b.groups).map((g, i) => [g.name, i]));
+      doc.families.sort((a, b) => (rank.get(a.key) ?? -1) - (rank.get(b.key) ?? -1));
+      doc.groups.sort((a, b) => (pos.get(a.name) ?? -1) - (pos.get(b.name) ?? -1));
+    }, "ordre des séries");
+    render();
+  }));
+  container.replaceChildren(
+    h("p", { class: "hint" }, "Utilisez les flèches pour déplacer, puis enregistrez. Les séries réunies sous un même titre sur la page Œuvres se déplacent ensemble ; leur ordre se règle à l'intérieur du cadre."),
+    listEl, errBox,
+    h("div", { class: "actions" }, saveBtn,
+      button("Annuler", async () => { if (await leaveOk()) render(); }, "btn btn--ghost")));
+  container.classList.add("card--edit");
 }
 
 function seriesDetail(name) {

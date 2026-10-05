@@ -308,6 +308,19 @@ describe("œuvres et images", () => {
     assert.ok(!s.families.some((f) => f.key === "gravures"), "une section sans série disparaît");
   });
 
+  test("changer l'ordre des séries : sections et séries gardent l'ordre envoyé", async () => {
+    const d = await docs();
+    const fams = d.series.data.families.map((f) => f.key).reverse();
+    const groups = d.series.data.groups.slice().reverse();
+    d.series.data.families.sort((a, b) => fams.indexOf(a.key) - fams.indexOf(b.key));
+    d.series.data.groups = groups;
+    const r = await call("POST", "save", { cookie, json: { docs: { series: d.series } } });
+    assert.equal(r.status, 200, JSON.stringify(r.data));
+    const s = JSON.parse(gh.read("content/series.json"));
+    assert.deepEqual(s.families.map((f) => f.key), fams);
+    assert.deepEqual(s.groups.map((g) => g.name), groups.map((g) => g.name));
+  });
+
   test("déplacer toutes les œuvres d'une série puis la supprimer, en un enregistrement", async () => {
     const d = await docs();
     for (const w of d.works.data.works) if (w.group === "Grands carrés") w.group = "Sans titre";
