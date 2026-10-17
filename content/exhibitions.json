@@ -538,6 +538,14 @@
       "venue": "Chapelle du Foyer des Marins",
       "city": "Rouen",
       "solo": true
+    },
+    {
+      "sort": "2026-11",
+      "when": "5 au 28 Novembre 2026",
+      "title": "Ecriture et espace",
+      "venue": "Centre Déziré",
+      "city": "Saint Etienne du Rouvray",
+      "solo": false
     }
   ]
 }
