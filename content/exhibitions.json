@@ -2,6 +2,14 @@
   "note": "sort = clé de tri AAAA-MM (début). solo = exposition personnelle. Ajouter les nouvelles expositions en haut de la liste, le tri est automatique.",
   "exhibitions": [
     {
+      "sort": "2026-10",
+      "when": "3 au 20 Octobre 2026",
+      "title": "Quand les maths prennent forme",
+      "venue": "Galerie HCE",
+      "city": "Saint Denis",
+      "solo": false
+    },
+    {
       "sort": "2026-09",
       "when": "25 Septembre au 1 Novembre 2026",
       "title": "Impressions Géométriques",
@@ -523,14 +531,6 @@
     }
   ],
   "upcoming": [
-    {
-      "sort": "2026-10",
-      "when": "3 au 17 Octobre 2026",
-      "title": "Quand les maths prennent forme",
-      "venue": "Galerie HCE",
-      "city": "Saint Denis",
-      "solo": false
-    },
     {
       "sort": "2026-11",
       "when": "4 au 29 Novembre 2026",
